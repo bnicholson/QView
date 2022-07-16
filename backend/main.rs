@@ -31,6 +31,10 @@ async fn main() -> std::io::Result<()> {
         #[cfg(debug_assertions)]
         {
             /* Development-only routes */
+            // Mount development-only API routes
+            api_scope = api_scope.service(create_rust_app::dev::endpoints(web::scope("/development")));
+            // Mount the admin dashboard on /admin
+            app = app.service(web::scope("/admin").service(Files::new("/", ".cargo/admin/dist/").index_file("admin.html")));
         }
 
         app = app.service(api_scope);

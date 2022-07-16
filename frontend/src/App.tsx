@@ -11,6 +11,8 @@ import { Home } from './containers/Home'
 import { Todos } from './containers/Todo'
 import { Route, useNavigate, Routes } from 'react-router-dom'
 
+if (process.env.NODE_ENV === 'development') import('./setupDevelopment')
+    
 const App = () => {
   useAuthCheck()
   const auth = useAuth()
