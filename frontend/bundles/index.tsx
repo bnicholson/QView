@@ -5,15 +5,28 @@ import App from '../src/App'
 import reportWebVitals from '../src/reportWebVitals'
 import {BrowserRouter} from 'react-router-dom'
 
+import {ApolloProvider} from "@apollo/client";
+import {useAuthenticatedApolloClient} from "../src/hooks/useAuthenticatedApolloClient";
+
+const AuthenticatedApolloProvider = (props: { children: React.ReactNode }) => {
+    const client = useAuthenticatedApolloClient()
+
+    return <ApolloProvider client={client}>
+        {props.children}
+    </ApolloProvider>
+}
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         {/* CRA: Wrap */}
 <AuthProvider>
+        <AuthenticatedApolloProvider>
         <BrowserRouter>
             <App/>
         </BrowserRouter>
         {/* CRA: Unwrap */}
-</AuthProvider>
+</AuthenticatedApolloProvider>
+      </AuthProvider>
     </React.StrictMode>
 )
 
