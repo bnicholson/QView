@@ -13,6 +13,7 @@ import { Home } from './containers/Home'
 import { Todos } from './containers/Todo'
 import { Files } from './containers/Files'
 import { Route, useNavigate, Routes } from 'react-router-dom'
+import { TournamentPage } from './containers/TournamentPage'
 
 if (process.env.NODE_ENV === 'development') import('./setupDevelopment')
     
@@ -30,11 +31,13 @@ const App = () => {
       <div className="App-nav-header">
         <div style={{ display: 'flex', flex: 1 }}>
           <a className="NavButton" onClick={() => navigate('/')}>Home</a>
-          <a className="NavButton" onClick={() => navigate('/todos')}>Todos</a>
-        <a className="NavButton" onClick={() => navigate('/files')}>Files</a>
+	  <a className="NavButton" onClick={() => navigate('/tournament')}>Tournament</a>
+	  <a className="NavButton" onClick={() => navigate('/todos')}>Todos</a>
+	  <a className="NavButton" onClick={() => navigate('/files')}>Files</a>
           {/* CRA: left-aligned nav buttons */}
           <a className="NavButton" onClick={() => navigate('/gql')}>GraphQL</a>
           <a className="NavButton" onClick={() => navigate('/account')}>Account</a>
+
         </div>
         <div>
           {/* CRA: right-aligned nav buttons */}
@@ -55,6 +58,7 @@ const App = () => {
             <Route path="/activate" element={<ActivationPage />} />
             <Route path="/register" element={<RegistrationPage />} />
             <Route path="/account" element={<AccountPage />} />
+            <Route path="/tournament" element={<TournamentPage />} />	    
     
           </Routes>
       </div>
