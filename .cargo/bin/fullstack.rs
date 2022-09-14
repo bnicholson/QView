@@ -1,5 +1,6 @@
 use std::io;
 use std::process::Command;
+use std::env;
 
 pub fn main() -> Result<(), io::Error> {
     if !create_rust_app::net::is_port_free(21012) {
@@ -9,7 +10,8 @@ pub fn main() -> Result<(), io::Error> {
         println!("========================================================");
         panic!("Port 21012 is taken but is required for development!")
     }
-
+    let path = env::current_dir()?;
+    println!("{}",path.display());
     Command::new("yarn")
         .arg("fullstack")
         .current_dir("frontend")
