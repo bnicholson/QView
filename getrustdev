@@ -1,0 +1,55 @@
+# Generic Editors
+sudo apt-get install emacs
+sudo snap install code --classic
+
+# Now more development tools
+sudo apt-get install git
+sudo apt-get install cmdtest
+sudo apt-get install erlang
+sudo apt-get install rakudo
+sudo apt-get install npm
+
+# Install Rust
+#sudo apt-get install rust-all
+# Install libraries for databases
+sudo apt-get install libpq-dev
+sudo apt-get install libmysqlclient-dev
+sudo apt-get install libsqlite3-dev
+#
+# Install the postgresql database because this is the one I use most often
+#
+sudo apt-get install postgresql
+sudo apt-get install postgresql-contrib
+
+#
+# Install a tool for helping manipulate Diesel (Rust CRUD ORM)
+#
+cargo install diesel_cli
+#
+# actix-web (Rust Web Server) stuff (mostly creating react web apps)
+#
+cargo install tsync
+
+# more libraries necessary for web work
+sudo apt-get install pkgconf
+sudo apt-get install libssl-dev
+sudo apt-get install libclang-dev
+
+# More generic cargo tools
+cargo install cargo-edit
+cargo install cargo-watch
+
+# Node add some node things we need
+sudo npm install -g yarn
+
+#
+# Add ~/.cargo/bin to the user's profile
+#
+PROFILE=$HOME/.profile
+if ! grep 'cargo bin if' "$PROFILE"; then
+   echo "Adding to the .profile the user's cargo bin"
+   echo "# set PATH so it includes a users private cargo bin if it exists" >>~/.profile
+   echo 'if [ -d "$HOME/.cargo/bin" ] ; then' >>~/.profile
+   echo '    PATH="$HOME/.cargo/bin:$PATH"' >>~/.profile
+   echo 'fi'  >>~/.profile
+fi
