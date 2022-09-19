@@ -79,10 +79,11 @@ const App = () => {
             >
               <MenuIcon />
             </IconButton>
+            <Typography variant="h6" component="div" onClick={() => {navigate("/")}}>QView</Typography>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} onClick={() => handleDrawerClose()}>
-              QView
-            </Typography>
-            <Button color="inherit" onClick={() => alert("button")}>Login</Button>
+               Tournament: Q2022 Division: District Novice Room: Clements 203 Round: Tues07a
+            </Typography>  
+            <Button color="inherit" onClick={() => alert("button")}>Login/Register</Button>
           </Toolbar>
         </AppBar>
       </Box>
@@ -106,7 +107,7 @@ const App = () => {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+          {['Tournament', 'Division', 'Room', 'Round'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
@@ -119,7 +120,7 @@ const App = () => {
         </List>
         <Divider />
         <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
+          {['Quizzes', 'Team', 'Individual'].map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
@@ -130,8 +131,50 @@ const App = () => {
             </ListItem>
           ))}
         </List>
+        <Divider />
+        <List>
+            <ListItem key={"Todos"} disablePadding >
+              <ListItemButton href="/todos">
+                <ListItemIcon>
+                  <Inbox /> 
+                </ListItemIcon>
+                <ListItemText primary={"Todos"} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem key={"Files"} disablePadding >
+              <ListItemButton href="/files">
+                <ListItemIcon>
+                    <Mail />
+                  </ListItemIcon>
+                  <ListItemText primary={"Files"} />                
+              </ListItemButton>
+            </ListItem>
+            <ListItem key={"GraphQL"} disablePadding >
+              <ListItemButton href="/gql">
+                <ListItemIcon>
+                  <Inbox /> 
+                </ListItemIcon>
+                <ListItemText primary={"GraphQL"} />        
+              </ListItemButton>
+            </ListItem>
+          </List>
       </Drawer>
-
+      <div style={{ margin: '0 auto', maxWidth: '800px' }}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/todos" element={<Todos />} />
+            {/* CRA: routes */}
+            <Route path="/gql" element={<GraphQLPage />} />
+            <Route path="/files" element={<Files />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/recovery" element={<RecoveryPage />} />
+            <Route path="/reset" element={<ResetPage />} />
+            <Route path="/activate" element={<ActivationPage />} />
+            <Route path="/register" element={<RegistrationPage />} />
+            <Route path="/account" element={<AccountPage />} />
+            <Route path="/tournament" element={<TournamentPage />} />	    
+          </Routes>
+      </div>
       <div onClick={() => alert("boo hoo")}>Boo Hoo</div>
     </div>
   )

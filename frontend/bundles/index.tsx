@@ -25,7 +25,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <App/>
         </BrowserRouter>
         {/* CRA: Unwrap */}
-</AuthenticatedApolloProvider>
+        </AuthenticatedApolloProvider>
       </AuthProvider>
     </React.StrictMode>
 )
