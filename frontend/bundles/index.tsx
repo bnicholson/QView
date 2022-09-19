@@ -3,10 +3,10 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from '../src/App'
 import reportWebVitals from '../src/reportWebVitals'
-import {BrowserRouter} from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 
-import {ApolloProvider} from "@apollo/client";
-import {useAuthenticatedApolloClient} from "../src/hooks/useAuthenticatedApolloClient";
+import { ApolloProvider } from "@apollo/client";
+import { useAuthenticatedApolloClient } from "../src/hooks/useAuthenticatedApolloClient";
 
 const AuthenticatedApolloProvider = (props: { children: React.ReactNode }) => {
     const client = useAuthenticatedApolloClient()
@@ -19,14 +19,14 @@ const AuthenticatedApolloProvider = (props: { children: React.ReactNode }) => {
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         {/* CRA: Wrap */}
-<AuthProvider>
-        <AuthenticatedApolloProvider>
-        <BrowserRouter>
-            <App/>
-        </BrowserRouter>
-        {/* CRA: Unwrap */}
-        </AuthenticatedApolloProvider>
-      </AuthProvider>
+        <AuthProvider>
+            <AuthenticatedApolloProvider>
+                <BrowserRouter>
+                    <App />
+                </BrowserRouter>
+                {/* CRA: Unwrap */}
+            </AuthenticatedApolloProvider>
+        </AuthProvider>
     </React.StrictMode>
 )
 
