@@ -28,7 +28,7 @@ import ListItem from '@mui/material/ListItem'
 import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
 import { ChevronLeft, ChevronRight, Inbox, Mail } from '@mui/icons-material'
-import { Divider, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
+import { Breadcrumbs, Divider, Link, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 
 if (process.env.NODE_ENV === 'development') import('./setupDevelopment')
 
@@ -85,21 +85,21 @@ const App = () => {
             </Typography>  
             <Button color="inherit" onClick={() => alert("button")}>Login/Register</Button>
           </Toolbar>
-        </AppBar>
+        </AppBar>  
+        <Breadcrumbs aria-label="breadcrumb">
+          <Link underline="hover" color="inherit" href="/">
+            MUI
+          </Link>
+          <Link
+            underline="hover"
+            color="inherit"
+            href="/material-ui/getting-started/installation/"
+          >
+            Core
+          </Link>
+          <Typography color="text.primary">Breadcrumbs</Typography>
+        </Breadcrumbs>
       </Box>
-      <Breadcrumbs aria-label="breadcrumb">
-        <Link underline="hover" color="inherit" href="/">
-          MUI
-        </Link>
-        <Link
-          underline="hover"
-          color="inherit"
-          href="/material-ui/getting-started/installation/"
-        >
-          Core
-        </Link>
-        <Typography color="text.primary">Breadcrumbs</Typography>
-      </Breadcrumbs>
       <Drawer
         sx={{
           width: drawerWidth,
