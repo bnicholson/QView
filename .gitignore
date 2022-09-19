@@ -2,6 +2,7 @@
 /.cargo/.build
 .env*
 !.env.example
+node_modules/*
 build-log*.txt
 .DS_Store
 /.idea/
