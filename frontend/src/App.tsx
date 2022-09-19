@@ -88,16 +88,16 @@ const App = () => {
         </AppBar>  
         <Breadcrumbs aria-label="breadcrumb">
           <Link underline="hover" color="inherit" href="/">
-            MUI
+            Q2022
           </Link>
           <Link
             underline="hover"
             color="inherit"
             href="/material-ui/getting-started/installation/"
           >
-            Core
+            District Novice
           </Link>
-          <Typography color="text.primary">Breadcrumbs</Typography>
+          <Typography color="text.primary">Teams</Typography>
         </Breadcrumbs>
       </Box>
       <Drawer
