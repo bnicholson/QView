@@ -41,7 +41,7 @@ export const TournamentPage = () => {
     }, [])
 
     return (
-        <div><h3 color="black">boo</h3></div>
+        <div><h3 color="black">Boo tournament hoo</h3></div>
     )
 }
 
