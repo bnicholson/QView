@@ -83,7 +83,11 @@ const App = () => {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} onClick={() => handleDrawerClose()}>
                Tournament: Q2022 Division: District Novice Room: Clements 203 Round: Tues07a
             </Typography>  
-            <Button color="inherit" onClick={() => alert("button")}>Login/Register</Button>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>           
+               {/* CRA: right-aligned nav buttons */}
+              { auth.isAuthenticated && <a className="NavButton" onClick={() => { auth.logout(); apollo.resetStore(); }}>Logout</a> }
+              { !auth.isAuthenticated && <a className="NavButton" onClick={() => navigate('/login')}>Login/Register</a> }
+            </Typography>
           </Toolbar>
         </AppBar>  
         <Breadcrumbs aria-label="breadcrumb">
