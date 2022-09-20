@@ -27,7 +27,7 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
-import { ChevronLeft, ChevronRight, Inbox, Mail } from '@mui/icons-material'
+import { ChevronLeft, ChevronRight, Inbox, Mail, AccountCircle } from '@mui/icons-material'
 import { Breadcrumbs, Divider, Link, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 
 if (process.env.NODE_ENV === 'development') import('./setupDevelopment')
@@ -88,6 +88,7 @@ const App = () => {
               { auth.isAuthenticated && <a className="NavButton" onClick={() => { auth.logout(); apollo.resetStore(); }}>Logout</a> }
               { !auth.isAuthenticated && <a className="NavButton" onClick={() => navigate('/login')}>Login/Register</a> }
             </Typography>
+            { auth.isAuthenticated && <IconButton> <AccountCircle onClick={() => navigate('/account')}/></IconButton>}
           </Toolbar>
         </AppBar>  
         <Breadcrumbs aria-label="breadcrumb">
@@ -128,7 +129,21 @@ const App = () => {
         <Divider />
         <List>
           {['Tournament', 'Division', 'Room', 'Round'].map((text, index) => (
-            <ListItem key={text} disablePadding>
+            <ListItem key={text} disablePadding 
+              onClick={ () => { 
+                switch(index % 4) {
+                  case 0 :
+                    navigate("/tournament");
+                    break;
+                  case 1 :
+                    alert('1');
+                    break;
+                  case 2 :
+                    alert("2");
+                    break;
+                  case 3 :
+                    alert('3');
+                } } }>
               <ListItemButton>
                 <ListItemIcon>
                   {index % 2 === 0 ? <Inbox /> : <Mail />}
@@ -201,5 +216,3 @@ const App = () => {
 }
 
 export default App
-
-
