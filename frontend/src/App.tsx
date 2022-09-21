@@ -85,28 +85,31 @@ const App = () => {
             </Typography>  
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>           
                {/* CRA: right-aligned nav buttons */}
-              { auth.isAuthenticated && <a className="NavButton" onClick={() => { auth.logout(); apollo.resetStore(); }}>Logout</a> }
-              { !auth.isAuthenticated && <a className="NavButton" onClick={() => navigate('/login')}>Login/Register</a> }
+              { auth.isAuthenticated && <a onClick={() => { auth.logout(); apollo.resetStore(); }}>Logout</a> }
+              { !auth.isAuthenticated && <a onClick={() => navigate('/login')}>Login/Register</a> }
             </Typography>
             { auth.isAuthenticated && <IconButton> <AccountCircle onClick={() => navigate('/account')}/></IconButton>}
           </Toolbar>
         </AppBar>  
-        <Breadcrumbs aria-label="breadcrumb">
-          <Link underline="hover" color="inherit" href="/">
-            Home
-          </Link>
-          <Link underline="hover" color="inherit" href="/t/q2022">
-            Q2022
-          </Link>
-          <Link
-            underline="hover"
-            color="inherit"
-            href="/t/q2022/district%20novice"
-          >
-            District Novice
-          </Link>
-          <Typography color="text.primary">Teams</Typography>
-        </Breadcrumbs>
+        <div> 
+          <Breadcrumbs aria-label="breadcrumb">
+            <Link underline="hover" color="inherit" href="/">
+              Home
+            </Link>
+            <Link underline="hover" color="inherit" href="/t/q2022">
+              Q2022
+            </Link>
+            <Link
+              underline="hover"
+              color="inherit"
+              href="/t/q2022/district%20novice"
+            >
+              District Novice
+            </Link>
+            <Typography color="text.primary">Teams</Typography>
+          </Breadcrumbs>
+        </div>
+
       </Box>
       <Drawer
         sx={{
@@ -136,13 +139,13 @@ const App = () => {
                     navigate("/tournament");
                     break;
                   case 1 :
-                    alert('1');
+                    alert('division');
                     break;
                   case 2 :
-                    alert("2");
+                    alert("room");
                     break;
                   case 3 :
-                    alert('3');
+                    alert('round');
                 } } }>
               <ListItemButton>
                 <ListItemIcon>
@@ -156,7 +159,20 @@ const App = () => {
         <Divider />
         <List>
           {['Quizzes', 'Team', 'Individual'].map((text, index) => (
-            <ListItem key={text} disablePadding>
+            <ListItem key={text} disablePadding 
+              onClick={ () => {
+                switch(index % 3) {
+                  case 0 :
+                    alert("quizzes");
+                    break;
+                  case 1 :
+                    alert("team");
+                    break;
+                  case 2 :
+                    alert("individual");
+                    break;
+                }
+              }}>
               <ListItemButton>
                 <ListItemIcon>
                   {index % 2 === 0 ? <Inbox /> : <Mail />}
