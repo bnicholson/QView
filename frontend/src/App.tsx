@@ -184,30 +184,30 @@ const App = () => {
         </List>
         <Divider />
         <List>
-            <ListItem key={"Todos"} disablePadding >
-              <ListItemButton href="/todos">
+          {['Todos', 'Files', 'GraphQL'].map((text, index) => (
+            <ListItem key={text} disablePadding 
+              onClick={() => {
+                switch(index % 3) {
+                  case 0 :
+                    navigate("/todos");
+                    break;
+                  case 1 :
+                    navigate("/files");
+                    break;
+                  case 2 :
+                    navigate("/gql");
+                    break;
+                }
+              }}
+            >
+              <ListItemButton>
                 <ListItemIcon>
-                  <Inbox /> 
+                  { index % 2 === 0 ? <Inbox /> : <Mail />} 
                 </ListItemIcon>
-                <ListItemText primary={"Todos"} />
+                <ListItemText primary={text} />
               </ListItemButton>
-            </ListItem>
-            <ListItem key={"Files"} disablePadding >
-              <ListItemButton href="/files">
-                <ListItemIcon>
-                    <Mail />
-                  </ListItemIcon>
-                  <ListItemText primary={"Files"} />                
-              </ListItemButton>
-            </ListItem>
-            <ListItem key={"GraphQL"} disablePadding >
-              <ListItemButton href="/gql">
-                <ListItemIcon>
-                  <Inbox /> 
-                </ListItemIcon>
-                <ListItemText primary={"GraphQL"} />        
-              </ListItemButton>
-            </ListItem>
+              </ListItem>
+          ))}
           </List>
       </Drawer>
       <div style={{ margin: '0 auto', maxWidth: '800px' }}>
