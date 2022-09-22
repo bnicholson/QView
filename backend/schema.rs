@@ -86,6 +86,7 @@ diesel::table! {
         hide -> Bool,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
+        info -> Text,
     }
 }
 
