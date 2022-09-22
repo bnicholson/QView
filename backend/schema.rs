@@ -72,6 +72,24 @@ diesel::table! {
 }
 
 diesel::table! {
+    tournaments (tournament, organization) {
+        organization -> Varchar,
+        tournament -> Varchar,
+        fromdate -> Date,
+        todate -> Date,
+        venue -> Varchar,
+        city -> Varchar,
+        region -> Varchar,
+        country -> Varchar,
+        contact -> Varchar,
+        contactemail -> Varchar,
+        hide -> Bool,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+    }
+}
+
+diesel::table! {
     user_permissions (user_id, permission) {
         user_id -> Int4,
         permission -> Text,
@@ -121,6 +139,7 @@ diesel::allow_tables_to_appear_in_same_query!(
     quizzes,
     role_permissions,
     todos,
+    tournaments,
     user_permissions,
     user_roles,
     user_sessions,
