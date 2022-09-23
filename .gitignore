@@ -6,3 +6,6 @@ node_modules/*
 build-log*.txt
 .DS_Store
 /.idea/
+
+# Temp files in the build
+Cargo.lock
