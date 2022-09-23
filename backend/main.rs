@@ -37,6 +37,7 @@ async fn main() -> std::io::Result<()> {
         app = app.app_data(Data::new(app_data.storage.clone()));
 
         let mut api_scope = web::scope("/api");
+        api_scope = api_scope.service(services::tournament::endpoints(web::scope("tournament")));
         api_scope = api_scope.service(web::resource("/graphql").guard(guard::Post()).to(graphql::index));
         api_scope = api_scope.service(web::resource("/graphql/ws")
                 .guard(guard::Get())

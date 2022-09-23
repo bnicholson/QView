@@ -7,7 +7,7 @@ import { ActivationPage } from './containers/ActivationPage'
 import { RegistrationPage } from './containers/RegistrationPage'
 import { RecoveryPage } from './containers/RecoveryPage'
 import { ResetPage } from './containers/ResetPage'
-import { TournamentPage } from './containers/TournamentPage'
+import { Tournaments } from './containers/TournamentPage'
 import React from 'react'
 import './App.css'
 import { Home } from './containers/Home'
@@ -223,7 +223,7 @@ const App = () => {
             <Route path="/activate" element={<ActivationPage />} />
             <Route path="/register" element={<RegistrationPage />} />
             <Route path="/account" element={<AccountPage />} />
-            <Route path="/tournament" element={<TournamentPage />} />	    
+            <Route path="/tournament" element={<Tournaments />} />	    
           </Routes>
       </div>
       <div onClick={() => alert("boo hoo")}>Boo Hoo</div>
