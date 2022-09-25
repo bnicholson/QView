@@ -17,6 +17,20 @@ pub struct Tournament {
   // pub id: ID,
   // pub created_at: UTC,
   // pub updated_at: UTC,
+  pub organization: String;
+  pub tournament: String;
+  pub fromdate: UTC;
+  pub todate: UTC;
+  pub venue: String;
+  pub city: String;
+  pub region: String;
+  pub country: String;
+  pub contact: String;
+  pub contactemail: String,
+  pub hide: bool;
+  pub created_at: UTC;
+  pub updated_at: UTC;
+  pub info: String;
 }
 
 #[tsync::tsync]
@@ -27,6 +41,16 @@ pub struct TournamentChangeset {
      Don't include non-mutable columns
      (ex: id, created_at/updated_at)
      -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+     pub fromdate: UTC;
+     pub todate: UTC;
+     pub venue: String;
+     pub city: String;
+     pub region: String;
+     pub country: String;
+     pub contact: String;
+     pub contactemail: String,
+     pub hide: bool;
+     pub info: String;
 }
 
 impl Tournament {
