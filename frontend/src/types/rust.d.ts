@@ -20,6 +20,12 @@ interface TodoChangeset {
   text: string
 }
 
+interface Tournament {
+}
+
+interface TournamentChangeset {
+}
+
 interface FileInfo {
   id: number
   key: string

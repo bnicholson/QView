@@ -72,7 +72,8 @@ diesel::table! {
 }
 
 diesel::table! {
-    tournaments (tournament, organization) {
+    tournaments (id) {
+        id -> Int4,
         organization -> Varchar,
         tournament -> Varchar,
         fromdate -> Date,
@@ -84,9 +85,9 @@ diesel::table! {
         contact -> Varchar,
         contactemail -> Varchar,
         hide -> Bool,
+        info -> Nullable<Text>,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
-        info -> Text,
     }
 }
 
