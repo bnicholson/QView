@@ -36,6 +36,7 @@ Identifiable,
 Associations,
 AsChangeset,
 )]
+
 #[table_name = "todos"]
 pub struct Todo {
     pub id: ID,

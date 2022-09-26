@@ -4,7 +4,8 @@ use crate::diesel::*;
 use diesel::QueryResult;
 use serde::{Serialize, Deserialize};
 use crate::models::*;
-use crate::DB;
+//use crate::DB;
+use crate::models::*;
 
 #[tsync::tsync]
 #[derive(Debug, Serialize, Deserialize, Clone, Queryable, Insertable, Identifiable, AsChangeset)]
@@ -42,18 +43,18 @@ pub struct TournamentChangeset {
      Don't include non-mutable columns
      (ex: id, created_at/updated_at)
      -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
-     pub organization: String;
-     pub tournament: String;
-     pub fromdate: UTC;
-     pub todate: UTC;
-     pub venue: String;
-     pub city: String;
-     pub region: String;
-     pub country: String;
-     pub contact: String;
-     pub contactemail: String;
-     pub hide: bool;
-     pub info: String;
+     pub organization: String,
+     pub tournament: String,
+     pub fromdate: UTC,
+     pub todate: UTC,
+     pub venue: String,
+     pub city: String,
+     pub region: String,
+     pub country: String,
+     pub contact: String,
+     pub contactemail: String,
+     pub hide: bool,
+     pub info: String
 }
 
 impl Tournament {
