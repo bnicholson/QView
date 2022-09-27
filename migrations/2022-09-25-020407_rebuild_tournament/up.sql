@@ -7,7 +7,7 @@ ALTER TABLE tournaments rename to orig_tournaments;
 
 -- create the new tournaments table 
 create table tournaments (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     organization varchar(32) NOT NULL,
     tournament varchar(32) NOT NULL,
     fromdate date NOT NULL,
@@ -31,7 +31,10 @@ CREATE INDEX tournaments_fromdate ON tournaments (
 );
 
 -- Copy the orig_tournament table to the tournaments table
-INSERT INTO tournaments SELECT * from orig_tournaments;
+INSERT INTO tournaments (organization,tournament, fromdate, todate, venue, city, region, country,
+    contact, contactemail, hide)    
+    SELECT organization,tournament,fromdate,todate,venue,city,region,country,
+        contact,contactemail, hide from orig_tournaments;
 
 -- Drop the original table
 DROP TABLE orig_tournaments;
