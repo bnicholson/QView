@@ -1,11 +1,13 @@
 use crate::schema::*;
 use crate::diesel::*;
 
+use create_rust_app::Connection;
+use serde::{Deserialize, Serialize};
+
 use diesel::QueryResult;
-use serde::{Serialize, Deserialize};
 use crate::models::*;
+use crate::models::common::*;
 //use crate::DB;
-use crate::models::*;
 
 #[tsync::tsync]
 #[derive(Debug, Serialize, Deserialize, Clone, Queryable, Insertable, Identifiable, AsChangeset)]

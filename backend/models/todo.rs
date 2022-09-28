@@ -2,27 +2,10 @@ use crate::diesel::*;
 use crate::schema::*;
 
 use create_rust_app::Connection;
-use chrono::DateTime;
-use chrono::Utc;
 use diesel::QueryResult;
 use serde::{Deserialize, Serialize};
-
-#[tsync::tsync]
-pub type ID = i32;
-
-#[tsync::tsync]
-pub type UTC = DateTime<Utc>;
-
-#[tsync::tsync]
-#[derive(serde::Deserialize)]
-pub struct PaginationParams {
-    pub page: i64,
-    pub page_size: i64,
-}
-
-impl PaginationParams {
-    const MAX_PAGE_SIZE: u16 = 100;
-}
+use crate::models::*;
+use crate::models::common::{PaginationParams, ID, UTC};
 
 #[tsync::tsync]
 #[derive(
