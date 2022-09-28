@@ -5,7 +5,6 @@ use create_rust_app::Connection;
 use serde::{Deserialize, Serialize};
 
 use diesel::QueryResult;
-use crate::models::*;
 use crate::models::common::*;
 //use crate::DB;
 

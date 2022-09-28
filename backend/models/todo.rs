@@ -4,7 +4,6 @@ use crate::schema::*;
 use create_rust_app::Connection;
 use diesel::QueryResult;
 use serde::{Deserialize, Serialize};
-use crate::models::*;
 use crate::models::common::{PaginationParams, ID, UTC};
 
 #[tsync::tsync]
