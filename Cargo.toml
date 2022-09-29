@@ -28,12 +28,12 @@ version = "0.4.19"
 
 [dependencies.create-rust-app]
 features = ["plugin_dev", "plugin_auth", "plugin_container", "plugin_storage", "plugin_graphql", "backend_actix-web"]
-version = "7.0.0"
+version = "8.0.0"
 
 [dependencies.diesel]
 default-features = false
 features = ["postgres", "r2d2", "chrono"]
-version = "1.4.8"
+version = "2.0.0"
 
 [dependencies.serde]
 features = ["derive"]

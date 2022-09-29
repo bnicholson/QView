@@ -7,19 +7,10 @@ use serde::{Deserialize, Serialize};
 use crate::models::common::{PaginationParams, ID, UTC};
 
 #[tsync::tsync]
-#[derive(
-Debug,
-Serialize,
-Deserialize,
-Clone,
-Queryable,
-Insertable,
-Identifiable,
-Associations,
-AsChangeset,
+#[derive( Debug, Serialize, Deserialize, Clone, Queryable, Insertable,
+    Identifiable, AsChangeset,
 )]
-
-#[table_name = "todos"]
+#[diesel(table_name = todos)]
 pub struct Todo {
     pub id: ID,
     pub text: String,
@@ -29,7 +20,7 @@ pub struct Todo {
 
 #[tsync::tsync]
 #[derive(Debug, Serialize, Deserialize, Clone, Insertable, AsChangeset)]
-#[table_name = "todos"]
+#[diesel(table_name = todos)]
 pub struct TodoChangeset {
     pub text: String,
 }

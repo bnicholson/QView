@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 #[tsync::tsync]
 #[derive(Debug, Serialize, Deserialize, Identifiable, AsChangeset, Clone, Queryable)]
-#[table_name = "todos"]
+#[diesel(table_name = todos)]
 pub struct Todo {
     pub id: i32,
     pub text: String,
@@ -18,7 +18,7 @@ pub struct Todo {
 
 #[tsync::tsync]
 #[derive(Debug, Insertable, Serialize, Deserialize, AsChangeset)]
-#[table_name = "todos"]
+#[diesel(table_name = todos)]
 pub struct TodoJson {
     pub text: String,
 }
