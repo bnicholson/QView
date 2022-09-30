@@ -1,12 +1,12 @@
 use crate::schema::*;
 use crate::diesel::*;
 
-use create_rust_app::Connection;
 use serde::{Deserialize, Serialize};
 
 use diesel::QueryResult;
 use crate::models::common::*;
-//use crate::DB;
+
+type DB = create_rust_app::Database;
 
 #[tsync::tsync]
 #[derive(Debug, Serialize, Deserialize, Clone, Queryable, Insertable, Identifiable, AsChangeset)]
@@ -16,10 +16,7 @@ pub struct Tournament {
      Add columns here in the same order as the schema
      (because #[derive(Queryable)] expects this)
      -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
-  // pub id: ID,
-  // pub created_at: UTC,
-  // pub updated_at: UTC,
-  pub id: ID, 
+  pub id: Big_Id, 
   pub organization: String,
   pub tournament: String,
   pub fromdate: UTC,

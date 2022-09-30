@@ -2,7 +2,10 @@ use chrono::DateTime;
 use chrono::Utc;
 
 #[tsync::tsync]
-pub type ID = i64;
+pub type ID = i32;
+
+#[tsync::tsync]
+pub type Big_Id = i64;
 
 #[tsync::tsync]
 pub type UTC = DateTime<Utc>;
