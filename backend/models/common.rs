@@ -5,7 +5,7 @@ use chrono::Utc;
 pub type ID = i32;
 
 #[tsync::tsync]
-pub type Big_Id = i64;
+pub type BigId = i64;
 
 #[tsync::tsync]
 pub type UTC = DateTime<Utc>;

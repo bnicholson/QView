@@ -1,6 +1,7 @@
 use crate::schema::*;
 use crate::diesel::*;
 
+use time::Date;
 use serde::{Deserialize, Serialize};
 
 use diesel::QueryResult;
@@ -16,11 +17,11 @@ pub struct Tournament {
      Add columns here in the same order as the schema
      (because #[derive(Queryable)] expects this)
      -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
-  pub id: Big_Id, 
+  pub id: BigId, 
   pub organization: String,
   pub tournament: String,
-  pub fromdate: UTC,
-  pub todate: UTC,
+  pub fromdate: time::Date,
+  pub todate: time::Date,
   pub venue: String,
   pub city: String,
   pub region: String,
@@ -43,8 +44,8 @@ pub struct TournamentChangeset {
      -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
      pub organization: String,
      pub tournament: String,
-     pub fromdate: UTC,
-     pub todate: UTC,
+     pub fromdate: time::Date,
+     pub todate: time::Date,
      pub venue: String,
      pub city: String,
      pub region: String,
