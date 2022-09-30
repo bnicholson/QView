@@ -73,7 +73,7 @@ diesel::table! {
 
 diesel::table! {
     tournaments (id) {
-        id -> Int8,
+        id -> Int4,
         organization -> Varchar,
         tournament -> Varchar,
         fromdate -> Date,

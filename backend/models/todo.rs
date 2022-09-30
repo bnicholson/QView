@@ -2,15 +2,24 @@ use crate::diesel::*;
 use crate::schema::*;
 
 use create_rust_app::Connection;
+use chrono::DateTime;
+use chrono::Utc;
 use diesel::QueryResult;
 use serde::{Deserialize, Serialize};
-use crate::models::common::{PaginationParams, ID, UTC};
+use crate::models::common::*;
 
 #[tsync::tsync]
-#[derive( Debug, Serialize, Deserialize, Clone, Queryable, Insertable,
-    Identifiable, AsChangeset,
+#[derive(
+Debug,
+Serialize,
+Deserialize,
+Clone,
+Queryable,
+Insertable,
+Identifiable,
+AsChangeset,
 )]
-#[diesel(table_name = todos)]
+#[diesel(table_name=todos)]
 pub struct Todo {
     pub id: ID,
     pub text: String,
@@ -20,24 +29,24 @@ pub struct Todo {
 
 #[tsync::tsync]
 #[derive(Debug, Serialize, Deserialize, Clone, Insertable, AsChangeset)]
-#[diesel(table_name = todos)]
+#[diesel(table_name=todos)]
 pub struct TodoChangeset {
     pub text: String,
 }
 
-pub fn create(db: &Connection, item: &TodoChangeset) -> QueryResult<Todo> {
+pub fn create(db: &mut Connection, item: &TodoChangeset) -> QueryResult<Todo> {
     use crate::schema::todos::dsl::*;
 
     insert_into(todos).values(item).get_result::<Todo>(db)
 }
 
-pub fn read(db: &Connection, item_id: ID) -> QueryResult<Todo> {
+pub fn read(db: &mut Connection, item_id: ID) -> QueryResult<Todo> {
     use crate::schema::todos::dsl::*;
 
     todos.filter(id.eq(item_id)).first::<Todo>(db)
 }
 
-pub fn read_all(db: &Connection, pagination: &PaginationParams) -> QueryResult<Vec<Todo>> {
+pub fn read_all(db: &mut Connection, pagination: &PaginationParams) -> QueryResult<Vec<Todo>> {
     use crate::schema::todos::dsl::*;
 
     todos
@@ -50,7 +59,7 @@ pub fn read_all(db: &Connection, pagination: &PaginationParams) -> QueryResult<V
         .load::<Todo>(db)
 }
 
-pub fn update(db: &Connection, item_id: ID, item: &TodoChangeset) -> QueryResult<Todo> {
+pub fn update(db: &mut Connection, item_id: ID, item: &TodoChangeset) -> QueryResult<Todo> {
     use crate::schema::todos::dsl::*;
 
     diesel::update(todos.filter(id.eq(item_id)))
@@ -58,7 +67,7 @@ pub fn update(db: &Connection, item_id: ID, item: &TodoChangeset) -> QueryResult
         .get_result(db)
 }
 
-pub fn delete(db: &Connection, item_id: ID) -> QueryResult<usize> {
+pub fn delete(db: &mut Connection, item_id: ID) -> QueryResult<usize> {
     use crate::schema::todos::dsl::*;
 
     diesel::delete(todos.filter(id.eq(item_id))).execute(db)

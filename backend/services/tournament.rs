@@ -1,77 +1,90 @@
-use crate::models::tournament::{Tournament, TournamentChangeset};
-use crate::models::common::*;
+use actix_web::{delete, Error, get, HttpResponse, post, put, Result, web::{Data, Json, Path, Query}};
 use create_rust_app::Database;
-
-use actix_web::{delete, get, post, put, Error as AWError};
-use actix_web::{web, HttpResponse};
+use crate::{models, models::tournament::{Tournament, TournamentChangeset}};
+use crate::models::common::{PaginationParams};
 
 #[get("")]
 async fn index(
-  db: web::Data<Database>,           //  pool: web::Data<Pool>,
-  web::Query(info): web::Query<PaginationParams>
-) -> Result<HttpResponse, AWError> {
-  //let db = pool.get().unwrap();
+    db: Data<Database>,
+    Query(info): Query<PaginationParams>,
+) -> HttpResponse {
+    let mut db = db.pool.get().unwrap();
 
-  Ok(Tournament::read_all(&db, &info)
-    .map(|items| HttpResponse::Ok().json(items))
-    .map_err(|_| HttpResponse::InternalServerError())?)
+    let result = models::tournament::read_all(&mut db, &info);
+
+    if result.is_ok() {
+        HttpResponse::Ok().json(result.unwrap())
+    } else {
+        HttpResponse::InternalServerError().finish()
+    }
 }
 
 #[get("/{id}")]
 async fn read(
-  db: web::Data<Database>,        //  pool: web::Data<Pool>,
-  item_id: web::Path<ID>
-) -> Result<HttpResponse, AWError> {
-  //let db = pool.get().unwrap();
+    db: Data<Database>,
+    item_id: Path<i32>,
+) -> HttpResponse {
+    let mut db = db.pool.get().unwrap();
 
-  Ok(Tournament::read(&db, item_id)
-    .map(|item| HttpResponse::Found().json(item))
-    .map_err(|_| HttpResponse::NotFound())?)
+    let result = models::tournament::read(&mut db, item_id.into_inner());
+
+    if result.is_ok() {
+        HttpResponse::Ok().json(result.unwrap())
+    } else {
+        HttpResponse::NotFound().finish()
+    }
 }
 
 #[post("")]
 async fn create(
-  db: web::Data<Database>,        //  pool: web::Data<Pool>,
-  web::Json(item): web::Json<TournamentChangeset>
-) -> Result<HttpResponse, AWError> {
-//  let db = pool.get().unwrap();
+    db: Data<Database>,
+    Json(item): Json<TournamentChangeset>,
+) -> Result<HttpResponse, Error> {
+    let mut db = db.pool.get().unwrap();
 
-  Ok(Tournament::create(&db, &item)
-    .map(|item| HttpResponse::Created().json(item))
-    .map_err(|_| HttpResponse::InternalServerError())?)
+    let result: Tournament = models::tournament::create(&mut db, &item).expect("Creation error");
+
+    Ok(HttpResponse::Created().json(result))
 }
 
 #[put("/{id}")]
 async fn update(
-  db: web::Data<Database>,    //  pool: web::Data<Pool>,
-  item_id: web::Path<ID>,
-  web::Json(item): web::Json<TournamentChangeset>
-) -> Result<HttpResponse, AWError> {
-//  let db = pool.get().unwrap();
+    db: Data<Database>,
+    item_id: Path<i32>,
+    Json(item): Json<TournamentChangeset>,
+) -> HttpResponse {
+    let mut db = db.pool.get().unwrap();
 
-  Ok(Tournament::update(&db, item_id, &item)
-    .map(|item| HttpResponse::Ok().json(item))
-    .map_err(|_| HttpResponse::InternalServerError())?)
+    let result = models::tournament::update(&mut db, item_id.into_inner(), &item);
+
+    if result.is_ok() {
+        HttpResponse::Ok().finish()
+    } else {
+        HttpResponse::InternalServerError().finish()
+    }
 }
 
 #[delete("/{id}")]
 async fn destroy(
-    db: web::Data<Database>,        //  pool: web::Data<Pool>,
-    item_id: web::Path<ID>,
-) -> Result<HttpResponse, AWError> {
-//    let db = pool.get().unwrap();
+    db: Data<Database>,
+    item_id: Path<i32>,
+) -> HttpResponse {
+    let mut db = db.pool.get().unwrap();
 
-    Ok(Tournament::delete(&db, item_id)
-        .map(|_| HttpResponse::Ok().finish())
-        .map_err(|_| HttpResponse::InternalServerError().finish())?)
+    let result = models::tournament::delete(&mut db, item_id.into_inner());
+
+    if result.is_ok() {
+        HttpResponse::Ok().finish()
+    } else {
+        HttpResponse::InternalServerError().finish()
+    }
 }
 
-
 pub fn endpoints(scope: actix_web::Scope) -> actix_web::Scope {
-  return scope
-    .service(index)
-    .service(read)
-    .service(create)
-    .service(update)
-    .service(destroy);
+    return scope
+        .service(index)
+        .service(read)
+        .service(create)
+        .service(update)
+        .service(destroy);
 }
