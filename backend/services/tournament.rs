@@ -1,7 +1,7 @@
 use actix_web::{delete, Error, get, HttpResponse, post, put, Result, web::{Data, Json, Path, Query}};
 use create_rust_app::Database;
 use crate::{models, models::tournament::{Tournament, TournamentChangeset}};
-use crate::models::common::{PaginationParams};
+use crate::models::common::*;
 
 #[get("")]
 async fn index(
@@ -22,7 +22,7 @@ async fn index(
 #[get("/{id}")]
 async fn read(
     db: Data<Database>,
-    item_id: Path<i32>,
+    item_id: Path<BigId>,
 ) -> HttpResponse {
     let mut db = db.pool.get().unwrap();
 
@@ -50,7 +50,7 @@ async fn create(
 #[put("/{id}")]
 async fn update(
     db: Data<Database>,
-    item_id: Path<i32>,
+    item_id: Path<BigId>,
     Json(item): Json<TournamentChangeset>,
 ) -> HttpResponse {
     let mut db = db.pool.get().unwrap();
@@ -67,7 +67,7 @@ async fn update(
 #[delete("/{id}")]
 async fn destroy(
     db: Data<Database>,
-    item_id: Path<i32>,
+    item_id: Path<BigId>,
 ) -> HttpResponse {
     let mut db = db.pool.get().unwrap();
 
