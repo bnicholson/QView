@@ -72,14 +72,16 @@ pub fn read(db: &mut Connection, item_id: BigId) -> QueryResult<Tournament> {
 pub fn read_all(db: &mut Connection, pagination: &PaginationParams) -> QueryResult<Vec<Tournament>> {
     use crate::schema::tournaments::dsl::*;
 
-    tournaments
+    let values = tournaments
         .order(created_at)
         .limit(pagination.page_size)
         .offset(
             pagination.page
                 * std::cmp::max(pagination.page_size, PaginationParams::MAX_PAGE_SIZE as i64),
         )
-        .load::<Tournament>(db)
+        .load::<Tournament>(db);
+    println!("{:?}",values);
+    values
 }
 
 pub fn update(db: &mut Connection, item_id: BigId, item: &TournamentChangeset) -> QueryResult<Tournament> {
