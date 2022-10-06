@@ -52,7 +52,7 @@ pub struct TournamentChangeset {
     pub region: String,
     pub country: String,
     pub contact: String,
-    pub contactemail: String,
+    pub contactemail: Option<String>,
     pub hide: bool,
     pub info: Option<String>
 }
