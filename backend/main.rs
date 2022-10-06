@@ -23,8 +23,8 @@ async fn main() -> std::io::Result<()> {
     let app_data = create_rust_app::setup();
 
     // Get the logging middleware up
-    dotenv::dotenv().ok();
-    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
+//    dotenv::dotenv().ok();
+//    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
     // set up database connection pool
 //    let conn_spec = std::env::var("DATABASE_URL").expect("DATABASE_URL");

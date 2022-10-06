@@ -21,6 +21,7 @@ AsChangeset,
 )]
 #[diesel(table_name=tournaments)]
 pub struct Tournament {
+    #[diesel(sql_type = Integer)]
     pub id: BigId, 
     pub organization: String,
     pub tournament: String,
@@ -33,7 +34,7 @@ pub struct Tournament {
     pub contact: String,
     pub contactemail: String,
     pub hide: bool,
-    pub info: String,
+    pub info: Option<String>,
     pub created_at: UTC,
     pub updated_at: UTC
 }
@@ -53,7 +54,7 @@ pub struct TournamentChangeset {
     pub contact: String,
     pub contactemail: String,
     pub hide: bool,
-    pub info: String
+    pub info: Option<String>
 }
 
 pub fn create(db: &mut Connection, item: &TournamentChangeset) -> QueryResult<Tournament> {

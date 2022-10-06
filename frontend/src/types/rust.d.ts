@@ -2,6 +2,8 @@
 
 type ID = number
 
+type BigId = number
+
 type UTC = Date
 
 interface PaginationParams {
@@ -21,11 +23,11 @@ interface TodoChangeset {
 }
 
 interface Tournament {
-  id: ID
+  id: BigId
   organization: string
   tournament: string
-  fromdate: UTC
-  todate: UTC
+  fromdate: NaiveDate
+  todate: NaiveDate
   venue: string
   city: string
   region: string
@@ -33,7 +35,7 @@ interface Tournament {
   contact: string
   contactemail: string
   hide: boolean
-  info: string
+  info: string | undefined
   created_at: UTC
   updated_at: UTC
 }
@@ -41,8 +43,8 @@ interface Tournament {
 interface TournamentChangeset {
   organization: string
   tournament: string
-  fromdate: UTC
-  todate: UTC
+  fromdate: NaiveDate
+  todate: NaiveDate
   venue: string
   city: string
   region: string
@@ -50,7 +52,7 @@ interface TournamentChangeset {
   contact: string
   contactemail: string
   hide: boolean
-  info: string
+  info: string | undefined
 }
 
 interface FileInfo {
@@ -58,15 +60,4 @@ interface FileInfo {
   key: string
   name: string
   url: string | undefined
-}
-
-interface Todo {
-  id: number
-  text: string
-  created_at: Date
-  updated_at: Date
-}
-
-interface TodoJson {
-  text: string
 }
