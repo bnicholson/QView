@@ -59,7 +59,7 @@ export const Tournaments = () => {
   }
 
   useEffect(() => {
-    setText(selectedTournament?.text || '')
+    setText(selectedTournament?.tournament || '')
   }, [selectedTournament])
 
   useEffect(() => {
@@ -85,9 +85,12 @@ export const Tournaments = () => {
             <div style={{ display: 'flex' }}>
               <input
                 style={{ flex: 1 }}
-                value={text}
+                value={tournament.organization + tournament.tournament + tournament.fromdate}
                 onChange={(e) => setText(e.target.value)}
               />
+              <input>
+                {tournament.organization + tournament.tournament + tournament.fromdate}
+              </input>
               <button
                 disabled={processing}
                 style={{ height: '40px' }}
@@ -107,7 +110,12 @@ export const Tournaments = () => {
         ) : (
           <div className="Form">
             <div style={{ flex: 1 }}>
-              #{tournament.id} {tournament.text}
+              ID: {tournament.id} Org: {tournament.organization} Tournament: {tournament.tournament} 
+              Dates: {tournament.fromdate} - {tournament.todate} 
+              At: {tournament.venue} {tournament.city},{tournament.region},{tournament.country}
+              Contacts: {tournament.contact} {tournament.contactemail} 
+              Hide: {tournament.hide}
+              More Info: {tournament.info}
             </div>
             <div>
               <a href="#" className="App-link" onClick={() => editTournament(tournament)}>

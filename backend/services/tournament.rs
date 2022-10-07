@@ -2,6 +2,7 @@ use actix_web::{delete, Error, get, HttpResponse, post, put, Result, web::{Data,
 use create_rust_app::Database;
 use crate::{models, models::tournament::{Tournament, TournamentChangeset}};
 use crate::models::common::*;
+use actix_web::middleware::Logger;
 
 #[get("")]
 async fn index(
@@ -11,6 +12,8 @@ async fn index(
     let mut db = db.pool.get().unwrap();
 
     let result = models::tournament::read_all(&mut db, &info);
+
+//    log::debug("what is going on here a /api/tournament");
 
     if result.is_ok() {
         HttpResponse::Ok().json(result.unwrap())

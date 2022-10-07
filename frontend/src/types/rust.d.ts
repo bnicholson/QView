@@ -50,7 +50,7 @@ interface TournamentChangeset {
   region: string
   country: string
   contact: string
-  contactemail: string
+  contactemail: string | undefined
   hide: boolean
   info: string | undefined
 }
