@@ -92,6 +92,7 @@ async fn main() -> std::io::Result<()> {
         api_scope = api_scope.service(create_rust_app::auth::endpoints(web::scope("/auth")));
         api_scope = api_scope.service(services::todo::endpoints(web::scope("/todos")));
         api_scope = api_scope.service(services::tournament::endpoints(web::scope("/tournaments")));
+        api_scope = api_scope.service(services::scoreevent::endpoints(web::scope("/scoreevents")));
 
         #[cfg(debug_assertions)]
         {
