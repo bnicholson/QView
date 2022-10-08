@@ -36,7 +36,7 @@ version = "8.0.0"
 
 [dependencies.diesel]
 default-features = false
-features = ["postgres", "r2d2", "chrono", "time", "32-column-tables"]
+features = ["postgres", "r2d2", "chrono", "time", "32-column-tables", "uuid"]
 version = "2.0.0"
 
 [dependencies.serde]
