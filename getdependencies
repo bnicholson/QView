@@ -1,0 +1,7 @@
+# Get all the dependencies we need for this application
+yarn add react
+yarn add react-dom
+yarn add @babel/core
+yarn add @mui/material @emotion/react @emotion/styled
+
+
