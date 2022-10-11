@@ -205,7 +205,7 @@ const App = () => {
                   { index % 2 === 0 ? <Inbox /> : <Mail />} 
                 </ListItemIcon>
                 <ListItemText primary={text} />
-              </ListItemButton>
+              </ListItemButton> 
               </ListItem>
           ))}
           </List>
@@ -224,6 +224,7 @@ const App = () => {
             <Route path="/register" element={<RegistrationPage />} />
             <Route path="/account" element={<AccountPage />} />
             <Route path="/tournament" element={<Tournaments />} />	    
+            <Route path="/scoreevents" element={<Scoreevents />} />
           </Routes>
       </div>
       <div onClick={() => alert("boo hoo")}>Boo Hoo</div>

@@ -7,7 +7,6 @@ use actix_files::{Files};
 use actix_web::{App, HttpServer, web};
 use actix_web::middleware::{Compress, Logger, NormalizePath};
 use actix_web::web::Data;
-use diesel::*;
 
 mod schema;
 mod services;
