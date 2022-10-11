@@ -93,6 +93,9 @@ async fn main() -> std::io::Result<()> {
         api_scope = api_scope.service(services::tournament::endpoints(web::scope("/tournaments")));
         api_scope = api_scope.service(services::scoreevent::endpoints(web::scope("/scoreevents")));
 
+        // now route the "/scoreevents" logic to the same place as /api/scoreevents
+        app = app.route("/scoreevent",web::get().to(services::scoreevent::index_playground));
+
         #[cfg(debug_assertions)]
         {
             /* Development-only routes */

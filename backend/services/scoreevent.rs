@@ -1,9 +1,47 @@
+use std::sync::Mutex;
 use actix_web::{delete, web, HttpRequest, Error, get, HttpResponse, post, put, Result, web::{Data, Json, Path, Query}};
 use create_rust_app::Database;
 use crate::{models, models::scoreevent::{Game, GameChangeset}};
-use crate::models::common::*;
-use actix_web::middleware::Logger;
 use uuid::Uuid;
+
+fn print_type_of<T>(_: &T) {
+    println!("{}", std::any::type_name::<T>())
+}
+
+pub async fn index_playground(
+    req: HttpRequest,
+) -> actix_web::Result<HttpResponse> {
+
+    let mut db = req.app_data::<Data<Database>>().unwrap();
+    let mut mdb = db.pool.get().unwrap();
+
+    print_type_of(&mdb);
+    println!("Method: {:?}",req.method()); 
+    println!("URI: {:?}",req.uri()); 
+    println!("Version: {:?}",req.version());     
+    println!("URI: {:?}",req.uri()); 
+    println!("Path: {:?}",req.path()); 
+    println!("URI: {:?}",req.uri()); 
+    println!("Query_string: {:?}",req.query_string()); 
+    let content = std::fs::read_to_string("./.cargo/graphql-playground.html").unwrap();
+
+    let result = models::scoreevent::read_all(&mut mdb);
+    println!("{:?}",result);
+    
+    Ok(
+        HttpResponse::Ok()
+            .content_type("text/html; charset=utf-8")
+            // GraphQL Playground original source:
+            // .body(playground_source(
+            //     GraphQLPlaygroundConfig::new("/api/graphql")
+            //         .with_header("Authorization", "token")
+            //         .subscription_endpoint("/api/graphql/ws"),
+            // ))
+
+            // GraphQL Playground modified source to include authentication:
+            .body(content)
+    )
+}
 
 
 #[get("")]
@@ -14,9 +52,10 @@ async fn index(
 //    path: web::Path<(String,String,String)>,
     req: HttpRequest,
 ) -> HttpResponse {
-
     let mut db = db.pool.get().unwrap();
     
+    print_type_of(&db); 
+
     println!("Method: {:?}",req.method()); 
     println!("URI: {:?}",req.uri()); 
     println!("Version: {:?}",req.version());     
