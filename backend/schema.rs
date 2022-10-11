@@ -33,8 +33,8 @@ diesel::table! {
         room -> Varchar,
         round -> Varchar,
         key4server -> Nullable<Varchar>,
-        ignore -> Nullable<Bpchar>,
-        ruleset -> Varchar,
+        ignore -> Nullable<Bool>,
+        ruleset -> Nullable<Varchar>,
     }
 }
 

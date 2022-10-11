@@ -13,8 +13,6 @@ async fn index(
 
     let result = models::tournament::read_all(&mut db, &info);
 
-//    log::debug("what is going on here a /api/tournament");
-
     if result.is_ok() {
         HttpResponse::Ok().json(result.unwrap())
     } else {

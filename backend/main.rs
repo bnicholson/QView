@@ -7,7 +7,6 @@ use actix_files::{Files};
 use actix_web::{App, HttpServer, web};
 use actix_web::middleware::{Compress, Logger, NormalizePath};
 use actix_web::web::Data;
-use diesel::*;
 
 mod schema;
 mod services;
@@ -82,7 +81,7 @@ async fn main() -> std::io::Result<()> {
         app = app.app_data(Data::new(app_data.storage.clone()));
 
         let mut api_scope = web::scope("/api");
-        api_scope = api_scope.service(services::tournament::endpoints(web::scope("tournament")));
+//        api_scope = api_scope.service(services::tournament::endpoints(web::scope("tournament")));
         api_scope = api_scope.service(web::resource("/graphql").guard(guard::Post()).to(graphql::index));
         api_scope = api_scope.service(web::resource("/graphql/ws")
                 .guard(guard::Get())
@@ -92,6 +91,10 @@ async fn main() -> std::io::Result<()> {
         api_scope = api_scope.service(create_rust_app::auth::endpoints(web::scope("/auth")));
         api_scope = api_scope.service(services::todo::endpoints(web::scope("/todos")));
         api_scope = api_scope.service(services::tournament::endpoints(web::scope("/tournaments")));
+        api_scope = api_scope.service(services::scoreevent::endpoints(web::scope("/scoreevents")));
+
+        // now route the "/scoreevents" logic to the same place as /api/scoreevents
+        app = app.route("/scoreevent",web::get().to(services::scoreevent::index_playground));
 
         #[cfg(debug_assertions)]
         {
