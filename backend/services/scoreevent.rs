@@ -27,7 +27,7 @@ pub async fn index_playground(
 
     let result = models::scoreevent::read_all(&mut mdb);
     println!("{:?}",result);
-    
+
     Ok(
         HttpResponse::Ok()
             .content_type("text/html; charset=utf-8")
@@ -63,15 +63,6 @@ async fn index(
     println!("Path: {:?}",req.path()); 
     println!("URI: {:?}",req.uri()); 
     println!("Query_string: {:?}",req.query_string()); 
-
-//    let info = web::Path<(String,String,String)>;
-//    println!("Index endpoint - {} {} {}",info.bldgroom,info.tn,info.dn);
-
-//    let (bldgroom, tn, dn) = path.into_inner();
-
-//    println!("bldgroom = {:?}",bldgroom);/
-//    println!("tn = {:?}",tn);
-//    println!("dn = {:?}",dn);
 
     let result = models::scoreevent::read_all(&mut db);
 
