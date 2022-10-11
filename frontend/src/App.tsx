@@ -81,12 +81,12 @@ const App = () => {
             </IconButton>
             <Typography variant="h6" component="div" onClick={() => {navigate("/")}}>QView</Typography>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} onClick={() => handleDrawerClose()}>
-               Tournament: Q2022 Division: District Novice Room: Clements 203 Round: Tues07a
+
             </Typography>  
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>           
                {/* CRA: right-aligned nav buttons */}
               { auth.isAuthenticated && <a onClick={() => { auth.logout(); apollo.resetStore(); }}>Logout</a> }
-              { !auth.isAuthenticated && <a onClick={() => navigate('/login')}>Login/Register</a> }
+              { !auth.isAuthenticated && <button onClick={() => navigate('/login')}>Login/Register</button> }
             </Typography>
             { auth.isAuthenticated && <IconButton> <AccountCircle onClick={() => navigate('/account')}/></IconButton>}
           </Toolbar>
@@ -223,8 +223,7 @@ const App = () => {
             <Route path="/activate" element={<ActivationPage />} />
             <Route path="/register" element={<RegistrationPage />} />
             <Route path="/account" element={<AccountPage />} />
-            <Route path="/tournament" element={<Tournaments />} />	    
-            <Route path="/scoreevents" element={<Scoreevents />} />
+            <Route path="/tournament" element={<Tournaments />} />	   
           </Routes>
       </div>
       <div onClick={() => alert("boo hoo")}>Boo Hoo</div>
