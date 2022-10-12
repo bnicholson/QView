@@ -56,7 +56,7 @@ export const Home = () => {
  
   return (
  
-    <div>       <Card sx={{ maxWidth: 345 }}>
+    <div>       <Card sx={{ maxWidth: 845 }}>
     <CardHeader
       avatar={
         <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -129,7 +129,7 @@ export const Home = () => {
         </Typography>
       </CardContent>
     </Collapse>
-  </Card><Card sx={{ maxWidth: 345 }}>
+  </Card><Card sx={{ maxWidth: 845 }}>
     <CardHeader
       avatar={
         <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -202,7 +202,7 @@ export const Home = () => {
         </Typography>
       </CardContent>
     </Collapse>
-  </Card><Card sx={{ maxWidth: 345 }}>
+  </Card><Card sx={{ maxWidth: 845 }}>
     <CardHeader
       avatar={
         <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -275,7 +275,7 @@ export const Home = () => {
         </Typography>
       </CardContent>
     </Collapse>
-  </Card><Card sx={{ maxWidth: 345 }}>
+  </Card><Card sx={{ maxWidth: 845 }}>
     <CardHeader
       avatar={
         <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -348,7 +348,7 @@ export const Home = () => {
         </Typography>
       </CardContent>
     </Collapse>
-  </Card><Card sx={{ maxWidth: 345 }}>
+  </Card><Card sx={{ maxWidth: 845 }}>
     <CardHeader
       avatar={
         <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
