@@ -236,17 +236,19 @@ const App = () => {
             <Grid item xs={12} sm={4}>
               <Box borderBottom={1}>Help</Box>
               <Box>Contact</Box>
-              <Box>Help #2</Box>
+              <Box>Support</Box>
+              <Box>Privacy</Box>
             </Grid>
             <Grid item xs={12} sm={4}>
               <Box borderBottom={1}>Help</Box>
-              <Box>Contact</Box>
-              <Box>Help #2</Box>
+              <Box>Login</Box>
+              <Box>Register</Box>
             </Grid>
             <Grid item xs={12} sm={4}>
-              <Box borderBottom={1}>Help</Box>
-              <Box>Contact</Box>
-              <Box>Help #2</Box>
+              <Box borderBottom={1}>Messages</Box>
+              <Box>Backup</Box>
+              <Box>History</Box>
+              <Box>Roll</Box>
             </Grid>
           </Grid>
         </Container>
