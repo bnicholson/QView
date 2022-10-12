@@ -21,6 +21,8 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import Container from '@mui/material/Container'
+import Grid from '@mui/material/Grid'
 import MenuIcon from '@mui/icons-material/Menu';
 import Drawer from '@mui/material/Drawer'
 import List from '@mui/material/List'
@@ -49,7 +51,7 @@ const App = () => {
     alignItems: 'center',
     /*padding: theme.spacing(0, 1),*/
     // necessary for content to be below app bar
-/*    ...theme.mixins.toolbar,*/
+    /*    ...theme.mixins.toolbar,*/
     justifyContent: 'flex-end',
   }));
 
@@ -57,7 +59,7 @@ const App = () => {
   const [open, setOpen] = React.useState(false);
 
   const handleDrawerClose = () => {
-    if(open==true)
+    if (open == true)
       setOpen(false);
     else
       setOpen(true);
@@ -75,23 +77,23 @@ const App = () => {
               color="inherit"
               aria-label="menu"
               sx={{ mr: 2 }}
-              onClick={() => {handleDrawerClose()}}
+              onClick={() => { handleDrawerClose() }}
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" component="div" onClick={() => {navigate("/")}}>QView</Typography>
+            <Typography variant="h6" component="div" onClick={() => { navigate("/") }}>QView</Typography>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} onClick={() => handleDrawerClose()}>
 
-            </Typography>  
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>           
-               {/* CRA: right-aligned nav buttons */}
-              { auth.isAuthenticated && <a onClick={() => { auth.logout(); apollo.resetStore(); }}>Logout</a> }
-              { !auth.isAuthenticated && <button onClick={() => navigate('/login')}>Login/Register</button> }
             </Typography>
-            { auth.isAuthenticated && <IconButton> <AccountCircle onClick={() => navigate('/account')}/></IconButton>}
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              {/* CRA: right-aligned nav buttons */}
+              {auth.isAuthenticated && <a onClick={() => { auth.logout(); apollo.resetStore(); }}>Logout</a>}
+              {!auth.isAuthenticated && <button onClick={() => navigate('/login')}>Login/Register</button>}
+            </Typography>
+            {auth.isAuthenticated && <IconButton> <AccountCircle onClick={() => navigate('/account')} /></IconButton>}
           </Toolbar>
-        </AppBar>  
-        <div> 
+        </AppBar>
+        <div>
           <Breadcrumbs aria-label="breadcrumb">
             <Link underline="hover" color="inherit" href="/">
               Home
@@ -109,7 +111,6 @@ const App = () => {
             <Typography color="text.primary">Teams</Typography>
           </Breadcrumbs>
         </div>
-
       </Box>
       <Drawer
         sx={{
@@ -126,27 +127,28 @@ const App = () => {
       >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            <ChevronLeft/>
+            <ChevronLeft />
           </IconButton>
         </DrawerHeader>
         <Divider />
         <List>
           {['Tournament', 'Division', 'Room', 'Round'].map((text, index) => (
-            <ListItem key={text} disablePadding 
-              onClick={ () => { 
-                switch(index % 4) {
-                  case 0 :
+            <ListItem key={text} disablePadding
+              onClick={() => {
+                switch (index % 4) {
+                  case 0:
                     navigate("/tournament");
                     break;
-                  case 1 :
+                  case 1:
                     alert('division');
                     break;
-                  case 2 :
+                  case 2:
                     alert("room");
                     break;
-                  case 3 :
+                  case 3:
                     alert('round');
-                } } }>
+                }
+              }}>
               <ListItemButton>
                 <ListItemIcon>
                   {index % 2 === 0 ? <Inbox /> : <Mail />}
@@ -159,16 +161,16 @@ const App = () => {
         <Divider />
         <List>
           {['Quizzes', 'Team', 'Individual'].map((text, index) => (
-            <ListItem key={text} disablePadding 
-              onClick={ () => {
-                switch(index % 3) {
-                  case 0 :
+            <ListItem key={text} disablePadding
+              onClick={() => {
+                switch (index % 3) {
+                  case 0:
                     alert("quizzes");
                     break;
-                  case 1 :
+                  case 1:
                     alert("team");
                     break;
-                  case 2 :
+                  case 2:
                     alert("individual");
                     break;
                 }
@@ -185,16 +187,16 @@ const App = () => {
         <Divider />
         <List>
           {['Todos', 'Files', 'GraphQL'].map((text, index) => (
-            <ListItem key={text} disablePadding 
+            <ListItem key={text} disablePadding
               onClick={() => {
-                switch(index % 3) {
-                  case 0 :
+                switch (index % 3) {
+                  case 0:
                     navigate("/todos");
                     break;
-                  case 1 :
+                  case 1:
                     navigate("/files");
                     break;
-                  case 2 :
+                  case 2:
                     navigate("/gql");
                     break;
                 }
@@ -202,32 +204,57 @@ const App = () => {
             >
               <ListItemButton>
                 <ListItemIcon>
-                  { index % 2 === 0 ? <Inbox /> : <Mail />} 
+                  {index % 2 === 0 ? <Inbox /> : <Mail />}
                 </ListItemIcon>
                 <ListItemText primary={text} />
-              </ListItemButton> 
-              </ListItem>
+              </ListItemButton>
+            </ListItem>
           ))}
-          </List>
+        </List>
       </Drawer>
       <div style={{ margin: '0 auto', maxWidth: '800px' }}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/todos" element={<Todos />} />
-            {/* CRA: routes */}
-            <Route path="/gql" element={<GraphQLPage />} />
-            <Route path="/files" element={<Files />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/recovery" element={<RecoveryPage />} />
-            <Route path="/reset" element={<ResetPage />} />
-            <Route path="/activate" element={<ActivationPage />} />
-            <Route path="/register" element={<RegistrationPage />} />
-            <Route path="/account" element={<AccountPage />} />
-            <Route path="/tournament" element={<Tournaments />} />	   
-          </Routes>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/todos" element={<Todos />} />
+          {/* CRA: routes */}
+          <Route path="/gql" element={<GraphQLPage />} />
+          <Route path="/files" element={<Files />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/recovery" element={<RecoveryPage />} />
+          <Route path="/reset" element={<ResetPage />} />
+          <Route path="/activate" element={<ActivationPage />} />
+          <Route path="/register" element={<RegistrationPage />} />
+          <Route path="/account" element={<AccountPage />} />
+          <Route path="/tournament" element={<Tournaments />} />
+        </Routes>
       </div>
-      <div onClick={() => alert("boo hoo")}>Boo Hoo</div>
-    </div>
+      <Box textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 }}>
+        </Box>
+      <Box px={{ xs: 3, sm: 10 }} py={{ xs: 5, sm: 10 }} bgcolor="text.secondary" color="white">
+        <Container maxWidth='lg'>
+          <Grid container spacing={5}>
+            <Grid item xs={12} sm={4}>
+              <Box borderBottom={1}>Help</Box>
+              <Box>Contact</Box>
+              <Box>Help #2</Box>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Box borderBottom={1}>Help</Box>
+              <Box>Contact</Box>
+              <Box>Help #2</Box>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Box borderBottom={1}>Help</Box>
+              <Box>Contact</Box>
+              <Box>Help #2</Box>
+            </Grid>
+          </Grid>
+        </Container>
+        <Box textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 }}>
+          QView by QuizStuff &reg; {new Date().getFullYear()}
+        </Box>
+      </Box>
+    </div >
   )
 }
 
