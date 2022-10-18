@@ -1,25 +1,51 @@
 
 The csv files have the following structure.
 
-$key4server,$tournament,$division,$room,$round,question,eventnum,$name,team,quizzer,$event,$parm1,$parm2,$parm3,$ts
+Each quiz consists of a number of events.  An event could be anything
+associated with an occurence in the quiz.  Events are unique in the
+$key4server, $tournament, $division, $room, $round, question, event.
+
+
+  $key4server,$tournament,$division,$room,$round,question,eventnum,$name,
+	team,quizzer,$event,$parm1,$parm2,$parm3,$ts
 
 Variables with a $ in front are strings, all others are integers
 
-$key4server:
-$tournament
-$division
-$room
-$round
-question
-eventnum
-$name
-team
-quizzer
-$event
-$parm1
-$parm2
-$parm3
-$ts --> Timestamp
+$key4server: This is a unique id (hopefully globally but not guaranteed).
+	     Someday in the future we'll convert this to uuid.
+
+$tournament: This is the name of the tournament itself.
+
+$division: The division
+
+$room: What room is this quizzing event in.
+$round: What round is this event in
+
+question: This is the question number. So if a jump, error, challenge, appeal
+	  and foul all occur in a question all will have the same question
+	  number.
+	  
+eventnum: This is a number that helps us have multiple events in each question.
+
+$name: This is usually the name of the quizzer involved in the event but it
+       can be a number of other items.
+       
+team:  Team number.  Starts at 0.  A two team quiz would have 0, and 1.  A
+       three team quiz would have 0,1 and 2.
+quizzer:  Quizzer number: Zero based.  0-4 for a five person team.
+$event: Event identifier.
+
+$parm1: String parameter that depends upon the event type
+$parm2: String parameter that depends upon the event type
+$parm3: String parameter that depends upon the event type
+$ts: Timestamp - 'YYYY-MM-DD-hh.mm.ss.mmmmmm'
+     YYYY - year, i.e. 2022
+     MM - month
+     DD - day
+     hh - hour 24 based
+     mm - minute
+     ss - second
+     mmmmmm - milliseconds
 
 
 CREATE TABLE games (
