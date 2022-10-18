@@ -1,0 +1,48 @@
+
+The csv files have the following structure.
+
+$key4server,$tournament,$division,$room,$round,question,eventnum,$name,team,quizzer,$event,$parm1,$parm2,$parm3,$ts
+
+Variables with a $ in front are strings, all others are integers
+
+$key4server:
+$tournament
+$division
+$room
+$round
+question
+eventnum
+$name
+team
+quizzer
+$event
+$parm1
+$parm2
+$parm3
+$ts --> Timestamp
+
+
+CREATE TABLE games (
+	tournament varchar(32),
+	division varchar(32),
+	room varchar(32),
+	round varchar(32),
+	tdrri integer, 
+	key4server varchar(64) default '', 
+	ignore varchar(1) default 'N');
+CREATE UNIQUE INDEX gamesprim on games (tdrri);
+
+
+CREATE TABLE quiz (
+	tdrri integer,
+	question integer,
+	eventnum integer,
+	name varchar(32),
+	team integer,
+	quizzer integer,
+	event varchar(2),
+	parm1 varchar(8),
+	parm2 varchar(8),
+	ts timestamp, 
+	md5digest varchar(32) default '');
+CREATE UNIQUE INDEX quizprim on quiz (tdrri,question,eventnum);
