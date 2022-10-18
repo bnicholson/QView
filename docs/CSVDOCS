@@ -34,7 +34,42 @@ team:  Team number.  Starts at 0.  A two team quiz would have 0, and 1.  A
        three team quiz would have 0,1 and 2.
 quizzer:  Quizzer number: Zero based.  0-4 for a five person team.
 $event: Event identifier.
-
+	QT - Quiz Type (unused but eventually the type of quiz)
+	     NZ - Nazarene
+	     WB - World Bible quiz
+	     ?? - any more
+	DE - deleted event
+	TC - Toss up Correct
+	TE - Toss up error
+	NJ - No Jump
+	BC - Bonus Correct
+	BE - Bonus Error
+	EO - Error out
+	SC - Set Captain
+	SS - Set Co Captain
+	TO - Timeout
+	C+ - Challenge Accepted
+	C- - Overruled Challenge
+	A+ - Appeal Accepted
+	A- - Appeal overruled
+	F- - Foul
+	F0 - Foul Out
+	OP - Option changed
+	     QuizOut
+	     ErrorOut
+	     FoulOut
+	     QuizzerDeduct
+	     TeamDeduct
+	RM - Rule or Method change
+	AR - Quizzer Arrived
+	LF - Quizzer Left the game
+	II - Incorrect Information
+	TN - Team Name
+	QN - Quizzer Name
+	SO - Sign off.  A coached signed off on the scoresheet
+	SB - Substitution
+	
+	
 $parm1: String parameter that depends upon the event type
 $parm2: String parameter that depends upon the event type
 $parm3: String parameter that depends upon the event type
@@ -47,6 +82,10 @@ $ts: Timestamp - 'YYYY-MM-DD-hh.mm.ss.mmmmmm'
      ss - second
      mmmmmm - milliseconds
 
+
+This is the schema for the SQLite tables.
+
+tdrri (Tournament Division Room Round Index): this is a unique id for each quiz game.  It identifies a particular game.
 
 CREATE TABLE games (
 	tournament varchar(32),
