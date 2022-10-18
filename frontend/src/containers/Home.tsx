@@ -46,6 +46,10 @@ export const Home = () => {
   };
 
   return (
+    // Okay here's where I have to go get the tournaments starting at some
+    // page and page_size.   We start at by displaying all the tournaments
+    // that end 30 days before today and 30 days after today. 
+    
     <div>
 
       <Card style={{ maxWidth: 845 } }>
