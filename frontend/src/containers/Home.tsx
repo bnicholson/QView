@@ -1,5 +1,6 @@
 
 import React from 'react'
+import { useState } from 'react'
 import { styled } from '@mui/material/styles'
 import Card from "@mui/material/Card"
 import CardHeader from '@mui/material/CardHeader'
@@ -34,10 +35,19 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 export const Home = () => {
   const [expanded, setExpanded] = React.useState(false);
+  const [page, setPage] = useState<number>(0)
+  const [numPages, setPages] = useState<number>(1)
+  const [processing, setProcessing] = useState<boolean>(false)
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  let fromDate = new Date();
+  fromDate.setDate(fromDate.getDate() - 30);
+  let toDate = new Date();
+  toDate.setDate(toDate.getDate() + 30);
+
 
   return (
     // Okay here's where I have to go get the tournaments starting at some
@@ -45,6 +55,18 @@ export const Home = () => {
     // that end 30 days before today and 30 days after today. 
 
     <div>
+      <div className="Form">
+        <div style={{ display: 'flex' }}>
+          <button onClick={() => setPage(page - 1)}>{` << Previous Month`}</button>
+          <span style={{ flex: 1, textAlign: 'center' }}>
+            { fromDate.toLocaleDateString()}  - {toDate.toLocaleDateString() }
+          </span>
+          <button
+            disabled={processing}
+            onClick={() => setPage(page + 1)}
+          >{`Next Month >>`}</button>
+        </div>
+      </div>
       <Card style={{ maxWidth: 845 }}>
         <CardHeader
           avatar={
@@ -73,16 +95,16 @@ export const Home = () => {
               Quizzing occurs in round robin or pool play format with multiple division
               tournaments after round robin play has concluded.  Top teams in each
               tournament are recognized as well as Top 20 Individuals.
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
-              tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus 
-              non enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus 
-              imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus. 
-              Convallis convallis tellus id interdum velit laoreet id donec ultrices. 
-              Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit 
-              adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra 
-              nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. 
-              Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat 
-              vivamus at augue. At augue eget arcu dictum varius duis at consectetur lorem. 
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+              tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus
+              non enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
+              imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
+              Convallis convallis tellus id interdum velit laoreet id donec ultrices.
+              Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
+              adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
+              nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
+              Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
+              vivamus at augue. At augue eget arcu dictum varius duis at consectetur lorem.
               Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
             </Typography>
           </CardContent>
@@ -426,6 +448,20 @@ export const Home = () => {
           </CardContent>
         </Collapse>
       </Card>
+      <div>
+        <div className="Form">
+          <div style={{ display: 'flex' }}>
+            <button onClick={() => setPage(page - 1)}>{`<< Previous Month`}</button>
+            <span style={{ flex: 1, textAlign: 'center' }}>
+              Page {page + 1} of {numPages}
+            </span>
+            <button
+              disabled={processing}
+              onClick={() => setPage(page + 1)}
+            >{`Next Month >>`}</button>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
