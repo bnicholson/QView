@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-const TournamentAPI = {
+export const TournamentAPI = {
   get: async (page: number, size: number) =>
     await (await fetch(`/api/tournaments?page=${page}&page_size=${size}`)).json(),
   create: async (tournament: string) =>
