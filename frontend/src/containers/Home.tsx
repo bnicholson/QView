@@ -1,27 +1,21 @@
 
 import React from 'react'
-import reactLogo from '../images/logo.svg'
-import rustLogo from '../images/logo2.svg'
-import plus from '../images/plus.svg'
-
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import { Grid } from '@mui/material'
-import Card from "@mui/material/Card";
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles'
+import Card from "@mui/material/Card"
+import CardHeader from '@mui/material/CardHeader'
+import CardMedia from "@mui/material/CardMedia"
+import CardContent from "@mui/material/CardContent"
+import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
 import IconButton, { IconButtonProps } from '@mui/material/IconButton'
-import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import CardActions from '@mui/material/CardActions';
-import Collapse from '@mui/material/Collapse';
+import { red } from '@mui/material/colors'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import ShareIcon from '@mui/icons-material/Share'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import CardActions from '@mui/material/CardActions'
+import Collapse from '@mui/material/Collapse'
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -51,12 +45,11 @@ export const Home = () => {
     // that end 30 days before today and 30 days after today. 
 
     <div>
-
       <Card style={{ maxWidth: 845 }}>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-              R
+              M
             </Avatar>
           }
           action={
@@ -67,19 +60,22 @@ export const Home = () => {
           title={<Typography variant="h5">Kentucky Invitational</Typography>}
           subheader={<Typography variant="h6">September 30, 2022 - October 1, 2022</Typography>}
         />
-        <CardMedia
-          component="img"
-          height="194"
-          image="../images/promo.jpg"
-          alt="Kentucky Promo picture"
-        />
-        <CardContent>
-          <Typography variant="body2" color="text.secondary">
-            Quizzing occurs in round robin or pool play format with multiple division
-            tournaments after round robin play has concluded.  Top teams in each
-            tournament are recognized as well as Top 20 Individuals.
-          </Typography>
-        </CardContent>
+        <Box sx={{ display: 'flex' }}>
+          <CardMedia
+            component="img"
+            sx={{ width: 200 }}
+            height="200"
+            image="../images/promo.jpg"
+            alt="Kentucky Promo picture"
+          />
+          <CardContent>
+            <Typography align="left" variant="body1" color="text.primary" >
+              Quizzing occurs in round robin or pool play format with multiple division
+              tournaments after round robin play has concluded.  Top teams in each
+              tournament are recognized as well as Top 20 Individuals.
+            </Typography>
+          </CardContent>
+        </Box>
         <CardActions disableSpacing>
           <IconButton aria-label="add to favorites">
             <FavoriteIcon />
@@ -357,8 +353,8 @@ export const Home = () => {
               <MoreVertIcon />
             </IconButton>
           }
-          title= { <Typography variant="h5">Tristate</Typography> }
-          subheader= { <Typography variant="h6">November 19, 2022</Typography> }
+          title={<Typography variant="h5">Tristate</Typography>}
+          subheader={<Typography variant="h6">November 19, 2022</Typography>}
         />
         <CardMedia
           component="img"
@@ -419,7 +415,6 @@ export const Home = () => {
           </CardContent>
         </Collapse>
       </Card>
-
     </div>
   )
 }
