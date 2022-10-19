@@ -42,31 +42,33 @@ const subtract31Days = (theDate: Date): Date => {
 
 const add31Days = (theDate: Date): Date => {
   theDate.setTime(theDate.getTime() + (31 * 24 * 3600 * 1000));
-  //alert("Adding: " + theDate.toLocaleDateString());
+  //console.log("Adding: " + theDate.toLocaleDateString());
   return (theDate);
 }
 
 export const Home = () => {
   const [expanded, setExpanded] = React.useState(false)
-  const [processing, setProcessing] = useState<boolean>(false)
-  const [displayDate, setDisplayDate] = useState<Date>(new Date())
-  const [tournaments, setTournaments] = useState<Tournament[]>([])
+  const [processing, setProcessing] = React.useState<boolean>(false)
+  const [displayDate, setDisplayDate] = React.useState<Date>(new Date())
+  const [tournaments, setTournaments] = React.useState<Tournament[]>([])
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
   useEffect(() => {
-    // 
-    //alert("Setting useeffect - toDate")
     setProcessing(true)
     TournamentAPI.get(0, 25).then((tournaments: Tournament[]) => {
       setTournaments(tournaments)
       setProcessing(false)
     })
+    console.log("In useeffect - pulling from api")
   }, [displayDate])
 
-  //  alert(displayDate.toLocaleDateString());
+  const setMyDisplayDate = (theDate: Date) : Date => {
+    console.log("Orig: "+displayDate.toLocaleDateString() +" Adding or subtracting"+theDate.toLocaleDateString())
+    setDisplayDate(theDate);
+  }
 
   return (
     // Okay here's where I have to go get the tournaments starting at some
@@ -76,13 +78,13 @@ export const Home = () => {
     <div>
       <div className="Form">
         <div style={{ display: 'flex' }}>
-          <button onClick={() => setDisplayDate(subtract31Days(displayDate))}>{` << Previous Month`}</button>
+          <button onClick={() => setMyDisplayDate(subtract31Days(displayDate))}>{` << Previous Month`}</button>
           <span style={{ flex: 1, textAlign: 'center' }}>
             {displayDate.toLocaleDateString()}  - {add31Days(displayDate).toLocaleDateString()}
           </span>
           <button
             disabled={processing}
-            onClick={() => setDisplayDate(add31Days(displayDate))}
+            onClick={() => setMyDisplayDate(add31Days(displayDate))}
           >{`Next Month >>`}</button>
         </div>
       </div>
@@ -113,7 +115,17 @@ export const Home = () => {
               />
               <CardContent>
                 <Typography align="left" variant="body1" color="text.primary" >
-                  { tournament.info }
+                  <p>
+                    Contact: {tournament.contact} Email:{tournament.contactemail}<br />
+                    Organization: {tournament.organization}<br />
+                    Venue: {tournament.venue}<br />
+                    Location: {tournament.city}, {tournament.region}, {tournament.country}<br />
+                    <br />
+                    ID: {tournament.id}<br />
+                    Hidden: {tournament.hide}<br />
+                    Originally created: {tournament.created_at} <br />
+                    Last Update: {tournament.updated_at}
+                  </p>
                 </Typography>
               </CardContent>
             </Box>
@@ -135,8 +147,8 @@ export const Home = () => {
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
               <CardContent>
-                <Typography paragraph> 
-                  { tournament.info } 
+                <Typography paragraph>
+                  {tournament.info}
                 </Typography>
               </CardContent>
             </Collapse>
@@ -146,13 +158,13 @@ export const Home = () => {
       <div>
         <div className="Form">
           <div style={{ display: 'flex' }}>
-            <button onClick={() => setDisplayDate(subtract31Days(displayDate))}>{`<< Previous Month`}</button>
+            <button onClick={() => setMyDisplayDate(subtract31Days(displayDate))}>{`<< Previous Month`}</button>
             <span style={{ flex: 1, textAlign: 'center' }}>
               {displayDate.toLocaleDateString()}  - {add31Days(displayDate).toLocaleDateString()}
             </span>
             <button
               disabled={processing}
-              onClick={() => setDisplayDate(add31Days(displayDate))}
+              onClick={() => setMyDisplayDate(add31Days(displayDate))}
             >{`Next Month >>`}</button>
           </div>
         </div>
