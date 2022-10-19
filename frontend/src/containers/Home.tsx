@@ -47,10 +47,33 @@ const add31Days = (theDate: Date): Date => {
 }
 
 export const Home = () => {
-  const [expanded, setExpanded] = React.useState(false)
-  const [processing, setProcessing] = React.useState<boolean>(false)
-  const [displayDate, setDisplayDate] = React.useState<Date>(new Date())
-  const [tournaments, setTournaments] = React.useState<Tournament[]>([])
+  //  const [expanded, setExpanded] = React.useState(false)
+  //const [processing, setProcessing] = React.useState<boolean>(false)
+  //const [displayDate, setDisplayDate] = React.useState<Date>(new Date())
+  //const [tournaments, setTournaments] = React.useState<Tournament[]>([])
+
+  var expanded : boolean = false;
+  var processing : boolean = false;
+  var displayDate : Date = new Date();
+  var tournaments : Tournament[] ;
+
+  const setExpanded = (value) => {
+    expanded = value;
+  }
+  const setProcessing = (value: boolean) => {
+    processing = value;
+  }
+
+  const setDisplayDate = (value: Date) => {
+    displayDate = value;    TournamentAPI.get(0, 25).then((tournaments: Tournament[]) => {
+      setTournaments(tournaments)
+      setProcessing(false)
+    })
+  }
+
+  const setTournaments = (value: Tournament[]) => {
+    tournaments = value;
+  }
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
