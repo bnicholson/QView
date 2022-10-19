@@ -43,11 +43,11 @@ export const Home = () => {
     setExpanded(!expanded);
   };
 
-  let fromDate = new Date();
-  fromDate.setDate(fromDate.getDate() - 30);
-  let toDate = new Date();
-  toDate.setDate(toDate.getDate() + 30);
 
+  let toDate = new Date();
+  let fromDate = new Date();
+  fromDate.setTime(toDate.getTime() - (30 * 24 * 3600 * 1000));
+  toDate.setTime(toDate.getTime() + (30 * 24 * 3600 * 1000));
 
   return (
     // Okay here's where I have to go get the tournaments starting at some
@@ -59,7 +59,7 @@ export const Home = () => {
         <div style={{ display: 'flex' }}>
           <button onClick={() => setPage(page - 1)}>{` << Previous Month`}</button>
           <span style={{ flex: 1, textAlign: 'center' }}>
-            { fromDate.toLocaleDateString()}  - {toDate.toLocaleDateString() }
+            {fromDate.toLocaleDateString()}  - {toDate.toLocaleDateString()}
           </span>
           <button
             disabled={processing}
@@ -453,7 +453,7 @@ export const Home = () => {
           <div style={{ display: 'flex' }}>
             <button onClick={() => setPage(page - 1)}>{`<< Previous Month`}</button>
             <span style={{ flex: 1, textAlign: 'center' }}>
-              Page {page + 1} of {numPages}
+              {fromDate.toLocaleDateString()}  - {toDate.toLocaleDateString()}
             </span>
             <button
               disabled={processing}
