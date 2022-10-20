@@ -91,7 +91,7 @@ export const Home = () => {
       </div>
       <div className="Form">
         {tournaments.map((tournament, index) =>
-          <Card style={{ maxWidth: 845 }} key={tournament.tournament}>
+          <Card style={{ maxWidth: 845 }} key={tournament.tname}>
             <CardHeader
               avatar={
                 <Avatar sx={{ bgcolor: red[500] }} aria-label="tournament">
@@ -103,7 +103,7 @@ export const Home = () => {
                   <MoreVertIcon />
                 </IconButton>
               }
-              title={<Typography variant="h5">{tournament.tournament}</Typography>}
+              title={<Typography variant="h5">{tournament.tname}</Typography>}
               subheader={<Typography variant="h6"> {tournament.fromdate} - {tournament.todate}</Typography>}
             />
             <Box sx={{ display: 'flex' }}>
@@ -123,7 +123,7 @@ export const Home = () => {
                     Location: {tournament.city}, {tournament.region}, {tournament.country}<br />
                     ShortInfo: {tournament.shortinfo}
                     <br />
-                    ID: {tournament.id}<br />
+                    ID: {tournament.tid}<br />
                     Hidden: {tournament.hide}<br />
                     Originally created: {tournament.created_at} <br />
                     Last Update: {tournament.updated_at}
