@@ -78,7 +78,7 @@ export const Divisions = () => {
   }, [displayDate])
 
   return (
-    <div>          <div>
+    <div>
       <Breadcrumbs aria-label="breadcrumb" >
         <Link underline="hover" color="inherit" href="/">
           &nbsp;&nbsp;&nbsp;&nbsp;Home
@@ -95,7 +95,6 @@ export const Divisions = () => {
         </Link>
         <Typography color="text.primary">Teams</Typography>
       </Breadcrumbs>
-    </div>
       <div className="Form">
         {divisions.map((division, index) =>
           <Card style={{ maxWidth: 845 }} key={division.dname}>
@@ -123,15 +122,16 @@ export const Divisions = () => {
               />
               <CardContent>
                 <Typography align="left" variant="body1" color="text.primary" >
-                  <span>
-                    Breadcrumb: {division.breadcrumb}
-                    ShortInfo: {division.shortinfo}
-                    <br />
-                    ID: {division.did}<br />
-                    Hidden: {division.hide}<br />
-                    Originally created: {division.created_at} <br />
-                    Last Update: {division.updated_at}
-                  </span>
+                  Breadcrumb: {division.breadcrumb}
+                </Typography>
+                <Typography align="left" variant="body1" color="text.primary" >
+                  ShortInfo: {division.shortinfo}
+                </Typography>
+                <Typography align="left" variant="body1" color="text.primary" >
+                  ID: {division.did}                   Hidden: {division.hide}
+                </Typography>
+                <Typography align="left" variant="body1" color="text.primary" >
+                  Created: {division.created_at}                   Last Update: {division.updated_at}
                 </Typography>
               </CardContent>
             </Box>
@@ -161,6 +161,6 @@ export const Divisions = () => {
           </Card>
         )}
       </div>
-    </div>
+    </div >
   )
 }
