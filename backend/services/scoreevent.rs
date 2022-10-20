@@ -1,5 +1,5 @@
-use std::sync::Mutex;
-use actix_web::{delete, web, HttpRequest, Error, get, HttpResponse, post, put, Result, web::{Data, Json, Path, Query}};
+
+use actix_web::{delete, HttpRequest, Error, get, HttpResponse, post, put, Result, web::{Data, Json, Path}};
 use create_rust_app::Database;
 use crate::{models, models::scoreevent::{Game, GameChangeset}};
 use uuid::Uuid;
@@ -12,7 +12,7 @@ pub async fn index_playground(
     req: HttpRequest,
 ) -> actix_web::Result<HttpResponse> {
 
-    let mut db = req.app_data::<Data<Database>>().unwrap();
+    let db = req.app_data::<Data<Database>>().unwrap();
     let mut mdb = db.pool.get().unwrap();
 
     print_type_of(&mdb);

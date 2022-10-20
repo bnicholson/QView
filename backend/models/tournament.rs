@@ -2,8 +2,6 @@ use crate::diesel::*;
 use crate::schema::*;
 
 use create_rust_app::Connection;
-use chrono::{Date,Utc};
-use chrono::naive::NaiveDate;
 use diesel::QueryResult;
 use serde::{Deserialize, Serialize};
 use crate::models::common::*;

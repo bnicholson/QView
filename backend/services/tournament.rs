@@ -2,7 +2,6 @@ use actix_web::{delete, Error, get, HttpResponse, post, put, Result, web::{Data,
 use create_rust_app::Database;
 use crate::{models, models::tournament::{Tournament, TournamentChangeset}};
 use crate::models::common::*;
-use actix_web::middleware::Logger;
 
 #[get("")]
 async fn index(

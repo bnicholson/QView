@@ -47,33 +47,10 @@ const add31Days = (theDate: Date): Date => {
 }
 
 export const Home = () => {
-  //  const [expanded, setExpanded] = React.useState(false)
-  //const [processing, setProcessing] = React.useState<boolean>(false)
-  //const [displayDate, setDisplayDate] = React.useState<Date>(new Date())
-  //const [tournaments, setTournaments] = React.useState<Tournament[]>([])
-
-  var expanded : boolean = false;
-  var processing : boolean = false;
-  var displayDate : Date = new Date();
-  var tournaments : Tournament[] ;
-
-  const setExpanded = (value) => {
-    expanded = value;
-  }
-  const setProcessing = (value: boolean) => {
-    processing = value;
-  }
-
-  const setDisplayDate = (value: Date) => {
-    displayDate = value;    TournamentAPI.get(0, 25).then((tournaments: Tournament[]) => {
-      setTournaments(tournaments)
-      setProcessing(false)
-    })
-  }
-
-  const setTournaments = (value: Tournament[]) => {
-    tournaments = value;
-  }
+  const [expanded, setExpanded] = React.useState(false)
+  const [processing, setProcessing] = React.useState<boolean>(false)
+  const [displayDate, setDisplayDate] = React.useState<Date>(new Date())
+  const [tournaments, setTournaments] = React.useState<Tournament[]>([])
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -88,7 +65,7 @@ export const Home = () => {
     console.log("In useeffect - pulling from api")
   }, [displayDate])
 
-  const setMyDisplayDate = (theDate: Date) : Date => {
+  const setMyDisplayDate = (theDate: Date) => {
     console.log("Orig: "+displayDate.toLocaleDateString() +" Adding or subtracting"+theDate.toLocaleDateString())
     setDisplayDate(theDate);
   }
@@ -103,7 +80,7 @@ export const Home = () => {
         <div style={{ display: 'flex' }}>
           <button onClick={() => setMyDisplayDate(subtract31Days(displayDate))}>{` << Previous Month`}</button>
           <span style={{ flex: 1, textAlign: 'center' }}>
-            {displayDate.toLocaleDateString()}  - {add31Days(displayDate).toLocaleDateString()}
+            { displayDate.toLocaleDateString() }  - {add31Days(displayDate).toLocaleDateString()}
           </span>
           <button
             disabled={processing}
@@ -113,7 +90,7 @@ export const Home = () => {
       </div>
       <div className="Form">
         {tournaments.map((tournament, index) =>
-          <Card style={{ maxWidth: 845 }}>
+          <Card style={{ maxWidth: 845 }} key={tournament.tournament}>
             <CardHeader
               avatar={
                 <Avatar sx={{ bgcolor: red[500] }} aria-label="tournament">
@@ -138,8 +115,8 @@ export const Home = () => {
               />
               <CardContent>
                 <Typography align="left" variant="body1" color="text.primary" >
-                  <p>
-                    Contact: {tournament.contact} Email:{tournament.contactemail}<br />
+                  <span>
+                    Contact: {tournament.contact} Email:{tournament.contactemail}<br/>
                     Organization: {tournament.organization}<br />
                     Venue: {tournament.venue}<br />
                     Location: {tournament.city}, {tournament.region}, {tournament.country}<br />
@@ -148,7 +125,7 @@ export const Home = () => {
                     Hidden: {tournament.hide}<br />
                     Originally created: {tournament.created_at} <br />
                     Last Update: {tournament.updated_at}
-                  </p>
+                  </span>
                 </Typography>
               </CardContent>
             </Box>

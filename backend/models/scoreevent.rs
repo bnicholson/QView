@@ -4,7 +4,6 @@ use crate::schema::*;
 use create_rust_app::Connection;
 use uuid::Uuid;
 use serde::{Deserialize, Serialize};
-use crate::models::common::*;
 
 #[tsync::tsync]
 #[derive(

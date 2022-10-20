@@ -316,7 +316,7 @@ const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: false } },
 })
 
-ReactDOM.render(
+ReactDOM.render (
   <>
     <QueryClientProvider client={queryClient}>
       <DevBox />
