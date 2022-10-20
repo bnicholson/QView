@@ -44,7 +44,7 @@ export const Tournaments = () => {
 
   const updateTournament = async (tournament: Tournament) => {
     setProcessing(true)
-    await TournamentAPI.update(tournament.id, text)
+    await TournamentAPI.update(tournament.tid, text)
     setTournaments(await TournamentAPI.get(page, pageSize))
     setText('')
     editTournament(null)
@@ -53,13 +53,13 @@ export const Tournaments = () => {
 
   const deleteTournament = async (tournament: Tournament) => {
     setProcessing(true)
-    await TournamentAPI.delete(tournament.id)
+    await TournamentAPI.delete(tournament.tid)
     setTournaments(await TournamentAPI.get(page, pageSize))
     setProcessing(false)
   }
 
   useEffect(() => {
-    setText(selectedTournament?.tournament || '')
+    setText(selectedTournament?.tname || '')
   }, [selectedTournament])
 
   useEffect(() => {
@@ -80,16 +80,16 @@ export const Tournaments = () => {
     <div style={{ display: 'flex', flexFlow: 'column', textAlign: 'left' }}>
       <h1>Tournaments</h1>
       {tournaments.map((tournament, index) =>
-        tournament.id === selectedTournament?.id ? (
+        tournament.tid === selectedTournament?.tid ? (
           <div className="Form">
             <div style={{ display: 'flex' }}>
               <input
                 style={{ flex: 1 }}
-                value={tournament.organization + tournament.tournament + tournament.fromdate}
+                value={tournament.organization + tournament.tname + tournament.fromdate}
                 onChange={(e) => setText(e.target.value)}
               />
               <input>
-                {tournament.organization + tournament.tournament + tournament.fromdate}
+                {tournament.organization + tournament.tname + tournament.fromdate}
               </input>
               <button
                 disabled={processing}
@@ -110,7 +110,7 @@ export const Tournaments = () => {
         ) : (
           <div className="Form">
             <div style={{ flex: 1 }}>
-              ID: {tournament.id} Org: {tournament.organization} Tournament: {tournament.tournament} 
+              ID: {tournament.tid} Org: {tournament.organization} Tournament: {tournament.tname} 
               Dates: {tournament.fromdate} - {tournament.todate} 
               At: {tournament.venue} {tournament.city},{tournament.region},{tournament.country}
               Contacts: {tournament.contact} {tournament.contactemail} 

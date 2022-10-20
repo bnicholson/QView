@@ -101,27 +101,10 @@ const App = () => {
                 {auth.isAuthenticated && <a onClick={() => { auth.logout(); apollo.resetStore(); }}>Logout</a>}
                 {!auth.isAuthenticated && <button onClick={() => navigate('/login')}>Login/Register</button>}
               </Typography>
-              { auth.isAuthenticated && <IconButton> <AccountCircle onClick={() => navigate('/account')} /></IconButton>}
+              {auth.isAuthenticated && <IconButton> <AccountCircle onClick={() => navigate('/account')} /></IconButton>}
             </Toolbar>
           </AppBar>
-          <div>
-            <Breadcrumbs aria-label="breadcrumb" >
-              <Link underline="hover" color="inherit" href="/">
-                &nbsp;&nbsp;&nbsp;&nbsp;Home
-              </Link>
-              <Link underline="hover" color="inherit" href="/t/q2022">
-                Q2022
-              </Link>
-              <Link
-                underline="hover"
-                color="inherit"
-                href="/t/q2022/district%20novice"
-              >
-                District Novice
-              </Link>
-              <Typography color="text.primary">Teams</Typography>
-            </Breadcrumbs>
-          </div>
+
         </Box>
         <Drawer
           sx={{
@@ -237,7 +220,7 @@ const App = () => {
             <Route path="/register" element={<RegistrationPage />} />
             <Route path="/account" element={<AccountPage />} />
             <Route path="/tournament" element={<Tournaments />} />
-            <Route path="/division" element={<Divisions />} /> 
+            <Route path="/division" element={<Divisions />} />
           </Routes>
         </div>
         <Box textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 }}>

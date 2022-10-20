@@ -18,6 +18,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
 import { TournamentAPI } from './TournamentPage'
+import { Route, useNavigate, Routes } from 'react-router-dom'
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -52,6 +53,8 @@ export const Home = () => {
   const [displayDate, setDisplayDate] = React.useState<Date>(new Date())
   const [tournaments, setTournaments] = React.useState<Tournament[]>([])
 
+  const navigate = useNavigate();
+  
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -66,7 +69,7 @@ export const Home = () => {
   }, [displayDate])
 
   const setMyDisplayDate = (theDate: Date) => {
-    console.log("Orig: "+displayDate.toLocaleDateString() +" Adding or subtracting"+theDate.toLocaleDateString())
+    console.log("Orig: " + displayDate.toLocaleDateString() + " Adding or subtracting" + theDate.toLocaleDateString())
     setDisplayDate(theDate);
   }
 
@@ -81,7 +84,7 @@ export const Home = () => {
         <div style={{ display: 'flex' }}>
           <button onClick={() => setMyDisplayDate(subtract31Days(displayDate))}>{` << Previous Month`}</button>
           <span style={{ flex: 1, textAlign: 'center' }}>
-            { displayDate.toLocaleDateString() }  - {add31Days(displayDate).toLocaleDateString()}
+            {displayDate.toLocaleDateString()}  - {add31Days(displayDate).toLocaleDateString()}
           </span>
           <button
             disabled={processing}
@@ -91,7 +94,8 @@ export const Home = () => {
       </div>
       <div className="Form">
         {tournaments.map((tournament, index) =>
-          <Card style={{ maxWidth: 845 }} key={tournament.tname}>
+          <Card style={{ maxWidth: 845 }} key={tournament.tname}
+            onClick={() => navigate("/division")}>
             <CardHeader
               avatar={
                 <Avatar sx={{ bgcolor: red[500] }} aria-label="tournament">
@@ -117,7 +121,7 @@ export const Home = () => {
               <CardContent>
                 <Typography align="left" variant="body1" color="text.primary" >
                   <span>
-                    Contact: {tournament.contact} Email:{tournament.contactemail}<br/>
+                    Contact: {tournament.contact} Email:{tournament.contactemail}<br />
                     Organization: {tournament.organization}<br />
                     Venue: {tournament.venue}<br />
                     Location: {tournament.city}, {tournament.region}, {tournament.country}<br />
