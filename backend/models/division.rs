@@ -37,7 +37,6 @@ pub struct Division {
 #[diesel(primary_key(did))]
 pub struct DivisionChangeset {   
     pub dname: String,
-    pub tname: String,
     pub breadcrumb: String,
     pub hide: bool,
     pub shortinfo: Option<String>

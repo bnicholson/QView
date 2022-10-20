@@ -34,7 +34,7 @@ diesel::table! {
 diesel::table! {
     divisions (did) {
         did -> Int8,
-        tid -> Nullable<Int8>,
+        tid -> Int8,
         dname -> Varchar,
         breadcrumb -> Varchar,
         hide -> Bool,

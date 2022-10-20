@@ -24,7 +24,6 @@ interface Division {
 
 interface DivisionChangeset {
   dname: string
-  tname: string
   breadcrumb: string
   hide: boolean
   shortinfo: string | undefined
