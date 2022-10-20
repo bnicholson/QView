@@ -73,7 +73,8 @@ export const Home = () => {
   return (
     // Okay here's where I have to go get the tournaments starting at some
     // page and page_size.   We start at by displaying all the tournaments
-    // that end 30 days before today and 30 days after today. 
+    // that end 30 days before today and 30 days after today.   I need to change
+    // the API to not worry abut page size and page.  This is more date based.
 
     <div>
       <div className="Form">
@@ -120,6 +121,7 @@ export const Home = () => {
                     Organization: {tournament.organization}<br />
                     Venue: {tournament.venue}<br />
                     Location: {tournament.city}, {tournament.region}, {tournament.country}<br />
+                    ShortInfo: {tournament.shortinfo}
                     <br />
                     ID: {tournament.id}<br />
                     Hidden: {tournament.hide}<br />

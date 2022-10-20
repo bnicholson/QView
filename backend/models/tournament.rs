@@ -32,7 +32,8 @@ pub struct Tournament {
     pub contact: String,
     pub contactemail: String,
     pub hide: bool,
-    pub info: Option<String>,
+    pub shortinfo : String,
+    pub info: String,
     pub created_at: UTC,
     pub updated_at: UTC
 }

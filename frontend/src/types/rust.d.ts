@@ -58,7 +58,8 @@ interface Tournament {
   contact: string
   contactemail: string
   hide: boolean
-  info: string | undefined
+  shortinfo: string
+  info: string
   created_at: UTC
   updated_at: UTC
 }

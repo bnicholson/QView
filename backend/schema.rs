@@ -85,7 +85,8 @@ diesel::table! {
         contact -> Varchar,
         contactemail -> Varchar,
         hide -> Bool,
-        info -> Nullable<Text>,
+        shortinfo -> Varchar,
+        info -> Text,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
     }
