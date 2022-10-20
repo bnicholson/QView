@@ -11,6 +11,25 @@ interface PaginationParams {
   page_size: number
 }
 
+interface Division {
+  did: BigId
+  tid: BigId
+  dname: string
+  breadcrumb: string
+  hide: boolean
+  shortinfo: string
+  created_at: UTC
+  updated_at: UTC
+}
+
+interface DivisionChangeset {
+  dname: string
+  tname: string
+  breadcrumb: string
+  hide: boolean
+  shortinfo: string | undefined
+}
+
 interface Game {
   tdrri: Uuid
   org: string

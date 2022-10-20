@@ -8,6 +8,7 @@ import { RegistrationPage } from './containers/RegistrationPage'
 import { RecoveryPage } from './containers/RecoveryPage'
 import { ResetPage } from './containers/ResetPage'
 import { Tournaments } from './containers/TournamentPage'
+import { Divisions } from './containers/DivisionPage'
 import React from 'react'
 import './App.css'
 import { Home } from './containers/Home'
@@ -150,7 +151,7 @@ const App = () => {
                       navigate("/tournament");
                       break;
                     case 1:
-                      alert('division');
+                      navigate("/division");
                       break;
                     case 2:
                       alert("room");
@@ -236,6 +237,7 @@ const App = () => {
             <Route path="/register" element={<RegistrationPage />} />
             <Route path="/account" element={<AccountPage />} />
             <Route path="/tournament" element={<Tournaments />} />
+            <Route path="/division" element={<Divisions />} /> 
           </Routes>
         </div>
         <Box textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 }}>
