@@ -113,13 +113,7 @@ export const Divisions = () => {
               subheader={<Typography variant="h6"> Need to put something here for now nothing. </Typography>}
             />
             <Box sx={{ display: 'flex' }}>
-              <CardMedia
-                component="img"
-                sx={{ width: 200 }}
-                height="200"
-                image="../images/promo.jpg"
-                alt="Kentucky Promo picture"
-              />
+
               <CardContent>
                 <Typography align="left" variant="body1" color="text.primary" >
                   Breadcrumb: {division.breadcrumb}
