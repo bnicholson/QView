@@ -80,7 +80,7 @@ export const Divisions = () => {
     <div>
       <div className="Form">
         {divisions.map((division, index) =>
-          <Card style={{ maxWidth: 845 }} key={division.division}>
+          <Card style={{ maxWidth: 845 }} key={division.dname}>
             <CardHeader
               avatar={
                 <Avatar sx={{ bgcolor: red[500] }} aria-label="division">
@@ -92,8 +92,8 @@ export const Divisions = () => {
                   <MoreVertIcon />
                 </IconButton>
               }
-              title={<Typography variant="h5">{division.division}</Typography>}
-              subheader={<Typography variant="h6"> {division.fromdate} - {division.todate}</Typography>}
+              title={<Typography variant="h5">{division.dname}</Typography>}
+              subheader={<Typography variant="h6"> Need to put something here for now nothing. </Typography>}
             />
             <Box sx={{ display: 'flex' }}>
               <CardMedia
@@ -106,13 +106,10 @@ export const Divisions = () => {
               <CardContent>
                 <Typography align="left" variant="body1" color="text.primary" >
                   <span>
-                    Contact: {division.contact} Email:{division.contactemail}<br/>
-                    Organization: {division.organization}<br />
-                    Venue: {division.venue}<br />
-                    Location: {division.city}, {division.region}, {division.country}<br />
+                    Breadcrumb: { division.breadcrumb}
                     ShortInfo: {division.shortinfo}
                     <br />
-                    ID: {division.id}<br />
+                    ID: {division.did}<br />
                     Hidden: {division.hide}<br />
                     Originally created: {division.created_at} <br />
                     Last Update: {division.updated_at}
@@ -139,7 +136,7 @@ export const Divisions = () => {
             <Collapse in={expanded} timeout="auto" unmountOnExit>
               <CardContent>
                 <Typography paragraph>
-                  {division.info}
+                  {division.shortinfo}
                 </Typography>
               </CardContent>
             </Collapse>

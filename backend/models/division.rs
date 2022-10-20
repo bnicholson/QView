@@ -66,7 +66,9 @@ pub fn read_all(db: &mut Connection, pagination: &PaginationParams) -> QueryResu
                 * std::cmp::max(pagination.page_size, PaginationParams::MAX_PAGE_SIZE as i64),
         )
         .load::<Division>(db);
-    values
+        println!("Tournaments Puuled {:?}",values);
+        values
+
 }
 
 pub fn update(db: &mut Connection, item_id: BigId, item: &DivisionChangeset) -> QueryResult<Division> {

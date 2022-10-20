@@ -83,7 +83,7 @@ pub fn read_all(db: &mut Connection, pagination: &PaginationParams) -> QueryResu
                 * std::cmp::max(pagination.page_size, PaginationParams::MAX_PAGE_SIZE as i64),
         )
         .load::<Tournament>(db);
-    println!("{:?}",values);
+        println!("Tournaments Puuled {:?}",values);
     values
 }
 
