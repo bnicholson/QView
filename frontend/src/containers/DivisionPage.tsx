@@ -99,11 +99,7 @@ export const Divisions = () => {
         {divisions.map((division, index) =>
           <Card style={{ maxWidth: 845 }} key={division.dname}>
             <CardHeader
-              avatar={
-                <Avatar sx={{ bgcolor: red[500] }} aria-label="division">
-                  M
-                </Avatar>
-              }
+
               action={
                 <IconButton aria-label="settings">
                   <MoreVertIcon />
@@ -115,6 +111,22 @@ export const Divisions = () => {
             <Box sx={{ display: 'flex' }}>
 
               <CardContent>
+                <Typography align="left" variant="h5" color="primary" >
+                  <Link
+                    underline="hover"
+                    color="inherit"
+                    href="/t/q2022/district%20novice"
+                  >
+                    Team Standings
+                  </Link>&nbsp;&nbsp;
+                  <Link
+                    underline="hover"
+                    color="inherit"
+                    href="/t/q2022/district%20novice"
+                  >
+                    Individual Standings
+                  </Link>
+                </Typography>
                 <Typography align="left" variant="body1" color="text.primary" >
                   Breadcrumb: {division.breadcrumb}
                 </Typography>
@@ -129,29 +141,7 @@ export const Divisions = () => {
                 </Typography>
               </CardContent>
             </Box>
-            <CardActions disableSpacing>
-              <IconButton aria-label="add to favorites">
-                <FavoriteIcon />
-              </IconButton>
-              <IconButton aria-label="share">
-                <ShareIcon />
-              </IconButton>
-              <ExpandMore
-                expand={expanded}
-                onClick={handleExpandClick}
-                aria-expanded={expanded}
-                aria-label="show more"
-              >
-                <ExpandMoreIcon />
-              </ExpandMore>
-            </CardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-              <CardContent>
-                <Typography paragraph>
-                  {division.shortinfo}
-                </Typography>
-              </CardContent>
-            </Collapse>
+
           </Card>
         )}
       </div>
