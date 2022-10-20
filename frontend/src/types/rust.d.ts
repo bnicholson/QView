@@ -46,9 +46,10 @@ interface TodoChangeset {
 }
 
 interface Tournament {
-  id: BigId
+  tid: BigId
   organization: string
-  tournament: string
+  tname: string
+  breadcrumb: string
   fromdate: NaiveDate
   todate: NaiveDate
   venue: string
@@ -66,7 +67,8 @@ interface Tournament {
 
 interface TournamentChangeset {
   organization: string
-  tournament: string
+  tname: string
+  breadcrumb: string
   fromdate: NaiveDate
   todate: NaiveDate
   venue: string

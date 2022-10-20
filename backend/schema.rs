@@ -25,6 +25,26 @@ diesel::table! {
 }
 
 diesel::table! {
+    division_games (did, tdrri) {
+        did -> Int8,
+        tdrri -> Int8,
+    }
+}
+
+diesel::table! {
+    divisions (did) {
+        did -> Int8,
+        tid -> Nullable<Int8>,
+        dname -> Varchar,
+        breadcrumb -> Varchar,
+        hide -> Bool,
+        shortinfo -> Varchar,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+    }
+}
+
+diesel::table! {
     games (tdrri) {
         tdrri -> Uuid,
         org -> Varchar,
@@ -72,10 +92,11 @@ diesel::table! {
 }
 
 diesel::table! {
-    tournaments (id) {
-        id -> Int8,
+    tournaments (tid) {
+        tid -> Int8,
         organization -> Varchar,
-        tournament -> Varchar,
+        tname -> Varchar,
+        breadcrumb -> Varchar,
         fromdate -> Date,
         todate -> Date,
         venue -> Varchar,
@@ -138,6 +159,8 @@ diesel::joinable!(user_sessions -> users (user_id));
 diesel::allow_tables_to_appear_in_same_query!(
     attachment_blobs,
     attachments,
+    division_games,
+    divisions,
     games,
     quizzes,
     role_permissions,

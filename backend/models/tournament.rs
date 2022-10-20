@@ -18,11 +18,13 @@ Identifiable,
 AsChangeset,
 )]
 #[diesel(table_name=tournaments)]
+#[diesel(primary_key(tid))]
 pub struct Tournament {
     #[diesel(sql_type = Integer)]
-    pub id: BigId, 
+    pub tid: BigId, 
     pub organization: String,
-    pub tournament: String,
+    pub tname: String,                          // name of this tournament (humans)
+    pub breadcrumb: String,
     pub fromdate: chrono::naive::NaiveDate,
     pub todate: chrono::naive::NaiveDate,
     pub venue: String,
@@ -41,9 +43,11 @@ pub struct Tournament {
 #[tsync::tsync]
 #[derive(Debug, Serialize, Deserialize, Clone, Insertable, AsChangeset)]
 #[diesel(table_name=tournaments)]
+#[diesel(primary_key(tid))]
 pub struct TournamentChangeset {   
     pub organization: String,
-    pub tournament: String,
+    pub tname: String,
+    pub breadcrumb: String,
     pub fromdate: chrono::naive::NaiveDate,
     pub todate: chrono::naive::NaiveDate,
     pub venue: String,
@@ -65,7 +69,7 @@ pub fn create(db: &mut Connection, item: &TournamentChangeset) -> QueryResult<To
 pub fn read(db: &mut Connection, item_id: BigId) -> QueryResult<Tournament> {
     use crate::schema::tournaments::dsl::*;
 
-    tournaments.filter(id.eq(item_id)).first::<Tournament>(db)
+    tournaments.filter(tid.eq(item_id)).first::<Tournament>(db)
 }
 
 pub fn read_all(db: &mut Connection, pagination: &PaginationParams) -> QueryResult<Vec<Tournament>> {
@@ -86,7 +90,7 @@ pub fn read_all(db: &mut Connection, pagination: &PaginationParams) -> QueryResu
 pub fn update(db: &mut Connection, item_id: BigId, item: &TournamentChangeset) -> QueryResult<Tournament> {
     use crate::schema::tournaments::dsl::*;
 
-    diesel::update(tournaments.filter(id.eq(item_id)))
+    diesel::update(tournaments.filter(tid.eq(item_id)))
         .set(item)
         .get_result(db)
 }
@@ -94,5 +98,5 @@ pub fn update(db: &mut Connection, item_id: BigId, item: &TournamentChangeset) -
 pub fn delete(db: &mut Connection, item_id: BigId) -> QueryResult<usize> {
     use crate::schema::tournaments::dsl::*;
 
-    diesel::delete(tournaments.filter(id.eq(item_id))).execute(db)
+    diesel::delete(tournaments.filter(tid.eq(item_id))).execute(db)
 }
