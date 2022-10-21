@@ -19,6 +19,8 @@ import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
 import { TournamentAPI } from './TournamentPage'
 import { Route, useNavigate, Routes } from 'react-router-dom'
+import { useSelect } from '@mui/base'
+import { useDispatch, useSelector } from 'react-redux'
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -54,7 +56,10 @@ export const Home = () => {
   const [tournaments, setTournaments] = React.useState<Tournament[]>([])
 
   const navigate = useNavigate();
-  
+
+  //const breadcrumbs = useSelector(state => state.breadcrumbs );
+  const dispatcher = useDispatch();
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -95,7 +100,10 @@ export const Home = () => {
       <div className="Form">
         {tournaments.map((tournament, index) =>
           <Card style={{ maxWidth: 845 }} key={tournament.tname}
-            onClick={() => navigate("/division")}>
+            onClick={() => {
+
+              navigate("/division")
+            }} >
             <CardHeader
               avatar={
                 <Avatar sx={{ bgcolor: red[500] }} aria-label="tournament">

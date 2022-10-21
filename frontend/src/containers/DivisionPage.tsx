@@ -43,20 +43,6 @@ export const DivisionAPI = {
       body: JSON.stringify({ text: division }),
     }),
 }
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
-
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
 
 export const Divisions = () => {
   const [expanded, setExpanded] = React.useState(false)
@@ -99,13 +85,17 @@ export const Divisions = () => {
         {divisions.map((division, index) =>
           <Card style={{ maxWidth: 845 }} key={division.dname}>
             <CardHeader
-
               action={
                 <IconButton aria-label="settings">
                   <MoreVertIcon />
                 </IconButton>
               }
-              title={<Typography variant="h5">{division.dname}</Typography>}
+              title={<Typography variant="h5">
+                <Link 
+                  underline="hover"
+                  color="primary"
+                  href="//">{division.dname}</Link>
+              </Typography>}
               subheader={<Typography variant="h6"> Need to put something here for now nothing. </Typography>}
             />
             <Box sx={{ display: 'flex' }}>

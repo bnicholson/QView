@@ -7,6 +7,8 @@ import { BrowserRouter } from 'react-router-dom'
 
 import { ApolloProvider } from "@apollo/client";
 import { useAuthenticatedApolloClient } from "../src/hooks/useAuthenticatedApolloClient";
+import { Provider } from 'react-redux'
+import { store } from '../src/store'
 
 const AuthenticatedApolloProvider = (props: { children: React.ReactNode }) => {
     const client = useAuthenticatedApolloClient()
@@ -22,7 +24,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <AuthProvider>
             <AuthenticatedApolloProvider>
                 <BrowserRouter>
+                    <Provider store={store}>
                     <App />
+                    </Provider>
                 </BrowserRouter>
                 {/* CRA: Unwrap */}
             </AuthenticatedApolloProvider>
