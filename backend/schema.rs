@@ -83,6 +83,34 @@ diesel::table! {
 }
 
 diesel::table! {
+    rooms (roomid) {
+        roomid -> Int8,
+        tid -> Int8,
+        name -> Varchar,
+        building -> Nullable<Varchar>,
+    }
+}
+
+diesel::table! {
+    schedules (sid) {
+        sid -> Int8,
+        tid -> Int8,
+        roundtime -> Timestamptz,
+        tournament -> Varchar,
+        division -> Varchar,
+        room -> Varchar,
+        round -> Varchar,
+        team1 -> Nullable<Varchar>,
+        team2 -> Nullable<Varchar>,
+        team3 -> Nullable<Varchar>,
+        quizmaster -> Nullable<Varchar>,
+        contentjudge -> Nullable<Varchar>,
+        scorekeeper -> Nullable<Varchar>,
+        stats -> Nullable<Varchar>,
+    }
+}
+
+diesel::table! {
     todos (id) {
         id -> Int4,
         text -> Text,
@@ -164,6 +192,8 @@ diesel::allow_tables_to_appear_in_same_query!(
     games,
     quizzes,
     role_permissions,
+    rooms,
+    schedules,
     todos,
     tournaments,
     user_permissions,
