@@ -88,7 +88,9 @@ export const Home = () => {
         <div style={{ display: 'flex' }}>
           <button onClick={() => setMyDisplayDate(subtract31Days(displayDate))}>{` << Previous Month`}</button>
           <span style={{ flex: 1, textAlign: 'center' }}>
-            {displayDate.toLocaleDateString()}  - {add31Days(displayDate).toLocaleDateString()}
+            <Typography variant="h5">
+              {displayDate.toLocaleDateString()}  - {add31Days(displayDate).toLocaleDateString()}
+            </Typography>
           </span>
           <button
             disabled={processing}
