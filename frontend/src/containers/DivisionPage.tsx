@@ -65,22 +65,27 @@ export const Divisions = () => {
 
   return (
     <div>
-      <Breadcrumbs aria-label="breadcrumb" >
-        <Link underline="hover" color="inherit" href="/">
-          &nbsp;&nbsp;&nbsp;&nbsp;Home
-        </Link>
-        <Link underline="hover" color="inherit" href="/t/q2022">
-          Q2022
-        </Link>
-        <Link
-          underline="hover"
-          color="inherit"
-          href="/t/q2022/district%20novice"
-        >
-          District Novice
-        </Link>
-        <Typography color="text.primary">Teams</Typography>
-      </Breadcrumbs>
+      <Box>
+        <Breadcrumbs aria-label="breadcrumb" >
+          <Link underline="hover" color="inherit" href="/">
+            Home
+          </Link>
+          <Link underline="hover" color="inherit" href="/t/q2022">
+            Q2022
+          </Link>
+          <Link
+            underline="hover"
+            color="inherit"
+            href="/t/q2022/district%20novice"
+          >
+            District Novice
+          </Link>
+          <Typography color="text.primary">Teams</Typography>
+        </Breadcrumbs>
+        <IconButton aria-label="settings">
+          <MoreVertIcon />
+        </IconButton>
+      </Box>
       <div className="Form">
         {divisions.map((division, index) =>
           <Card style={{ maxWidth: 845 }} key={division.dname}>
@@ -91,7 +96,7 @@ export const Divisions = () => {
                 </IconButton>
               }
               title={<Typography variant="h5">
-                <Link 
+                <Link
                   underline="hover"
                   color="primary"
                   href="//">{division.dname}</Link>
@@ -99,7 +104,6 @@ export const Divisions = () => {
               subheader={<Typography variant="h6"> Need to put something here for now nothing. </Typography>}
             />
             <Box sx={{ display: 'flex' }}>
-
               <CardContent>
                 <Typography align="left" variant="h5" color="primary" >
                   <Link
@@ -127,7 +131,7 @@ export const Divisions = () => {
                   ID: {division.did}                   Hidden: {division.hide}
                 </Typography>
                 <Typography align="left" variant="body1" color="text.primary" >
-                  Created: {division.created_at}                   Last Update: {division.updated_at}
+                  Created: {division.created_at} - Last Update: {division.updated_at}
                 </Typography>
               </CardContent>
             </Box>
