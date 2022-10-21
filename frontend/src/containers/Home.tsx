@@ -148,6 +148,7 @@ export const Home = () => {
               <IconButton aria-label="add to favorites">
                 <FavoriteIcon />
               </IconButton>
+              <Typography>33</Typography>
               <IconButton aria-label="share">
                 <ShareIcon />
               </IconButton>
