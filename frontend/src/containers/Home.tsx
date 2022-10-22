@@ -20,6 +20,9 @@ import { TournamentAPI } from './TournamentPage'
 import { Route, useNavigate, Routes } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import SettingsIcon from '@mui/icons-material/Settings';
+import { selectDisplayDate, selectTournament, setDisplayDate, setTournament, toggleIsOn } from '../breadcrumb'
+import { useAppSelector, useAppDispatch } from '../app/hooks'
+import { breadCrumb } from '../breadcrumb'
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -36,11 +39,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-const subtract31Days = (theDate: Date): Date => {
-  theDate.setTime(theDate.getTime() - (31 * 24 * 3600 * 1000));
-  //  alert("Subtracting: " + theDate.toLocaleDateString());
-  return (theDate);
-}
+
 
 const add31Days = (theDate: Date): Date => {
   theDate.setTime(theDate.getTime() + (31 * 24 * 3600 * 1000));
@@ -51,13 +50,25 @@ const add31Days = (theDate: Date): Date => {
 export const Home = () => {
   const [expanded, setExpanded] = React.useState(false)
   const [processing, setProcessing] = React.useState<boolean>(false)
-  const [displayDate, setDisplayDate] = React.useState<Date>(new Date())
   const [tournaments, setTournaments] = React.useState<Tournament[]>([])
 
   const navigate = useNavigate();
 
-  //const breadcrumbs = useSelector(state => state.breadcrumbs );
-  const dispatcher = useDispatch();
+  var displayDate = useAppSelector( (state) => state.breadCrumb.displayDate) ;
+  const tournament = useAppSelector( (state) => state.breadCrumb.tournament );
+  const dispatcher = useAppDispatch();
+
+  const subtract31Days = () => {
+    displayDate = displayDate - (31 * 24 * 3600 * 1000);
+    dispatcher(setDisplayDate(displayDate));
+  }
+  
+  const add31Days = () => {
+    displayDate = displayDate + (31 * 24 * 3600 * 1000);
+    dispatcher(setDisplayDate(displayDate));
+  }
+
+  console.log("Display Date = "+displayDate + " Tournament is "+tournament);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -72,10 +83,10 @@ export const Home = () => {
     console.log("In useeffect - pulling from api")
   }, [displayDate])
 
-  const setMyDisplayDate = (theDate: Date) => {
-    console.log("Orig: " + displayDate.toLocaleDateString() + " Adding or subtracting" + theDate.toLocaleDateString())
-    setDisplayDate(theDate);
-  }
+  const fromDate = new Date();
+  fromDate.setTime(displayDate);
+  const toDate = new Date();
+  toDate.setTime(displayDate + (31*24*3600*1000));
 
   return (
     // Okay here's where I have to go get the tournaments starting at some
@@ -86,15 +97,15 @@ export const Home = () => {
     <div>
       <div className="Form">
         <div style={{ display: 'flex' }}>
-          <button onClick={() => setMyDisplayDate(subtract31Days(displayDate))}>{` << Previous Month`}</button>
+          <button onClick={() => subtract31Days()}>{` << Previous Month`}</button>
           <span style={{ flex: 1, textAlign: 'center' }}>
             <Typography variant="h5">
-              {displayDate.toLocaleDateString()}  - {add31Days(displayDate).toLocaleDateString()}
+              { fromDate.toLocaleDateString()} - {toDate.toLocaleDateString() }
             </Typography>
           </span>
           <button
             disabled={processing}
-            onClick={() => setMyDisplayDate(add31Days(displayDate))}
+            onClick={() => add31Days()}
           >{`Next Month >>`}</button>
         </div>
       </div>
@@ -102,7 +113,7 @@ export const Home = () => {
         {tournaments.map((tournament, index) =>
           <Card style={{ maxWidth: 845 }} key={tournament.tname}
             onClick={() => {
-
+              dispatcher(setTournament( tournament.tname ));  
               navigate("/division")
             }} >
             <CardHeader
@@ -140,6 +151,7 @@ export const Home = () => {
                     Hidden: {tournament.hide}<br />
                     Originally created: {tournament.created_at} <br />
                     Last Update: {tournament.updated_at}
+                      breadcrumbs.tournament  --- not working correctly - why? 
                   </span>
                 </Typography>
               </CardContent>
@@ -174,13 +186,13 @@ export const Home = () => {
       <div>
         <div className="Form">
           <div style={{ display: 'flex' }}>
-            <button onClick={() => setMyDisplayDate(subtract31Days(displayDate))}>{`<< Previous Month`}</button>
+            <button onClick={() => subtract31Days()}>{`<< Previous Month`}</button>
             <span style={{ flex: 1, textAlign: 'center' }}>
-              {displayDate.toLocaleDateString()}  - {add31Days(displayDate).toLocaleDateString()}
+                { fromDate.toLocaleDateString() }  - { toDate.toLocaleDateString()}
             </span>
             <button
               disabled={processing}
-              onClick={() => setMyDisplayDate(add31Days(displayDate))}
+              onClick={() => add31Days()}
             >{`Next Month >>`}</button>
           </div>
         </div>
