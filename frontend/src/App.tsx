@@ -101,7 +101,7 @@ const App = () => {
                 {auth.isAuthenticated && <a onClick={() => { auth.logout(); apollo.resetStore(); }}>Logout</a>}
                 {!auth.isAuthenticated && <button onClick={() => navigate('/login')}>Login/Register</button>}
               </Typography>
-              {auth.isAuthenticated && <IconButton> <AccountCircle onClick={() => navigate('/account')} /></IconButton>}
+              {auth.isAuthenticated && <IconButton onClick={() => navigate('/account')}> <AccountCircle/></IconButton>}
             </Toolbar>
           </AppBar>
 

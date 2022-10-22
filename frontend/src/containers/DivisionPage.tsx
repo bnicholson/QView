@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { useState, useEffect } from 'react'
 import Card from "@mui/material/Card"
@@ -41,10 +40,6 @@ export const Divisions = () => {
   const [processing, setProcessing] = React.useState<boolean>(false)
   const [displayDate, setDisplayDate] = React.useState<Date>(new Date())
   const [divisions, setDivisions] = React.useState<Division[]>([])
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
 
   useEffect(() => {
     setProcessing(true)
