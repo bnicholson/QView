@@ -76,7 +76,7 @@ pub fn read_all(db: &mut Connection, pagination: &PaginationParams) -> QueryResu
     use crate::schema::tournaments::dsl::*;
 
     let values = tournaments
-        .order(created_at)
+        .order(todate)
         .limit(pagination.page_size)
         .offset(
             pagination.page
