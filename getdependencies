@@ -1,4 +1,9 @@
 # Get all the dependencies we need for this application
+
+## first make sure we are in the frontend dir
+cd frontend
+
+# now get the deps
 yarn add react
 yarn add react-dom
 yarn add @babel/core

@@ -10,6 +10,8 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
 import IconButton, { IconButtonProps } from '@mui/material/IconButton'
+import Fab from '@mui/material/Fab'
+import AddIcon from "@mui/icons-material/Add"
 import { red } from '@mui/material/colors'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import ShareIcon from '@mui/icons-material/Share'
@@ -22,7 +24,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import SettingsIcon from '@mui/icons-material/Settings';
 import { selectDisplayDate, selectTournament, setDisplayDate, setTournament, toggleIsOn } from '../breadcrumb'
 import { useAppSelector, useAppDispatch } from '../app/hooks'
-import { breadCrumb } from '../breadcrumb'
+import MUIRichTextEditor from 'mui-text-editor'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -54,21 +57,21 @@ export const Home = () => {
 
   const navigate = useNavigate();
 
-  var displayDate = useAppSelector( (state) => state.breadCrumb.displayDate) ;
-  const tournament = useAppSelector( (state) => state.breadCrumb.tournament );
+  var displayDate = useAppSelector((state) => state.breadCrumb.displayDate);
+  const tournament = useAppSelector((state) => state.breadCrumb.tournament);
   const dispatcher = useAppDispatch();
 
   const subtract31Days = () => {
     displayDate = displayDate - (31 * 24 * 3600 * 1000);
     dispatcher(setDisplayDate(displayDate));
   }
-  
+
   const add31Days = () => {
     displayDate = displayDate + (31 * 24 * 3600 * 1000);
     dispatcher(setDisplayDate(displayDate));
   }
 
-  console.log("Display Date = "+displayDate + " Tournament is "+tournament);
+  console.log("Display Date = " + displayDate + " Tournament is " + tournament);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -86,8 +89,31 @@ export const Home = () => {
   const fromDate = new Date();
   fromDate.setTime(displayDate);
   const toDate = new Date();
-  toDate.setTime(displayDate + (31*24*3600*1000));
+  toDate.setTime(displayDate + (31 * 24 * 3600 * 1000));
 
+  if (1 == 0) {
+    return (
+      <div className="Form">
+        <div style={{ display: 'flex' }}>
+          <button onClick={() => subtract31Days()}>{` << Previous Month`}</button>
+          <span style={{ flex: 1, textAlign: 'center' }}>
+            <Typography variant="h5">
+              {fromDate.toLocaleDateString()} - {toDate.toLocaleDateString()}
+            </Typography>
+          </span>
+          <button
+            disabled={processing}
+            onClick={() => add31Days()}
+          >{`Next Month >>`}</button>
+        </div>
+        <Fab color="primary" aria-label="Add Tournament">
+          <AddIcon />
+        </Fab>
+ 
+      </div>
+    )
+  }
+//<MUIRichTextEditor label='Start typing here'></MUIRichTextEditor>
   return (
     // Okay here's where I have to go get the tournaments starting at some
     // page and page_size.   We start at by displaying all the tournaments
@@ -95,12 +121,15 @@ export const Home = () => {
     // the API to not worry abut page size and page.  This is more date based.
 
     <div>
+      <Fab color="primary" aria-label="Add Tournament">
+        <AddIcon />
+      </Fab>
       <div className="Form">
         <div style={{ display: 'flex' }}>
           <button onClick={() => subtract31Days()}>{` << Previous Month`}</button>
           <span style={{ flex: 1, textAlign: 'center' }}>
             <Typography variant="h5">
-              { fromDate.toLocaleDateString()} - {toDate.toLocaleDateString() }
+              {fromDate.toLocaleDateString()} - {toDate.toLocaleDateString()}
             </Typography>
           </span>
           <button
@@ -113,7 +142,7 @@ export const Home = () => {
         {tournaments.map((tournament, index) =>
           <Card style={{ maxWidth: 845 }} key={tournament.tname}
             onClick={() => {
-              dispatcher(setTournament( tournament.tname ));  
+              dispatcher(setTournament(tournament.tname));
               navigate("/division")
             }} >
             <CardHeader
@@ -151,7 +180,7 @@ export const Home = () => {
                     Hidden: {tournament.hide}<br />
                     Originally created: {tournament.created_at} <br />
                     Last Update: {tournament.updated_at}
-                      breadcrumbs.tournament  --- not working correctly - why? 
+                    breadcrumbs.tournament  --- not working correctly - why?
                   </span>
                 </Typography>
               </CardContent>
@@ -188,7 +217,7 @@ export const Home = () => {
           <div style={{ display: 'flex' }}>
             <button onClick={() => subtract31Days()}>{`<< Previous Month`}</button>
             <span style={{ flex: 1, textAlign: 'center' }}>
-                { fromDate.toLocaleDateString() }  - { toDate.toLocaleDateString()}
+              {fromDate.toLocaleDateString()}  - {toDate.toLocaleDateString()}
             </span>
             <button
               disabled={processing}
@@ -200,3 +229,4 @@ export const Home = () => {
     </div>
   )
 }
+//<MUIRichTextEditor label='Start typing here'></MUIRichTextEditor>
