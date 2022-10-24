@@ -23,9 +23,18 @@ import { Route, useNavigate, Routes } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import SettingsIcon from '@mui/icons-material/Settings';
 import { selectDisplayDate, selectTournament, setDisplayDate, setTournament, toggleIsOn } from '../breadcrumb'
-import { useAppSelector, useAppDispatch } from '../app/hooks'
-import MUIRichTextEditor from 'mui-text-editor'
-import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { useAppSelector, useAppDispatch } from '../app/hooks';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid'
+import MenuItem from '@mui/material/MenuItem'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
+import InputLabel from '@mui/material/InputLabel'
+import FormControl from '@mui/material/FormControl'
+import TextField from '@mui/material/TextField'
+import { Dayjs } from 'dayjs'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -91,29 +100,83 @@ export const Home = () => {
   const toDate = new Date();
   toDate.setTime(displayDate + (31 * 24 * 3600 * 1000));
 
-  if (1 == 0) {
+  const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode == 'dark' ? '#1a2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  }));
+
+  if (1 == 1) {
+    const [age, setAge] = React.useState('');
+    const [value, setValue] = React.useState<Dayjs | null>(null);
+
+    const handleChange = (event: SelectChangeEvent) => {
+      setAge(event.target.value as string);
+    }
     return (
       <div className="Form">
-        <div style={{ display: 'flex' }}>
-          <button onClick={() => subtract31Days()}>{` << Previous Month`}</button>
-          <span style={{ flex: 1, textAlign: 'center' }}>
-            <Typography variant="h5">
-              {fromDate.toLocaleDateString()} - {toDate.toLocaleDateString()}
-            </Typography>
-          </span>
-          <button
-            disabled={processing}
-            onClick={() => add31Days()}
-          >{`Next Month >>`}</button>
-        </div>
-        <Fab color="primary" aria-label="Add Tournament">
-          <AddIcon />
-        </Fab>
- 
-      </div>
+        <Box sx={{ flex: 1 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={6} md={8}>
+              <Item>sx=6 md=8
+                <Box sx={{ flex: 1 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id='demo-simple-select-label'>Age</InputLabel>
+                    <Select
+                      labelId='demo-simple-select-label'
+                      value={age}
+                      label="Age"
+                      onChange={handleChange}
+                    >
+                      <MenuItem value={10}>Nazarene</MenuItem>
+                      <MenuItem value={20}>Other</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <TextField id="standard-basic" label="Standard" variant="standard" />
+                </Box>
+              </Item>
+            </Grid>
+            <Grid item xs={6} md={4}>
+              <Item>xs=6 md=4
+
+              </Item>
+            </Grid>
+            <Grid item xs={6} md={4}>
+              <Item>xs={6} md={4}
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Basic example"
+                    value={value}
+                    onChange={(newValue) => {
+                      setValue(newValue);
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
+              </Item>
+            </Grid>
+            <Grid item xs={6} md={8}>
+              <Item>xs=6 md=8
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Basic example"
+                    value={value}
+                    onChange={(newValue) => {
+                      setValue(newValue);
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
+              </Item>
+            </Grid>
+          </Grid>
+        </Box>
+      </div >
     )
   }
-//<MUIRichTextEditor label='Start typing here'></MUIRichTextEditor>
+  //<MUIRichTextEditor label='Start typing here'></MUIRichTextEditor>
   return (
     // Okay here's where I have to go get the tournaments starting at some
     // page and page_size.   We start at by displaying all the tournaments
