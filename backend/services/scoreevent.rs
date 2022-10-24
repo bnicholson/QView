@@ -1,7 +1,7 @@
 
 use actix_web::{delete, HttpRequest, Error, get, HttpResponse, post, put, Result, web::{Data, Json, Path}};
 use create_rust_app::Database;
-use crate::{models, models::scoreevent::{Game, GameChangeset}};
+use crate::{models, models::scoreevent::{Game, GameChangeset, Quizzes, QuizzesChangeset}};
 use crate::models::common::*;
 use qstring::QString;
 
@@ -9,7 +9,7 @@ pub async fn write(
     req: HttpRequest,
 ) -> actix_web::Result<HttpResponse> {
     let db = req.app_data::<Data<Database>>().unwrap();
-    let mut mdb = db.pool.get().unwrap();
+    let mdb = db.pool.get().unwrap();
 
     print_type_of(&mdb);
     println!("Method: {:?}",req.method()); 
@@ -27,28 +27,138 @@ pub async fn write(
     let ps = qs.to_pairs();
     println!("Pairs: {:?}",ps);
     let psiter = ps.iter();
+    let mut key = "";
+    let mut tk="";
+    let mut org = "";
+    let mut tn = "";
+    let mut dn = "";
+    let mut rm = "";
+    let mut rd = "";
+    let mut qn: i32 = 0;
+    let mut e: i32  = 0;
+    let mut n = "";
+    let mut t: i32 = 0;
+    let mut q: i32  = 0;
+    let mut ec = "";
+    let mut p1 = "";
+    let mut p2 = "";
+    let mut md5 = "";
+    let mut ts = "";
+    let mut nonce = "";
+    let mut s1s = "";
+    let mut tdrri: i64  = 0;
+
     let mut i = 0;
+    let mut fieldCount = 10;
     for pair in psiter {
-        println!("Index: {:?} Pair: {:?}",i,pair);
+        let s = String::from(pair.0);
+        match s.as_str() {
+            "key" => {  // key4server - uniquely identifies a particular client
+                key = pair.1;
+            },
+            "tk" => {   // tournament key - short id for a particular tournament
+                tk = pair.1;
+            },
+            "tn" => { // Tournament Name
+                tn = pair.1;
+            },
+            "dn" => { // Division Name
+                dn = pair.1;
+            },
+            "rm" => { // Room 
+                rm = pair.1;
+            },
+            "rd" => { // Round
+                rd = pair.1;
+            }, 
+            "qn" => { // Question #
+//                 if Ok(qn) = pair.1.parse() {
+                    fieldCount -= 1;
+  //               }
+            },
+            "e" => { // event number
+//                if Ok(e) = pair.1.parse() {
+  //                  fieldCount -=1;
+    //            }
+            },
+            "n" => { // quizzer or team name
+                n = pair.1
+            },
+            "t" => { // team # (0-2)
+      //          if Ok(t) = pair.1.parse() {
+                    fieldCount -=1;
+        //        }
+            },
+            "q" => { // quizzer # (0-4) 
+          //      if Ok(q) = pair.1.parse() {
+                    fieldCount -=1;
+            //    }
+            }, 
+            "ec" => { // Event type/class (TC, BE, QT, ... 
+                ec = pair.1;
+            }, 
+            "p1" => { // parameter 1
+                p1 = pair.1;
+            }, 
+            "p2" => { // parameter 2 - depends upon what ec is
+                p2 = pair.1;
+            }, 
+            "ts" => { // timestamp from the client
+                ts = pair.1;
+            }, 
+            "md5" => {  // md5 hashsum
+                md5 = pair.1;
+            },
+            "nonce" => {
+                nonce = pair.1;
+            },
+            "s1s" => {
+                s1s = pair.1;
+            }, 
+            _ => {
+                println!("{:?} undefined {:?}",pair.0,pair.1);
+            }
+        }
+        // debugging println!("Index: {:?} Pair: {:?} {:?}",i,pair.0,pair.1);
         i += 1;
     }
+    // now populate the Game
+//    let mut game = GameChangeset { 
+//        org: "Nazarene".to_string(), 
+//        tournament: tn.to_string(),
+//        division: dn.to_string(), 
+//        room: rm.to_string(),
+//        round: rd.to_string(),
+//        key4server: key.to_string(),
+//        ignore: false,
+//        ruleset: "Nazarene".to_string()
+//    };
+//    let mut quizevent = QuizzesChangeset {
+//        tdrri: tdrri,
+//        question: qn,
+//        eventnum: e,
+//        name: n.to_string(),
+//        team: t,
+//        quizzer: q,
+//        event: ec.to_string(),
+//        parm1: p1.to_string(),
+//        parm2: p2.to_string(),
+//        clientts: ts,
+//        serverts: Date.now(),
+//        md5digest: md5.to_string()
+//    };
 
-    let content = std::fs::read_to_string("./.cargo/graphql-playground.html").unwrap();
+    let content = "Boo\n";
+   
+    // now populate the Game Changeset
+//    Json(item): Json<GameChangeset>;
+//    let result: Game = models::scoreevent::create(&mut db, &item).expect("Creation error");
 
-    let result = models::scoreevent::read_all(&mut mdb);
-    println!("{:?}",result);
+//    Ok(HttpResponse::Created().json(result));
 
     Ok(
         HttpResponse::Ok()
             .content_type("text/html; charset=utf-8")
-            // GraphQL Playground original source:
-            // .body(playground_source(
-            //     GraphQLPlaygroundConfig::new("/api/graphql")
-            //         .with_header("Authorization", "token")
-            //         .subscription_endpoint("/api/graphql/ws"),
-            // ))
-
-            // GraphQL Playground modified source to include authentication:
             .body(content)
     )
 
