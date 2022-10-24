@@ -8,7 +8,20 @@ import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
 import IconButton, { IconButtonProps } from '@mui/material/IconButton'
 import { Breadcrumbs, Link } from '@mui/material'
-import SettingsIcon from '@mui/icons-material/Settings';
+import SettingsIcon from '@mui/icons-material/Settings'
+import AppBar from '@mui/material/AppBar'
+import Dialog from '@mui/material/Dialog'
+import Toolbar from '@mui/material/Toolbar'
+import CloseIcon from '@mui/icons-material/Close'
+import Slide from '@mui/material/Slide'
+import { TransitionProps } from '@mui/material/transitions'
+import Button from '@mui/material/Button';
+import ListItemText from '@mui/material/ListItemText';
+import ListItem from '@mui/material/ListItem';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import Fab from '@mui/material/Fab'
+import AddIcon from "@mui/icons-material/Add"
 
 export const DivisionAPI = {
   get: async (page: number, size: number) =>
@@ -35,11 +48,25 @@ export const DivisionAPI = {
     }),
 }
 
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement;
+  },
+  ref: React.Ref<unknown>,
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 export const Divisions = () => {
   const [expanded, setExpanded] = React.useState(false)
   const [processing, setProcessing] = React.useState<boolean>(false)
   const [displayDate, setDisplayDate] = React.useState<Date>(new Date())
   const [divisions, setDivisions] = React.useState<Division[]>([])
+  const [openDivisionEditor, setDivisionEditorOpen] = React.useState(false);
+
+  const handleEditorClickOpen = () => {
+    setDivisionEditorOpen(true);
+  };
 
   useEffect(() => {
     setProcessing(true)
@@ -52,6 +79,9 @@ export const Divisions = () => {
 
   return (
     <div>
+      <Fab color="primary" onClick={() => handleEditorClickOpen()} aria-label="Add Tournament">
+        <AddIcon />
+      </Fab>
       <Box>
         <Breadcrumbs aria-label="breadcrumb" >
           <Link underline="hover" color="inherit" href="/">
@@ -75,7 +105,7 @@ export const Divisions = () => {
           <Card style={{ maxWidth: 845 }} key={division.dname}>
             <CardHeader
               action={
-                <IconButton aria-label="settings">
+                <IconButton onClick={() => handleEditorClickOpen()} aria-label="settings">
                   <SettingsIcon />
                 </IconButton>
               }
@@ -119,10 +149,70 @@ export const Divisions = () => {
                 </Typography>
               </CardContent>
             </Box>
-
           </Card>
+
         )}
+        { DivisionEditor(openDivisionEditor, setDivisionEditorOpen) }
       </div>
     </div >
   )
+}
+
+const test = () => {
+  return (
+    <ListItem button>
+      <ListItemText
+        primary="Snake button"
+        secondary="Tethys"
+      />
+    </ListItem>
+  )
+
+}
+
+const DivisionEditor = (  openDivisionEditor : Boolean, setDivisionEditorOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
+  const handleDivisionEditorClose = () => {
+    setDivisionEditorOpen(false);
+  };
+
+  return (
+    <Dialog
+      fullScreen
+      open={openDivisionEditor}
+      onClose={handleDivisionEditorClose}
+      TransitionComponent={Transition}
+    >
+      <AppBar sx={{ position: 'relative' }}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={handleDivisionEditorClose}
+            aria-label="close"
+          >
+            <CloseIcon />
+          </IconButton>
+          <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+            Division Settings
+          </Typography>
+          <Button autoFocus color="inherit" onClick={handleDivisionEditorClose}>
+            save
+          </Button>
+        </Toolbar>
+      </AppBar>
+      <List>
+        <ListItem button>
+          <ListItemText primary="Phone ringtone" secondary="Titania" />
+        </ListItem>
+        <Divider />
+        <ListItem button>
+          <ListItemText
+            primary="Default notification ringtone"
+            secondary="Tethys"
+          />
+        </ListItem>
+      </List>
+    </Dialog>
+  )
+
 }

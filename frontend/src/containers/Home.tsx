@@ -35,6 +35,17 @@ import { Dayjs } from 'dayjs'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+import AppBar from '@mui/material/AppBar'
+import Dialog from '@mui/material/Dialog'
+import Toolbar from '@mui/material/Toolbar'
+import CloseIcon from '@mui/icons-material/Close'
+import Slide from '@mui/material/Slide'
+import { TransitionProps } from '@mui/material/transitions'
+import Button from '@mui/material/Button';
+import ListItemText from '@mui/material/ListItemText';
+import ListItem from '@mui/material/ListItem';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -107,8 +118,13 @@ export const Home = () => {
     textAlign: 'center',
     color: theme.palette.text.secondary,
   }));
+  const [openTournamentEditor, setTournamentEditorOpen] = React.useState(false);
 
-  if (1 == 1) {
+  const handleTournamentEditorClickOpen = () => {
+    setTournamentEditorOpen(true);
+  };
+
+  if (1 == 0) {
     const [age, setAge] = React.useState('');
     const [value, setValue] = React.useState<Dayjs | null>(null);
 
@@ -184,7 +200,7 @@ export const Home = () => {
     // the API to not worry abut page size and page.  This is more date based.
 
     <div>
-      <Fab color="primary" aria-label="Add Tournament">
+      <Fab color="primary" onClick={() => handleTournamentEditorClickOpen()} aria-label="Add Tournament">
         <AddIcon />
       </Fab>
       <div className="Form">
@@ -289,7 +305,64 @@ export const Home = () => {
           </div>
         </div>
       </div>
+      { TournamentEditorDialog(openTournamentEditor, setTournamentEditorOpen) }
     </div>
   )
 }
-//<MUIRichTextEditor label='Start typing here'></MUIRichTextEditor>
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement;
+  },
+  ref: React.Ref<unknown>,
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+
+const TournamentEditorDialog = (  openTournamentEditor : Boolean, setTournamentEditorOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
+  const handleTournamentEditorClose = () => {
+    setTournamentEditorOpen(false);
+  };
+
+  return (
+    <Dialog
+      fullScreen
+      open={openTournamentEditor}
+      onClose={handleTournamentEditorClose}
+      TransitionComponent={Transition}
+    >
+      <AppBar sx={{ position: 'relative' }}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={handleTournamentEditorClose}
+            aria-label="close"
+          >
+            <CloseIcon />
+          </IconButton>
+          <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+            Tournament Settings
+          </Typography>
+          <Button autoFocus color="inherit" onClick={handleTournamentEditorClose}>
+            save
+          </Button>
+        </Toolbar>
+      </AppBar>
+      <List>
+        <ListItem button>
+          <ListItemText primary="Phone ringtone" secondary="Titania" />
+        </ListItem>
+        <Divider />
+        <ListItem button>
+          <ListItemText
+            primary="Default notification ringtone"
+            secondary="Tethys"
+          />
+        </ListItem>
+      </List>
+    </Dialog>
+  )
+
+}
