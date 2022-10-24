@@ -2,7 +2,8 @@ use crate::diesel::*;
 use crate::schema::*;
 
 use create_rust_app::Connection;
-use uuid::Uuid;
+use crate::models::common::*;
+
 use serde::{Deserialize, Serialize};
 
 #[tsync::tsync]
@@ -19,7 +20,7 @@ use serde::{Deserialize, Serialize};
 #[diesel(table_name=games)]
 #[diesel(primary_key(tdrri))]
 pub struct Game {
-    pub tdrri: Uuid,
+    pub tdrri: BigId,
     pub org: String,
     pub tournament: String,
     pub division: String,
@@ -27,7 +28,7 @@ pub struct Game {
     pub round: String,
     pub key4server: Option<String>,
     pub ignore: Option<bool>,
-    pub ruleset: Option<String>,
+    pub ruleset: String,
 }
 
 #[tsync::tsync]
@@ -42,7 +43,52 @@ pub struct GameChangeset {
     pub round: String,
     pub key4server: Option<String>,
     pub ignore: Option<bool>,
-    pub ruleset: Option<String>,
+    pub ruleset: String,
+}
+
+// Now define the tables that will store each quiz event
+#[tsync::tsync]
+#[derive(
+    Debug,
+    Serialize,
+    Deserialize,
+    Clone,
+    Queryable,
+    Insertable,
+    Identifiable,
+    AsChangeset,
+)]
+#[diesel(table_name=quizzes)]
+#[diesel(primary_key(tdrri,question,eventnum))]
+pub struct Quizzes {
+    pub tdrri: BigId,
+    pub question: i32,
+    pub eventnum: i32,
+    pub name: Option<String>,
+    pub team: i32,
+    pub quizzer: i32,
+    pub event: Option<String>,
+    pub parm1: Option<String>,
+    pub parm2: Option<String>,
+    pub clientts: UTC,
+    pub serverts: UTC,
+    pub md5digest: Option<String>,
+}
+
+#[tsync::tsync]
+#[derive(Debug, Serialize, Deserialize, Clone, Insertable, AsChangeset)]
+#[diesel(table_name=quizzes)]
+#[diesel(primary_key(tdrri,question,eventnum))]
+pub struct QuizzesChangeset {   
+    pub name: Option<String>,
+    pub team: i32,
+    pub quizzer: i32,
+    pub event: Option<String>,
+    pub parm1: Option<String>,
+    pub parm2: Option<String>,
+    pub clientts: UTC,
+    pub serverts: UTC,
+    pub md5digest: Option<String>,  
 }
 
 pub fn create(db: &mut Connection, item: &GameChangeset) -> QueryResult<Game> {
@@ -51,7 +97,7 @@ pub fn create(db: &mut Connection, item: &GameChangeset) -> QueryResult<Game> {
     insert_into(games).values(item).get_result::<Game>(db)
 }
 
-pub fn read(db: &mut Connection, item_id: Uuid) -> QueryResult<Game> {
+pub fn read(db: &mut Connection, item_id: i64) -> QueryResult<Game> {
     use crate::schema::games::dsl::*;
 
     games.filter(tdrri.eq(item_id)).first::<Game>(db)
@@ -67,7 +113,7 @@ pub fn read_all(db: &mut Connection) -> QueryResult<Vec<Game>> {
         .load::<Game>(db)
 }
 
-pub fn update(db: &mut Connection, item_id: Uuid, item: &GameChangeset) -> QueryResult<Game> {
+pub fn update(db: &mut Connection, item_id: i64, item: &GameChangeset) -> QueryResult<Game> {
     use crate::schema::games::dsl::*;
 
     diesel::update(games.filter(tdrri.eq(item_id)))
@@ -75,7 +121,7 @@ pub fn update(db: &mut Connection, item_id: Uuid, item: &GameChangeset) -> Query
         .get_result(db)
 }
 
-pub fn delete(db: &mut Connection, item_id: Uuid) -> QueryResult<usize> {
+pub fn delete(db: &mut Connection, item_id: i64) -> QueryResult<usize> {
     use crate::schema::games::dsl::*;
 
     diesel::delete(games.filter(tdrri.eq(item_id))).execute(db)

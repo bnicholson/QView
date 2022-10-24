@@ -2,7 +2,57 @@
 use actix_web::{delete, HttpRequest, Error, get, HttpResponse, post, put, Result, web::{Data, Json, Path}};
 use create_rust_app::Database;
 use crate::{models, models::scoreevent::{Game, GameChangeset}};
-use uuid::Uuid;
+use crate::models::common::*;
+use qstring::QString;
+
+pub async fn write(
+    req: HttpRequest,
+) -> actix_web::Result<HttpResponse> {
+    let db = req.app_data::<Data<Database>>().unwrap();
+    let mut mdb = db.pool.get().unwrap();
+
+    print_type_of(&mdb);
+    println!("Method: {:?}",req.method()); 
+    println!("URI: {:?}",req.uri()); 
+    println!("Version: {:?}",req.version()); 
+    println!("Headers: {:?}",req.headers());
+    println!("Match_info: {:?}",req.match_info());    
+    println!("Peer_address {:?}",req.peer_addr());
+    println!("URI: {:?}",req.uri()); 
+    println!("Path: {:?}",req.path()); 
+    println!("URI: {:?}",req.uri()); 
+    println!("Query_string: {:?}",req.query_string()); 
+    
+    let qs = qstring::QString::from(req.query_string());
+    let ps = qs.to_pairs();
+    println!("Pairs: {:?}",ps);
+    let psiter = ps.iter();
+    let mut i = 0;
+    for pair in psiter {
+        println!("Index: {:?} Pair: {:?}",i,pair);
+        i += 1;
+    }
+
+    let content = std::fs::read_to_string("./.cargo/graphql-playground.html").unwrap();
+
+    let result = models::scoreevent::read_all(&mut mdb);
+    println!("{:?}",result);
+
+    Ok(
+        HttpResponse::Ok()
+            .content_type("text/html; charset=utf-8")
+            // GraphQL Playground original source:
+            // .body(playground_source(
+            //     GraphQLPlaygroundConfig::new("/api/graphql")
+            //         .with_header("Authorization", "token")
+            //         .subscription_endpoint("/api/graphql/ws"),
+            // ))
+
+            // GraphQL Playground modified source to include authentication:
+            .body(content)
+    )
+
+}
 
 fn print_type_of<T>(_: &T) {
     println!("{}", std::any::type_name::<T>())
@@ -15,14 +65,6 @@ pub async fn index_playground(
     let db = req.app_data::<Data<Database>>().unwrap();
     let mut mdb = db.pool.get().unwrap();
 
-    print_type_of(&mdb);
-    println!("Method: {:?}",req.method()); 
-    println!("URI: {:?}",req.uri()); 
-    println!("Version: {:?}",req.version());     
-    println!("URI: {:?}",req.uri()); 
-    println!("Path: {:?}",req.path()); 
-    println!("URI: {:?}",req.uri()); 
-    println!("Query_string: {:?}",req.query_string()); 
     let content = std::fs::read_to_string("./.cargo/graphql-playground.html").unwrap();
 
     let result = models::scoreevent::read_all(&mut mdb);
@@ -76,7 +118,7 @@ async fn index(
 #[get("/{id}")]
 async fn read(
     db: Data<Database>,
-    item_id: Path<Uuid>,
+    item_id: Path<BigId>,
 ) -> HttpResponse {
     println!("read endpoint");
     let mut db = db.pool.get().unwrap();
@@ -106,7 +148,7 @@ async fn create(
 #[put("/{id}")]
 async fn update(
     db: Data<Database>,
-    item_id: Path<Uuid>,
+    item_id: Path<BigId>,
     Json(item): Json<GameChangeset>,
 ) -> HttpResponse {
     println!("update endpoint");
@@ -124,7 +166,7 @@ async fn update(
 #[delete("/{id}")]
 async fn destroy(
     db: Data<Database>,
-    item_id: Path<Uuid>,
+    item_id: Path<BigId>,
 ) -> HttpResponse {
     println!("destroy endpoint");
     let mut db = db.pool.get().unwrap();

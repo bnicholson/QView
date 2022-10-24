@@ -30,7 +30,7 @@ interface DivisionChangeset {
 }
 
 interface Game {
-  tdrri: Uuid
+  tdrri: BigId
   org: string
   tournament: string
   division: string
@@ -38,7 +38,7 @@ interface Game {
   round: string
   key4server: string | undefined
   ignore: boolean | undefined
-  ruleset: string | undefined
+  ruleset: string
 }
 
 interface GameChangeset {
@@ -49,7 +49,34 @@ interface GameChangeset {
   round: string
   key4server: string | undefined
   ignore: boolean | undefined
-  ruleset: string | undefined
+  ruleset: string
+}
+
+interface Quizzes {
+  tdrri: BigId
+  question: number
+  eventnum: number
+  name: string | undefined
+  team: number
+  quizzer: number
+  event: string | undefined
+  parm1: string | undefined
+  parm2: string | undefined
+  clientts: UTC
+  serverts: UTC
+  md5digest: string | undefined
+}
+
+interface QuizzesChangeset {
+  name: string | undefined
+  team: number
+  quizzer: number
+  event: string | undefined
+  parm1: string | undefined
+  parm2: string | undefined
+  clientts: UTC
+  serverts: UTC
+  md5digest: string | undefined
 }
 
 interface Todo {

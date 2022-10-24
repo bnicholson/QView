@@ -95,7 +95,7 @@ async fn main() -> std::io::Result<()> {
 
         // now route the "/scoreevents" logic to the same place as /api/scoreevents
         // this is needed for backwards compatibility with the old quizmachines (pre < 6.0)
-        app = app.route("/scoreevent",web::get().to(services::scoreevent::index_playground));
+        app = app.route("/scoreevent",web::get().to(services::scoreevent::write));
 
         #[cfg(debug_assertions)]
         {

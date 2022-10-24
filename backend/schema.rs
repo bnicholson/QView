@@ -46,7 +46,7 @@ diesel::table! {
 
 diesel::table! {
     games (tdrri) {
-        tdrri -> Uuid,
+        tdrri -> Int8,
         org -> Varchar,
         tournament -> Varchar,
         division -> Varchar,
@@ -54,22 +54,23 @@ diesel::table! {
         round -> Varchar,
         key4server -> Nullable<Varchar>,
         ignore -> Nullable<Bool>,
-        ruleset -> Nullable<Varchar>,
+        ruleset -> Varchar,
     }
 }
 
 diesel::table! {
     quizzes (tdrri, question, eventnum) {
-        tdrri -> Uuid,
+        tdrri -> Int8,
         question -> Int4,
         eventnum -> Int4,
-        name -> Nullable<Varchar>,
-        team -> Nullable<Int4>,
-        quizzer -> Nullable<Int4>,
-        event -> Nullable<Varchar>,
+        name -> Varchar,
+        team -> Int4,
+        quizzer -> Int4,
+        event -> Varchar,
         parm1 -> Nullable<Varchar>,
         parm2 -> Nullable<Varchar>,
-        ts -> Nullable<Timestamptz>,
+        clientts -> Nullable<Timestamptz>,
+        serverts -> Nullable<Timestamptz>,
         md5digest -> Nullable<Varchar>,
     }
 }
