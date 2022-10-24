@@ -43,7 +43,7 @@ import Slide from '@mui/material/Slide'
 import { TransitionProps } from '@mui/material/transitions'
 import Button from '@mui/material/Button';
 import ListItemText from '@mui/material/ListItemText';
-import ListItem from '@mui/material/ListItem';
+import ListItem from '@mui/material/ListItem'
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 
@@ -111,88 +111,12 @@ export const Home = () => {
   const toDate = new Date();
   toDate.setTime(displayDate + (31 * 24 * 3600 * 1000));
 
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode == 'dark' ? '#1a2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  }));
   const [openTournamentEditor, setTournamentEditorOpen] = React.useState(false);
 
   const handleTournamentEditorClickOpen = () => {
     setTournamentEditorOpen(true);
   };
 
-  if (1 == 0) {
-    const [age, setAge] = React.useState('');
-    const [value, setValue] = React.useState<Dayjs | null>(null);
-
-    const handleChange = (event: SelectChangeEvent) => {
-      setAge(event.target.value as string);
-    }
-    return (
-      <div className="Form">
-        <Box sx={{ flex: 1 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={6} md={8}>
-              <Item>sx=6 md=8
-                <Box sx={{ flex: 1 }}>
-                  <FormControl fullWidth>
-                    <InputLabel id='demo-simple-select-label'>Age</InputLabel>
-                    <Select
-                      labelId='demo-simple-select-label'
-                      value={age}
-                      label="Age"
-                      onChange={handleChange}
-                    >
-                      <MenuItem value={10}>Nazarene</MenuItem>
-                      <MenuItem value={20}>Other</MenuItem>
-                    </Select>
-                  </FormControl>
-                  <TextField id="standard-basic" label="Standard" variant="standard" />
-                </Box>
-              </Item>
-            </Grid>
-            <Grid item xs={6} md={4}>
-              <Item>xs=6 md=4
-
-              </Item>
-            </Grid>
-            <Grid item xs={6} md={4}>
-              <Item>xs={6} md={4}
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Basic example"
-                    value={value}
-                    onChange={(newValue) => {
-                      setValue(newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
-              </Item>
-            </Grid>
-            <Grid item xs={6} md={8}>
-              <Item>xs=6 md=8
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Basic example"
-                    value={value}
-                    onChange={(newValue) => {
-                      setValue(newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
-              </Item>
-            </Grid>
-          </Grid>
-        </Box>
-      </div >
-    )
-  }
-  //<MUIRichTextEditor label='Start typing here'></MUIRichTextEditor>
   return (
     // Okay here's where I have to go get the tournaments starting at some
     // page and page_size.   We start at by displaying all the tournaments
@@ -305,7 +229,7 @@ export const Home = () => {
           </div>
         </div>
       </div>
-      { TournamentEditorDialog(openTournamentEditor, setTournamentEditorOpen) }
+      {TournamentEditorDialog(openTournamentEditor, setTournamentEditorOpen)}
     </div>
   )
 }
@@ -320,10 +244,23 @@ const Transition = React.forwardRef(function Transition(
 });
 
 
-const TournamentEditorDialog = (  openTournamentEditor : Boolean, setTournamentEditorOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
+const TournamentEditorDialog = (openTournamentEditor: Boolean, setTournamentEditorOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
   const handleTournamentEditorClose = () => {
     setTournamentEditorOpen(false);
   };
+  const [age, setAge] = React.useState('');
+  const [value, setValue] = React.useState<Dayjs | null>(null);
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setAge(event.target.value as string);
+  }
+  const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode == 'dark' ? '#1a2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  }));
 
   return (
     <Dialog
@@ -362,7 +299,165 @@ const TournamentEditorDialog = (  openTournamentEditor : Boolean, setTournamentE
           />
         </ListItem>
       </List>
+      <div className="Form">
+        <Box sx={{ flex: 1 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={6} md={8}>
+              <Item>sx=6 md=8
+                <Box sx={{ flex: 1 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id='demo-simple-select-label'>Age</InputLabel>
+                    <Select
+                      labelId='demo-simple-select-label'
+                      value={age}
+                      label="Age"
+                      onChange={handleChange}
+                    >
+                      <MenuItem value={10}>Nazarene</MenuItem>
+                      <MenuItem value={20}>Other</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <TextField id="standard-basic" label="Standard" variant="standard" />
+                </Box>
+              </Item>
+            </Grid>
+            <Grid item xs={6} md={4}>
+              <Item>xs=6 md=4
+
+              </Item>
+            </Grid>
+            <Grid item xs={6} md={4}>
+              <Item>xs={6} md={4}
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Basic example"
+                    value={value}
+                    onChange={(newValue) => {
+                      setValue(newValue);
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
+              </Item>
+            </Grid>
+            <Grid item xs={6} md={8}>
+              <Item>xs=6 md=8
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Basic example"
+                    value={value}
+                    onChange={(newValue) => {
+                      setValue(newValue);
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
+              </Item>
+            </Grid>
+          </Grid>
+        </Box>
+        <Box display="inline-block">
+          tid
+          Organization
+          tname
+          breadcrumb
+          fromdate
+          todate
+          venue
+          city
+          state
+          region,
+          country,
+          contact,
+          contactemail
+          hide,
+          shortinfo,
+          info,
+          created_at,
+          updated_at,
+          history,
+        
+        </Box>
+      </div >
     </Dialog>
   )
 
+}
+
+
+const test = () => {
+  const [age, setAge] = React.useState('');
+  const [value, setValue] = React.useState<Dayjs | null>(null);
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setAge(event.target.value as string);
+  }
+  const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode == 'dark' ? '#1a2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  }));
+
+  return (
+    <div className="Form">
+      <Box sx={{ flex: 1 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={6} md={8}>
+            <Item>sx=6 md=8
+              <Box sx={{ flex: 1 }}>
+                <FormControl fullWidth>
+                  <InputLabel id='demo-simple-select-label'>Age</InputLabel>
+                  <Select
+                    labelId='demo-simple-select-label'
+                    value={age}
+                    label="Age"
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={10}>Nazarene</MenuItem>
+                    <MenuItem value={20}>Other</MenuItem>
+                  </Select>
+                </FormControl>
+                <TextField id="standard-basic" label="Standard" variant="standard" />
+              </Box>
+            </Item>
+          </Grid>
+          <Grid item xs={6} md={4}>
+            <Item>xs=6 md=4
+
+            </Item>
+          </Grid>
+          <Grid item xs={6} md={4}>
+            <Item>xs={6} md={4}
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Basic example"
+                  value={value}
+                  onChange={(newValue) => {
+                    setValue(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+            </Item>
+          </Grid>
+          <Grid item xs={6} md={8}>
+            <Item>xs=6 md=8
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Basic example"
+                  value={value}
+                  onChange={(newValue) => {
+                    setValue(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+            </Item>
+          </Grid>
+        </Grid>
+      </Box>
+    </div >
+  )
 }
