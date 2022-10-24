@@ -33,7 +33,6 @@ import styled from '@emotion/styled'
 import { ChevronLeft, Inbox, Mail, AccountCircle } from '@mui/icons-material'
 import { Breadcrumbs, Divider, Link, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material'
-import TournamentEditor from './containers/tournamentEditor'
 
 if (process.env.NODE_ENV === 'development') import('./setupDevelopment')
 
@@ -222,7 +221,6 @@ const App = () => {
             <Route path="/account" element={<AccountPage />} />
             <Route path="/tournament" element={<Tournaments />} />
             <Route path="/division" element={<Divisions />} />
-            <Route path="/tournamenteditor" element={<TournamentEditor />} />
           </Routes>
         </div>
         <Box textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 }}>
