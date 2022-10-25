@@ -170,7 +170,7 @@ const test = () => {
 
 }
 
-const DivisionEditor = (  openDivisionEditor : Boolean, setDivisionEditorOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
+const DivisionEditor = (  openDivisionEditor : boolean, setDivisionEditorOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
   const handleDivisionEditorClose = () => {
     setDivisionEditorOpen(false);
   };
