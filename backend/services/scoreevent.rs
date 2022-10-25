@@ -18,17 +18,23 @@ pub async fn write(
     let mut mdb = db.pool.get().unwrap();
 
 //    print_type_of(&mdb);
-//    println!("Method: {:?}",req.method()); 
-//    println!("URI: {:?}",req.uri()); 
-//    println!("Version: {:?}",req.version()); 
-//    println!("Headers: {:?}",req.headers());
-//    println!("Match_info: {:?}",req.match_info());    
-//    println!("Peer_address {:?}",req.peer_addr());
-//    println!("URI: {:?}",req.uri()); 
-//    println!("Path: {:?}",req.path()); 
-//    println!("URI: {:?}",req.uri()); 
-//    println!("Query_string: {:?}",req.query_string()); 
-    
+    println!("Method: {:?}",req.method()); 
+    println!("URI: {:?}",req.uri()); 
+    println!("Version: {:?}",req.version()); 
+    println!("Headers: {:?}",req.headers());
+    println!("Match_info: {:?}",req.match_info());    
+    println!("Peer_address {:?}",req.peer_addr());
+    println!("URI: {:?}",req.uri()); 
+    println!("Path: {:?}",req.path()); 
+    println!("URI: {:?}",req.uri()); 
+    println!("Query_string: {:?}",req.query_string()); 
+    println!("Cookies: {:?}", req.cookies());
+    println!("Content-type: {:?}",req.content_type());
+    println!("Encoding: {:?}",req.encoding());
+    println!("Mime-type: {:?}",req.mime_type());
+    println!("Body (content): {:?}",req.body());
+
+
     let qs = qstring::QString::from(req.query_string());
     let ps = qs.to_pairs();
     println!("Pairs: {:?}",ps);
@@ -145,7 +151,7 @@ pub async fn write(
     // now lets log all this information to the eventlog table.
     // This is a file on disk in QMServer.  But we'll put it
     // on the database in the eventlog table
-    
+
     // Check to make sure we got all the parameters
     let content = "bad parameters";
     if field_count != 18 {
