@@ -45,6 +45,31 @@ diesel::table! {
 }
 
 diesel::table! {
+    eventlog (eid) {
+        created_at -> Timestamptz,
+        eid -> Int8,
+        key4server -> Varchar,
+        tournament -> Varchar,
+        division -> Varchar,
+        room -> Varchar,
+        round -> Varchar,
+        question -> Int4,
+        eventnum -> Int4,
+        name -> Varchar,
+        team -> Int4,
+        quizzer -> Int4,
+        event -> Varchar,
+        parm1 -> Varchar,
+        parm2 -> Varchar,
+        ts -> Varchar,
+        host -> Varchar,
+        md5digest -> Varchar,
+        nonce -> Varchar,
+        s1s -> Varchar,
+    }
+}
+
+diesel::table! {
     games (tdrri) {
         tdrri -> Int8,
         org -> Varchar,
@@ -190,6 +215,7 @@ diesel::allow_tables_to_appear_in_same_query!(
     attachments,
     division_games,
     divisions,
+    eventlog,
     games,
     quizzes,
     role_permissions,
