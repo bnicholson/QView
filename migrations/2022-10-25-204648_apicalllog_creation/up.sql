@@ -5,7 +5,7 @@ BEGIN;
 -- create the new eventlog table 
 create table apicalllog (
     created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,      -- used to ensure we have a unique timestamp to the millisecond    
-    eid BIGSERIAL PRIMARY KEY NOT NULL,                             -- event identifier (unique) -- also ensure all events are unique
+    apicallid BIGSERIAL PRIMARY KEY NOT NULL,                       -- apicall log identifier (unique) -- also ensure all call logs are unique
     key4server VARCHAR(32) NOT NULL,                                -- what key/client did this come from
     tournament VARCHAR(32) NOT NULL,                                -- tournament
     division VARCHAR(32) NOT NULL,                                  -- division
