@@ -16,28 +16,34 @@ use crate::models::common::*;
 #[derive( Debug, Serialize, Deserialize, Clone, Queryable, Insertable, Identifiable, AsChangeset,)]
 #[diesel(table_name=eventlog)]
 #[diesel(primary_key(did))]
-pub struct Eventlog {
+pub struct ApiCalllog {
     pub created_at: UTC,                                            // used to ensure we have a unique timestamp to the millisecond    
-    pub eid: BigId,                                                 // event identifier (unique) -- also ensure all events are unique
-    pub key4server: String,                                          // what key/client did this come from
-    pub tournament: String,                                          // tournament
-    pub division: String,                                            // division
-    pub room: String,                                                // room
-    pub round: String,                                               // round
-    pub question: i32,                                               // question
-    pub eventnum: i32,                                               // event number
-    pub name: String,                                                // name of the quizzer or team
-    pub team: i32,                                                   // team # (0-2)
-    pub quizzer: i32,                                                // quizzer (0-4)
-    pub event: String,                                               // event (TC, BE, ...)
-    pub parm1: String,                                               // parameter used by a specific event
-    pub parm2: String,                                               // another one
-    pub ts: String,                                                  // timestamp from the clients viewpoint
-    pub host: String,                                                // host
-    pub md5digest: String,                                           // used to ensure we don't have corruption in transmission
-    pub nonce: String,                                               // part of the corruption avoidance 
-    pub s1s: String,                                                 //  
-};
+    pub apicallid: BigId,                                           // apicall log identifier (unique) -- also ensure all events are unique
+    pub method: String
+}
+
+pub fn apicalllog(db: &mut Connection, HttpRequest: req) {
+    use crate::schema::apicalllog::dsl::*;
+
+    //    print_type_of(&mdb);
+    println!("Method: {:?}",req.method()); 
+    println!("URI: {:?}",req.uri()); 
+    println!("Version: {:?}",req.version()); 
+    println!("Headers: {:?}",req.headers());
+    println!("Match_info: {:?}",req.match_info());    
+    println!("Peer_address {:?}",req.peer_addr());
+    println!("URI: {:?}",req.uri()); 
+    println!("Path: {:?}",req.path()); 
+    println!("URI: {:?}",req.uri()); 
+    println!("Query_string: {:?}",req.query_string()); 
+    println!("Cookies: {:?}", req.cookies());
+   // println!("Content-type: {:?}",req.content_type());
+  //  println!("Encoding: {:?}",req.encoding());
+ //   println!("Mime-type: {:?}",req.mime_type());
+//    println!("Body (content): {:?}",req.body());
+
+    insert_into(divisions).values(item).get_result::<Division>(db)
+}
 
 pub fn create(db: &mut Connection, item: &DivisionChangeset) -> QueryResult<Division> {
     use crate::schema::divisions::dsl::*;

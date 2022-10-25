@@ -10,6 +10,7 @@ use std::line;
 use std::file;
 use diesel::result::Error as DBError;
 use diesel::result::DatabaseErrorKind;
+use crate::models::apicalllog;
 
 pub async fn write(
     req: HttpRequest,
@@ -17,23 +18,8 @@ pub async fn write(
     let db = req.app_data::<Data<Database>>().unwrap();
     let mut mdb = db.pool.get().unwrap();
 
-//    print_type_of(&mdb);
-    println!("Method: {:?}",req.method()); 
-    println!("URI: {:?}",req.uri()); 
-    println!("Version: {:?}",req.version()); 
-    println!("Headers: {:?}",req.headers());
-    println!("Match_info: {:?}",req.match_info());    
-    println!("Peer_address {:?}",req.peer_addr());
-    println!("URI: {:?}",req.uri()); 
-    println!("Path: {:?}",req.path()); 
-    println!("URI: {:?}",req.uri()); 
-    println!("Query_string: {:?}",req.query_string()); 
-    println!("Cookies: {:?}", req.cookies());
-    println!("Content-type: {:?}",req.content_type());
-    println!("Encoding: {:?}",req.encoding());
-    println!("Mime-type: {:?}",req.mime_type());
-    println!("Body (content): {:?}",req.body());
-
+    // log this api call
+    apicalllog(mdb,req);
 
     let qs = qstring::QString::from(req.query_string());
     let ps = qs.to_pairs();
