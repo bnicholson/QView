@@ -64,14 +64,14 @@ pub struct Quizzes {
     pub tdrri: BigId,
     pub question: i32,
     pub eventnum: i32,
-    pub name: Option<String>,
+    pub name: String,
     pub team: i32,
     pub quizzer: i32,
-    pub event: Option<String>,
+    pub event: String,
     pub parm1: Option<String>,
     pub parm2: Option<String>,
-    pub clientts: UTC,
-    pub serverts: UTC,
+    pub clientts: Option<UTC>,
+    pub serverts: Option<UTC>,
     pub md5digest: Option<String>,
 }
 
@@ -80,21 +80,31 @@ pub struct Quizzes {
 #[diesel(table_name=quizzes)]
 #[diesel(primary_key(tdrri,question,eventnum))]
 pub struct QuizzesChangeset {   
-    pub name: Option<String>,
+    pub name: String,
     pub team: i32,
     pub quizzer: i32,
-    pub event: Option<String>,
+    pub event: String,
     pub parm1: Option<String>,
     pub parm2: Option<String>,
-    pub clientts: UTC,
-    pub serverts: UTC,
+    pub clientts: Option<UTC>,
+    pub serverts: Option<UTC>,
     pub md5digest: Option<String>,  
+}
+
+fn print_type_of<T>(_: &T) {
+    println!("{}", std::any::type_name::<T>())
 }
 
 pub fn create(db: &mut Connection, item: &GameChangeset) -> QueryResult<Game> {
     use crate::schema::games::dsl::*;
 
     insert_into(games).values(item).get_result::<Game>(db)
+}
+
+pub fn createQuizEvent(db: &mut Connection, item: &Quizzes) -> QueryResult<Quizzes> {
+    use crate::schema::quizzes::dsl::*;
+
+    insert_into(quizzes).values(item).get_result::<Quizzes>(db)
 }
 
 pub fn read(db: &mut Connection, item_id: i64) -> QueryResult<Game> {

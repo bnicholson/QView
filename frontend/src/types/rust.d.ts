@@ -56,26 +56,26 @@ interface Quizzes {
   tdrri: BigId
   question: number
   eventnum: number
-  name: string | undefined
+  name: string
   team: number
   quizzer: number
-  event: string | undefined
+  event: string
   parm1: string | undefined
   parm2: string | undefined
-  clientts: UTC
-  serverts: UTC
+  clientts: UTC | undefined
+  serverts: UTC | undefined
   md5digest: string | undefined
 }
 
 interface QuizzesChangeset {
-  name: string | undefined
+  name: string
   team: number
   quizzer: number
-  event: string | undefined
+  event: string
   parm1: string | undefined
   parm2: string | undefined
-  clientts: UTC
-  serverts: UTC
+  clientts: UTC | undefined
+  serverts: UTC | undefined
   md5digest: string | undefined
 }
 

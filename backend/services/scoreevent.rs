@@ -1,10 +1,15 @@
 
 use actix_web::{delete, HttpRequest, Error, get, HttpResponse, post, put, Result, web::{Data, Json, Path}};
+use actix_web::middleware::{ Logger };
 use create_rust_app::Database;
 use crate::{models, models::scoreevent::{Game, GameChangeset, Quizzes, QuizzesChangeset}};
 use crate::models::common::*;
 use qstring::QString;
 use chrono::{ Utc, TimeZone };
+use std::line;
+use std::file;
+use diesel::result::Error as DBError;
+use diesel::result::DatabaseErrorKind;
 
 pub async fn write(
     req: HttpRequest,
@@ -12,17 +17,17 @@ pub async fn write(
     let db = req.app_data::<Data<Database>>().unwrap();
     let mut mdb = db.pool.get().unwrap();
 
-    print_type_of(&mdb);
-    println!("Method: {:?}",req.method()); 
-    println!("URI: {:?}",req.uri()); 
-    println!("Version: {:?}",req.version()); 
-    println!("Headers: {:?}",req.headers());
-    println!("Match_info: {:?}",req.match_info());    
-    println!("Peer_address {:?}",req.peer_addr());
-    println!("URI: {:?}",req.uri()); 
-    println!("Path: {:?}",req.path()); 
-    println!("URI: {:?}",req.uri()); 
-    println!("Query_string: {:?}",req.query_string()); 
+//    print_type_of(&mdb);
+//    println!("Method: {:?}",req.method()); 
+//    println!("URI: {:?}",req.uri()); 
+//    println!("Version: {:?}",req.version()); 
+//    println!("Headers: {:?}",req.headers());
+//    println!("Match_info: {:?}",req.match_info());    
+//    println!("Peer_address {:?}",req.peer_addr());
+//    println!("URI: {:?}",req.uri()); 
+//    println!("Path: {:?}",req.path()); 
+//    println!("URI: {:?}",req.uri()); 
+//    println!("Query_string: {:?}",req.query_string()); 
     
     let qs = qstring::QString::from(req.query_string());
     let ps = qs.to_pairs();
@@ -136,6 +141,10 @@ pub async fn write(
         // debugging println!("Index: {:?} Pair: {:?} {:?}",i,pair.0,pair.1);
         i += 1;
     }
+
+    // now lets log all this information to the eventlog table.
+    // This is a file on disk in QMServer.  But we'll put it
+    // on the database in the eventlog table
     
     // Check to make sure we got all the parameters
     let content = "bad parameters";
@@ -164,23 +173,85 @@ pub async fn write(
         tdrri: tdrri,
         question: qn,
         eventnum: e,
-        name: Some(n.to_string()),
+        name: n.to_string(),
         team: t,
         quizzer: q,
-        event: Some(ec.to_string()),
+        event: ec.to_string(),
         parm1: Some(p1.to_string()),
         parm2: Some(p2.to_string()),
-        clientts: ts,
-        serverts: Utc::now(),
+        clientts: Some(ts),
+        serverts: Some(Utc::now()),
         md5digest: Some(md5.to_string())
     };
 
     // now let's create an entry in the games table
-    println!("GameChangeSet {:?}",game);
-    writegame(&mut mdb,&game);
+    // Handle errors while we create the entry
+    match models::scoreevent::create(&mut mdb, &game) {
+        Ok(output) => {
+            // update the quizevent tdrri so we have the correct one to write
+            // the quizevent to the Quizzes table
+            quizevent.tdrri = output.tdrri;
+        },
+        Err(e) => {
+            println!("error ===>>> {:?}",e);
+            match e {
+               // the most likely cause here is a Unique constraint - the row
+                // already exists in the database.  We'll ignore those and
+                // panic or log the others
+                DBError::DatabaseError(dbek,info) => match dbek {
+                    UniqueViolation => {
+                        // do nothing here.  This is a normal case when another event 
+                        // comes in for this quiz.
+                        println!("Loginfo => {:?}", info);
+ //                       quizevent.tdrri = output.tdrri;
+                    },
+                    _ => {
+                        // Okay this error is a database error but not a unique violation
+                        log::error!("Line: {:?} DB Create error {:?} {:?} {:?}",line!(),dbek,info,game);
+                    },
+                },
+                _ => {
+                    // this is some error but not a database error
+                    log::error!("Line: {:?} DB Create error {:?} {:?}",line!(),e,game);
+                },
+            };
+        },
+    };
 
-    let content = " it worked ";
+    // let's print out the tdrri we got
+//    log::info!("Line: {:?} TDRRI = {:?}",line!(),quiz.tdrri);
+    
+    let mut content = " it worked ";
    
+    // now let's write an entry in the quizzes event table
+    // Handle errors while we create the entry
+    println!("inserted a games table entry");
+    match models::scoreevent::createQuizEvent(&mut mdb, &quizevent) {
+        Ok(output) => println!("Inserted a Quizevent {:?}",output),
+        Err(e) => match e {
+            // the most likely cause here is a Unique constraint - the row
+            // already exists in the database.  We'll ignore those and
+            // panic or log the others
+            DBError::DatabaseError(dbek,info) => match dbek {
+                UniqueViolation => {
+                    // Okay we've written this one before.  Now we have to update it. 
+                    content = "Update";
+                },
+                _ => {
+                    // Okay this error is a database error but not a unique violation
+                    log::error!("Line: {:?} DB Create error {:?} {:?} {:?}",line!(),dbek,info,quizevent);
+                },
+            },
+            _ => {
+                // this is some error but not a database error
+                log::error!("Line: {:?} DB Create error {:?} {:?}",line!(),e,quizevent);
+            },
+        },
+        _ => {
+            log::error!("Line: {:?} Unknown error {:?} {:?}", line!(), e, quizevent);
+        }
+    }
+
     // now populate the Game Changeset
 //    Json(item): Json<GameChangeset>;
 //    let result: Game = models::scoreevent::create(&mut db, &item).expect("Creation error");
@@ -193,22 +264,6 @@ pub async fn write(
             .body(content)
     )
 }
-
-fn writegame(mdb, game: GameChangeSet) -> Result<Game, Error> {
-    
-    println!("GameChangeSet {:?}",game);
-    let output = match models::scoreevent::create(&mut mdb, &game).expect("Creation error") {
-        _ => {
-            println!("Returned result: Err" )
-        },
-        game2 => { 
-            println!("Valid return")
-    };
-    output
-};
-println!("Output = {:?}",output);
-}
-
 
 fn print_type_of<T>(_: &T) {
     println!("{}", std::any::type_name::<T>())
