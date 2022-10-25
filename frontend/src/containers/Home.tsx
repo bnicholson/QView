@@ -244,7 +244,7 @@ const Transition = React.forwardRef(function Transition(
 });
 
 
-const TournamentEditorDialog = (openTournamentEditor: Boolean, setTournamentEditorOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
+const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEditorOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
   const handleTournamentEditorClose = () => {
     setTournamentEditorOpen(false);
   };
