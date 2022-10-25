@@ -1,4 +1,4 @@
-FROM rust:1.54
+FROM rust:1.60
 
 RUN apt-get update -y
 RUN apt-get install -y nodejs npm
