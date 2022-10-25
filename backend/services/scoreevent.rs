@@ -4,12 +4,13 @@ use create_rust_app::Database;
 use crate::{models, models::scoreevent::{Game, GameChangeset, Quizzes, QuizzesChangeset}};
 use crate::models::common::*;
 use qstring::QString;
+use chrono::{ Utc, TimeZone };
 
 pub async fn write(
     req: HttpRequest,
 ) -> actix_web::Result<HttpResponse> {
     let db = req.app_data::<Data<Database>>().unwrap();
-    let mdb = db.pool.get().unwrap();
+    let mut mdb = db.pool.get().unwrap();
 
     print_type_of(&mdb);
     println!("Method: {:?}",req.method()); 
@@ -43,78 +44,91 @@ pub async fn write(
     let mut p1 = "";
     let mut p2 = "";
     let mut md5 = "";
-    let mut ts = "";
+    let mut ts = Utc::now();
     let mut nonce = "";
     let mut s1s = "";
     let mut tdrri: i64  = 0;
 
     let mut i = 0;
-    let mut fieldCount = 10;
+    let mut field_count = 0;
     for pair in psiter {
         let s = String::from(pair.0);
         match s.as_str() {
             "key" => {  // key4server - uniquely identifies a particular client
                 key = pair.1;
+                field_count += 1;                
             },
             "tk" => {   // tournament key - short id for a particular tournament
                 tk = pair.1;
+                field_count += 1;                
             },
             "tn" => { // Tournament Name
                 tn = pair.1;
+                field_count += 1;
             },
             "dn" => { // Division Name
                 dn = pair.1;
+                field_count += 1;
             },
             "rm" => { // Room 
                 rm = pair.1;
+                field_count += 1;
             },
             "rd" => { // Round
                 rd = pair.1;
+                field_count += 1;
             }, 
             "qn" => { // Question #
-//                 if Ok(qn) = pair.1.parse() {
-                    fieldCount -= 1;
-  //               }
+                qn = pair.1.trim().parse().unwrap(); 
+                field_count += 1;
             },
             "e" => { // event number
-//                if Ok(e) = pair.1.parse() {
-  //                  fieldCount -=1;
-    //            }
+                e = pair.1.trim().parse().unwrap();
+                field_count +=1;
             },
             "n" => { // quizzer or team name
-                n = pair.1
+                n = pair.1;
+                field_count +=1;
             },
             "t" => { // team # (0-2)
-      //          if Ok(t) = pair.1.parse() {
-                    fieldCount -=1;
-        //        }
+                t = pair.1.trim().parse().unwrap();
+                field_count +=1;
             },
             "q" => { // quizzer # (0-4) 
-          //      if Ok(q) = pair.1.parse() {
-                    fieldCount -=1;
-            //    }
+                q = pair.1.trim().parse().unwrap();
+                field_count +=1;
             }, 
             "ec" => { // Event type/class (TC, BE, QT, ... 
                 ec = pair.1;
+                field_count += 1;
             }, 
             "p1" => { // parameter 1
                 p1 = pair.1;
+                field_count += 1;
             }, 
             "p2" => { // parameter 2 - depends upon what ec is
                 p2 = pair.1;
+                field_count += 1;
             }, 
             "ts" => { // timestamp from the client
-                ts = pair.1;
+                let secs : i64 = pair.1.trim().parse().unwrap();
+                ts = Utc.timestamp(secs,0);
+                println!("Time: {:?}",ts);
+                field_count += 1;
+                println!("Timestamp = {:?}",ts)
             }, 
             "md5" => {  // md5 hashsum
                 md5 = pair.1;
+                field_count += 1;
             },
             "nonce" => {
                 nonce = pair.1;
+                field_count += 1;
             },
             "s1s" => {
                 s1s = pair.1;
-            }, 
+                field_count += 1;
+            },
             _ => {
                 println!("{:?} undefined {:?}",pair.0,pair.1);
             }
@@ -122,33 +136,50 @@ pub async fn write(
         // debugging println!("Index: {:?} Pair: {:?} {:?}",i,pair.0,pair.1);
         i += 1;
     }
-    // now populate the Game
-//    let mut game = GameChangeset { 
-//        org: "Nazarene".to_string(), 
-//        tournament: tn.to_string(),
-//        division: dn.to_string(), 
-//        room: rm.to_string(),
-//        round: rd.to_string(),
-//        key4server: key.to_string(),
-//        ignore: false,
-//        ruleset: "Nazarene".to_string()
-//    };
-//    let mut quizevent = QuizzesChangeset {
-//        tdrri: tdrri,
-//        question: qn,
-//        eventnum: e,
-//        name: n.to_string(),
-//        team: t,
-//        quizzer: q,
-//        event: ec.to_string(),
-//        parm1: p1.to_string(),
-//        parm2: p2.to_string(),
-//        clientts: ts,
-//        serverts: Date.now(),
-//        md5digest: md5.to_string()
-//    };
+    
+    // Check to make sure we got all the parameters
+    let content = "bad parameters";
+    if field_count != 18 {
+        return Ok(
+            HttpResponse::BadRequest()
+                .content_type("text/html; charset=utf-8")
+                .body(content)
+        )
+    }
 
-    let content = "Boo\n";
+    // now populate the Game
+    let mut game = GameChangeset {
+        org: "Nazarene".to_string(),
+        tournament: tn.to_string(),
+        division: dn.to_string(),
+        room: rm.to_string(),
+        round: rd.to_string(),
+        key4server: Some(key.to_string()),
+        ignore: Some(false),
+        ruleset: "Nazarene".to_string()
+    };
+
+    // Now populate the quizzes event
+    let mut quizevent = Quizzes {
+        tdrri: tdrri,
+        question: qn,
+        eventnum: e,
+        name: Some(n.to_string()),
+        team: t,
+        quizzer: q,
+        event: Some(ec.to_string()),
+        parm1: Some(p1.to_string()),
+        parm2: Some(p2.to_string()),
+        clientts: ts,
+        serverts: Utc::now(),
+        md5digest: Some(md5.to_string())
+    };
+
+    // now let's create an entry in the games table
+    println!("GameChangeSet {:?}",game);
+    writegame(&mut mdb,&game);
+
+    let content = " it worked ";
    
     // now populate the Game Changeset
 //    Json(item): Json<GameChangeset>;
@@ -161,8 +192,23 @@ pub async fn write(
             .content_type("text/html; charset=utf-8")
             .body(content)
     )
-
 }
+
+fn writegame(mdb, game: GameChangeSet) -> Result<Game, Error> {
+    
+    println!("GameChangeSet {:?}",game);
+    let output = match models::scoreevent::create(&mut mdb, &game).expect("Creation error") {
+        _ => {
+            println!("Returned result: Err" )
+        },
+        game2 => { 
+            println!("Valid return")
+    };
+    output
+};
+println!("Output = {:?}",output);
+}
+
 
 fn print_type_of<T>(_: &T) {
     println!("{}", std::any::type_name::<T>())
