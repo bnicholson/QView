@@ -89,10 +89,6 @@ pub struct QuizzesChangeset {
     pub md5digest: Option<String>,  
 }
 
-fn print_type_of<T>(_: &T) {
-    println!("{}", std::any::type_name::<T>())
-}
-
 pub fn create(db: &mut Connection, item: &GameChangeset) -> QueryResult<Game> {
     use crate::schema::games::dsl::*;
 
