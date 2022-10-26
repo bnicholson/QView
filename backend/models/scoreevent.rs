@@ -1,9 +1,7 @@
 use crate::diesel::*;
 use crate::schema::*;
-
 use create_rust_app::Connection;
 use crate::models::common::*;
-
 use serde::{Deserialize, Serialize};
 
 #[tsync::tsync]
