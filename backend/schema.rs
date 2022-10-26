@@ -1,6 +1,17 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
+    apicalllog (apicallid) {
+        created_at -> Timestamptz,
+        apicallid -> Int8,
+        method -> Varchar,
+        uri -> Text,
+        version -> Varchar,
+        headers -> Text,
+    }
+}
+
+diesel::table! {
     attachment_blobs (id) {
         id -> Int4,
         key -> Text,
@@ -211,6 +222,7 @@ diesel::joinable!(user_roles -> users (user_id));
 diesel::joinable!(user_sessions -> users (user_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
+    apicalllog,
     attachment_blobs,
     attachments,
     division_games,

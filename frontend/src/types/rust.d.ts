@@ -1,5 +1,21 @@
 /* This file is generated and managed by tsync */
 
+interface ApiCalllog {
+  created_at: UTC
+  apicallid: BigId
+  method: string
+  uri: string
+  version: string
+  headers: string
+}
+
+interface ApiCalllogChangeset {
+  method: string
+  uri: string
+  version: string
+  headers: string
+}
+
 type ID = number
 
 type BigId = number

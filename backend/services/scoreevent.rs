@@ -1,16 +1,13 @@
 
 use actix_web::{delete, HttpRequest, Error, get, HttpResponse, post, put, Result, web::{Data, Json, Path}};
-use actix_web::middleware::{ Logger };
 use create_rust_app::Database;
-use crate::{models, models::scoreevent::{Game, GameChangeset, Quizzes, QuizzesChangeset}};
+use crate::{models, models::scoreevent::{Game, GameChangeset, Quizzes }};
 use crate::models::common::*;
-use qstring::QString;
 use chrono::{ Utc, TimeZone };
 use std::line;
 use std::file;
 use diesel::result::Error as DBError;
-use diesel::result::DatabaseErrorKind;
-use crate::models::apicalllog;
+use crate::models::apicalllog::{apicalllog};
 
 pub async fn write(
     req: HttpRequest,
@@ -19,7 +16,7 @@ pub async fn write(
     let mut mdb = db.pool.get().unwrap();
 
     // log this api call
-    apicalllog(mdb,req);
+    apicalllog(&req);
 
     let qs = qstring::QString::from(req.query_string());
     let ps = qs.to_pairs();
@@ -27,7 +24,7 @@ pub async fn write(
     let psiter = ps.iter();
     let mut key = "";
     let mut tk="";
-    let mut org = "";
+//    let org = "Nazarene";
     let mut tn = "";
     let mut dn = "";
     let mut rm = "";
@@ -149,7 +146,7 @@ pub async fn write(
     }
 
     // now populate the Game
-    let mut game = GameChangeset {
+    let game = GameChangeset {
         org: "Nazarene".to_string(),
         tournament: tn.to_string(),
         division: dn.to_string(),
