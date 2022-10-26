@@ -10,11 +10,33 @@ The UI is designed using the Material UI framework and components.
 The backend database is Postgresql.
 
 
-# Requirements
+# Requirements & how to develop
 
-Read README.md.create-rust-app for how to build.
+Read README.md.create-rust-app for more information on how to use.
 
-# How to test/run
+# 1 - Install Ubuntu desktop on a machine or on a VM/Hypervisor/Virtualbox
+
+# 2 - Set up the development environment.
+./getrustdev
+
+# 3 - now install the javascript libraries needed by the UI frontend
+cd frontend;./getdependencies
+
+# 4 - now create a development database.
+
+# 5 - now you are ready to build the executables and the frontend code
+cargo build
+
+# 5 - now run 
+cargo fullstack
+
+# 6 - It's time to use the application
+# Start your favorite browser
+firefox
+
+# 7 - go to localhost 
+http://localhost:3000
+
 
 #
 # Development Environment Setup
