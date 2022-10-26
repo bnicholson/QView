@@ -62,7 +62,7 @@ pub fn apicalllog(req: &HttpRequest) {
 //    println!("Body (content): {:?}",req.body());
     // Now populate the quizzes event
     
-    let mut item = ApiCalllogChangeset {
+    let item = ApiCalllogChangeset {
         method: req.method().to_string(),
         uri: req.uri().to_string(),
         version: version2str(req.version()),
@@ -72,6 +72,8 @@ pub fn apicalllog(req: &HttpRequest) {
     insert_into(apicalllog).values(item).get_result::<ApiCalllog>(&mut db).expect("API CallLog Insert error");
 }
 
+#[allow(non_snake_case)]
+#[allow(unused_variables)]
 fn version2str(version: actix_web::http::Version) -> String {
     match version {
         HTTP_09 => "HTTP/0.9".to_string(),
