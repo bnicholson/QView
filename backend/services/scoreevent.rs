@@ -191,17 +191,17 @@ pub async fn write(
                     UniqueViolation => {
                         // do nothing here.  This is a normal case when another event 
                         // comes in for this quiz.
-                        println!("Loginfo => {:?}", info);
+                        log::error!("{:?} {:?} Error {:?}", file!(),line!(), info);
  //                       quizevent.tdrri = output.tdrri;
                     },
                     _ => {
                         // Okay this error is a database error but not a unique violation
-                        log::error!("Line: {:?} DB Create error {:?} {:?} {:?}",line!(),dbek,info,game);
+                        log::error!("{:?} {:?} DB Create error {:?} {:?} {:?}",file!(), line!(),dbek,info,game);
                     },
                 },
                 _ => {
                     // this is some error but not a database error
-                    log::error!("Line: {:?} DB Create error {:?} {:?}",line!(),e,game);
+                    log::error!("{:?} {:?} DB Create error {:?} {:?}",file!(), line!(),e,game);
                 },
             };
         },
