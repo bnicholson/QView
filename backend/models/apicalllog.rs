@@ -45,17 +45,18 @@ pub fn apicalllog(req: &HttpRequest) {
     let mut db = appdb.pool.get().unwrap();
 
     //    print_type_of(&mdb);
-    println!("Method: {:?}",req.method()); 
-    println!("URI: {:?}",req.uri()); 
-    println!("Version: {:?}",req.version()); 
-    println!("Headers: {:?}",req.headers());
-    println!("Match_info: {:?}",req.match_info());    
-    println!("Peer_address {:?}",req.peer_addr());
-    println!("URI: {:?}",req.uri()); 
-    println!("Path: {:?}",req.path()); 
-    println!("URI: {:?}",req.uri()); 
-    println!("Query_string: {:?}",req.query_string()); 
-    println!("Cookies: {:?}", req.cookies());
+//    println!("Method: {:?}",req.method()); 
+//    println!("URI: {:?}",req.uri()); 
+//    println!("Version: {:?}",req.version()); 
+//    println!("Headers: {:?}",req.headers());
+//    println!("Match_info: {:?}",req.match_info());    
+//    println!("Peer_address {:?}",req.peer_addr());
+//    println!("URI: {:?}",req.uri()); 
+//    println!("Path: {:?}",req.path()); 
+//    println!("URI: {:?}",req.uri()); 
+//    println!("Query_string: {:?}",req.query_string()); 
+//    println!("Cookies: {:?}", req.cookies());
+// the following aren't working
    // println!("Content-type: {:?}",req.content_type());
   //  println!("Encoding: {:?}",req.encoding());
  //   println!("Mime-type: {:?}",req.mime_type());

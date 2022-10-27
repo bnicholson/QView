@@ -20,7 +20,7 @@ pub async fn write(
 
     let qs = qstring::QString::from(req.query_string());
     let ps = qs.to_pairs();
-    println!("Pairs: {:?}",ps);
+//    println!("Pairs: {:?}",ps);
     let psiter = ps.iter();
     let mut key = "";
     let mut tk="";
@@ -42,12 +42,15 @@ pub async fn write(
     let mut nonce = "";
     let mut s1s = "";
     let mut tdrri: i64  = 0;
-
+    let mut bldgroom = "none";
     let mut i = 0;
     let mut field_count = 0;
     for pair in psiter {
         let s = String::from(pair.0);
         match s.as_str() {
+            "bldgroom" => {
+                
+            },
             "key" => {  // key4server - uniquely identifies a particular client
                 key = pair.1;
                 field_count += 1;                
@@ -107,9 +110,7 @@ pub async fn write(
             "ts" => { // timestamp from the client
                 let secs : i64 = pair.1.trim().parse().unwrap();
                 ts = Utc.timestamp(secs,0);
-                println!("Time: {:?}",ts);
                 field_count += 1;
-                println!("Timestamp = {:?}",ts)
             }, 
             "md5" => {  // md5 hashsum
                 md5 = pair.1;
@@ -124,7 +125,8 @@ pub async fn write(
                 field_count += 1;
             },
             _ => {
-                println!("{:?} undefined {:?}",pair.0,pair.1);
+                log::error!("{:?} {:?} Invalid parameter received in /scoreevent api call {:?} ",module_path!(),line!(),
+                    pair);
             }
         }
         // debugging println!("Index: {:?} Pair: {:?} {:?}",i,pair.0,pair.1);
@@ -182,7 +184,6 @@ pub async fn write(
             quizevent.tdrri = output.tdrri;
         },
         Err(e) => {
-            println!("error ===>>> {:?}",e);
             match e {
                // the most likely cause here is a Unique constraint - the row
                 // already exists in the database.  We'll ignore those and
@@ -191,17 +192,17 @@ pub async fn write(
                     UniqueViolation => {
                         // do nothing here.  This is a normal case when another event 
                         // comes in for this quiz.
-                        log::error!("{:?} {:?} Error {:?}", file!(),line!(), info);
+                        log::error!("{:?} {:?} Error {:?}", module_path!(),line!(), info);
  //                       quizevent.tdrri = output.tdrri;
                     },
                     _ => {
                         // Okay this error is a database error but not a unique violation
-                        log::error!("{:?} {:?} DB Create error {:?} {:?} {:?}",file!(), line!(),dbek,info,game);
+                        log::error!("{:?} {:?} DB Create error {:?} {:?} {:?}",module_path!(), line!(),dbek,info,game);
                     },
                 },
                 _ => {
                     // this is some error but not a database error
-                    log::error!("{:?} {:?} DB Create error {:?} {:?}",file!(), line!(),e,game);
+                    log::error!("{:?} {:?} DB Create error {:?} {:?}",module_path!(), line!(),e,game);
                 },
             };
         },
@@ -214,7 +215,6 @@ pub async fn write(
    
     // now let's write an entry in the quizzes event table
     // Handle errors while we create the entry
-    println!("inserted a games table entry");
     match models::scoreevent::createQuizEvent(&mut mdb, &quizevent) {
         Ok(output) => println!("Inserted a Quizevent {:?}",output),
         Err(e) => match e {
