@@ -1,19 +1,23 @@
 extern crate diesel;
-use std::collections::HashMap;
+extern crate log;
+extern crate log4rs;
+extern crate log4rs_syslog;
+
 use actix_web::guard;
 use std::process;
 use actix_files::{Files};
 use actix_web::{App, HttpServer, web};
 use actix_web::middleware::{Compress, Logger, NormalizePath};
 use actix_web::web::Data;
-use syslog::{Facility, Formatter3164, Formatter5424, BasicLogger, LogFormat};
-use crate::utils::FormatterLog::{FormatterNiceng};
-use log::{error, info, warn, Record, Level, Metadata, LevelFilter, SetLoggerError };
+//use syslog::{Facility, Formatter3164, Formatter5424, BasicLogger, LogFormat};
+//use log::{error, info, warn, Record, Level, Metadata, LevelFilter, SetLoggerError };
+//use log4rs::file::{ Deserializers };
+//use log4rs::file::Deserializers;
+use log4rs::config::Deserializers;
 
 mod schema;
 mod services;
 mod models;
-mod utils;
 mod mail;
 mod graphql;
 
@@ -21,23 +25,21 @@ mod graphql;
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
 
-    // this should setup logging if we are not in debug mode
     #[cfg(not(debug_assertions))] {
-        let formatter = FormatterNiceng {
-            facility: Facility::LOG_LOCAL4,
-            hostname: None,
-            process: "qview".into(),
-            pid: process::id(),
-        };
-
-        let logger = syslog::unix(formatter).expect("could not connect to syslog");
-        match log::set_boxed_logger(Box::new(BasicLogger::new(logger)))
-                .map(|()| log::set_max_level(LevelFilter::Info)) {
-            Err(e) => println!("Error connecting to syslog via unix {:?}",e),
-            Ok(j) => println!("Connected to syslog via unix {:?}",j),
-        }
+         // Handle setting up log4rs (logging)
+        // add syslog support
+        let mut deserializers = log4rs::config::Deserializers::new();
+        log4rs_syslog::register(&mut deserializers);
+        // 
+        log4rs::init_file("config/logging_prod.yaml",deserializers).unwrap();  
     }
 
+    #[cfg(debug_assertions)]
+    log4rs::init_file("config/logging_debug.yaml",Default::default()).unwrap();
+
+    log::error!("Initialized log4rs");
+
+    println!("inside main");
     // Now setup some of the crates that we'll use later
     let app_data = create_rust_app::setup();
 
