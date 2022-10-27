@@ -1,64 +1,45 @@
 extern crate diesel;
-
+use std::collections::HashMap;
 use actix_web::guard;
-
+use std::process;
 use actix_files::{Files};
 use actix_web::{App, HttpServer, web};
 use actix_web::middleware::{Compress, Logger, NormalizePath};
 use actix_web::web::Data;
+use syslog::{Facility, Formatter3164, Formatter5424, BasicLogger, LogFormat};
+use crate::utils::FormatterLog::{FormatterNiceng};
+use log::{error, info, warn, Record, Level, Metadata, LevelFilter, SetLoggerError };
 
 mod schema;
 mod services;
 mod models;
+mod utils;
 mod mail;
 mod graphql;
 
-//type DbPool = r2d2::Pool<ConnectionManager<SqliteConnection>>;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+
+    // this should setup logging if we are not in debug mode
+    #[cfg(not(debug_assertions))] {
+        let formatter = FormatterNiceng {
+            facility: Facility::LOG_LOCAL4,
+            hostname: None,
+            process: "qview".into(),
+            pid: process::id(),
+        };
+
+        let logger = syslog::unix(formatter).expect("could not connect to syslog");
+        match log::set_boxed_logger(Box::new(BasicLogger::new(logger)))
+                .map(|()| log::set_max_level(LevelFilter::Info)) {
+            Err(e) => println!("Error connecting to syslog via unix {:?}",e),
+            Ok(j) => println!("Connected to syslog via unix {:?}",j),
+        }
+    }
+
     // Now setup some of the crates that we'll use later
     let app_data = create_rust_app::setup();
-
-    // Get the logging middleware up
-//    dotenv::dotenv().ok();
-//    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
-
-    // set up database connection pool
-//    let conn_spec = std::env::var("DATABASE_URL").expect("DATABASE_URL");
-//    let manager = ConnectionManager::<PgConnection>::new(conn_spec);
-//    let pool = r2d2::Pool::builder()
-//        .build(manager)
-//        .expect("Failed to create pool.");
-
-    log::info!("starting HTTP server at http://localhost:8080");
-
-    // Start HTTP server
-    //HttpServer::new(move || {
-    //    App::new()
-    //        // set up DB pool to be used with web::Data<Pool> extractor
-    //       .app_data(web::Data::new(pool.clone()))
-    //        .wrap(middleware::Logger::default())
-    //        .service(get_user)
-    //        .service(add_user)
-    //})
-    //.bind(("127.0.0.1", 8080))?
-    //.run()
-    //.await
-
-    // Create connection pool
-//    let pool = r2d2::Pool::builder()
-//        .build(manager)
-//        .expect("Failed to create pool.");
-
-   // Start HTTP server
-   //HttpServer::new(move || {
-   //     App::new().app_data(web::Data::new(pool.clone()))
-   //     .resource("/{name}", web::get().to(index))
-   // })
-   // .bind(("127.0.0.1", 8080))?
-   // .run()
-   // .await
 
     // GraphQL Stuff
     let schema = async_graphql::Schema::build(graphql::QueryRoot, graphql::MutationRoot, graphql::SubscriptionRoot)
@@ -67,12 +48,25 @@ async fn main() -> std::io::Result<()> {
         .data(app_data.storage.clone())
         .finish();
 
+    // Grab the HOST:PORT the web server should run on.
+    let host_port = match std::env::var("HOST_PORT") {
+        Ok(host_and_port) => {
+            host_and_port
+        },
+        Err(e) => {
+            "0.0.0.0:3000".to_string()
+        }
+    };
+
     // Start the actix-web server
     HttpServer::new(move || {
         let mut app = App::new()
             .wrap(Compress::default())
             .wrap(NormalizePath::trim())
             .wrap(Logger::default());
+
+
+        log::info!("starting HTTP server at http://localhost:3000");
 
         app = app.app_data(Data::new(app_data.database.clone()));
         app = app.app_data(Data::new(app_data.mailer.clone()));
@@ -110,5 +104,5 @@ async fn main() -> std::io::Result<()> {
         app = app.service(api_scope);
         app = app.default_service(web::get().to(create_rust_app::render_views));
         app
-    }).bind("0.0.0.0:3000")?.run().await
+    }).bind(host_port)?.run().await
 }
