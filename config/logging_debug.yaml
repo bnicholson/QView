@@ -1,0 +1,14 @@
+# scan this file for changes every 60 seconds
+refresh_rate: 60 seconds
+
+appenders:
+  qview_stdout:
+    kind: console
+    encoder:
+      pattern: "{h({d(%Y-%m-%d %H:%M:%S.%f)(utc)} - {l}: {m}{n})}"
+      
+root:
+  level: debug
+  appenders:
+    - qview_stdout
+  

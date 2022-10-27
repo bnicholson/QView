@@ -1,0 +1,19 @@
+appenders:
+  qview_stdout:
+    kind: console
+    encoder:
+      pattern: "{h({d(%Y-%m-%d %H:%M:%S.%f)(utc)} - {l}: {m}{n})}"
+  syslog:
+    kind: libc-syslog
+    openlog:
+      ident: log4rs-syslog-example
+      option: LOG_PID | LOG_NDELAY | LOG_CONS
+      facility: Daemon
+    encoder:
+      pattern: "{M} - {m}"
+      
+root:
+  level: debug
+  appenders:
+    - qview_stdout
+  
