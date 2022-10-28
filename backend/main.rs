@@ -37,9 +37,9 @@ async fn main() -> std::io::Result<()> {
     #[cfg(debug_assertions)]
     log4rs::init_file("config/logging_debug.yaml",Default::default()).unwrap();
 
-    log::error!("Initialized log4rs");
+    // tell everyone we have logging running
+    log::info!("Initialized log4rs");
 
-    println!("inside main");
     // Now setup some of the crates that we'll use later
     let app_data = create_rust_app::setup();
 

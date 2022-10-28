@@ -28,6 +28,9 @@ tsync = "1.2.1"
 qstring = "0.7.2"
 log4rs = "=0.8.0"
 log4rs-syslog = "3.0.3"
+sha1="0.10.0"
+base64="0.13.1"
+hex-literal="0.3.4"
 
 [dependencies.chrono]
 features = ["serde"]

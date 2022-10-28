@@ -24,19 +24,24 @@ pub async fn write(
     let psiter = ps.iter();
     let mut key = "";
     let mut tk="";
-//    let org = "Nazarene";
+    let org = "Nazarene";
+    let bldgroom = "";
     let mut tn = "";
     let mut dn = "";
     let mut rm = "";
     let mut rd = "";
     let mut qn: i32 = 0;
+    let mut qnStr = "";
     let mut e: i32  = 0;
+    let mut eStr = "";
     let mut n = "";
     let mut t: i32 = 0;
+    let mut tStr = "";
     let mut q: i32  = 0;
+    let mut qStr = "";
     let mut ec = "";
     let mut p1 = "";
-    let mut p2 = "";
+    let mut p2 = String{""};
     let mut md5 = "";
     let mut ts = Utc::now();
     let mut nonce = "";
@@ -49,62 +54,67 @@ pub async fn write(
         let s = String::from(pair.0);
         match s.as_str() {
             "bldgroom" => {
-                
+                bldgroom = &pair.1.replace("+"," ");
+                field_count += 1;               
             },
             "key" => {  // key4server - uniquely identifies a particular client
-                key = pair.1;
+                key = &pair.1.replace("+"," ");
                 field_count += 1;                
             },
             "tk" => {   // tournament key - short id for a particular tournament
-                tk = pair.1;
+                tk = &pair.1.replace("+"," ");
                 field_count += 1;                
             },
             "tn" => { // Tournament Name
-                tn = pair.1;
+                tn = &pair.1.replace("+"," ");
                 field_count += 1;
             },
             "dn" => { // Division Name
-                dn = pair.1;
+                dn = &pair.1.replace("+"," ");
                 field_count += 1;
             },
             "rm" => { // Room 
-                rm = pair.1;
+                rm = &pair.1.replace("+"," ");
                 field_count += 1;
             },
             "rd" => { // Round
-                rd = pair.1;
+                rd = &pair.1.replace("+"," ");
                 field_count += 1;
             }, 
             "qn" => { // Question #
+                qnStr = &pair.1.replace("+"," ");
                 qn = pair.1.trim().parse().unwrap(); 
                 field_count += 1;
             },
             "e" => { // event number
+                eStr = &pair.1.replace("+"," ");
                 e = pair.1.trim().parse().unwrap();
                 field_count +=1;
             },
             "n" => { // quizzer or team name
-                n = pair.1;
+                n = &pair.1.replace("+"," ");
                 field_count +=1;
             },
             "t" => { // team # (0-2)
+                tStr = &pair.1.replace("+"," ");
                 t = pair.1.trim().parse().unwrap();
                 field_count +=1;
             },
-            "q" => { // quizzer # (0-4) 
+            "q" => { // quizzer # (0-4)
+                qStr = &pair.1.replace("+"," "); 
                 q = pair.1.trim().parse().unwrap();
                 field_count +=1;
             }, 
             "ec" => { // Event type/class (TC, BE, QT, ... 
-                ec = pair.1;
+                ec = &pair.1.replace("+"," ");
                 field_count += 1;
             }, 
             "p1" => { // parameter 1
-                p1 = pair.1;
+                p1 = &pair.1.replace("+"," ");
                 field_count += 1;
             }, 
             "p2" => { // parameter 2 - depends upon what ec is
-                p2 = pair.1;
+                p2 = pair.1.replace("+"," ");
                 field_count += 1;
             }, 
             "ts" => { // timestamp from the client
@@ -139,13 +149,49 @@ pub async fn write(
 
     // Check to make sure we got all the parameters
     let content = "bad parameters";
-    if field_count != 18 {
+    if field_count != 19 {
         return Ok(
             HttpResponse::BadRequest()
                 .content_type("text/html; charset=utf-8")
                 .body(content)
         )
     }
+
+    // create the sha1sum
+    use hex_literal::hex;
+    use base64;
+    use sha1::{Sha1, Digest};
+    // create the sha1 object
+    let mut sha1hasher = Sha1::new();
+
+    // 
+    sha1hasher.update(nonce);
+    let psk = "caakokwy13274125359545uranusplutomarssaturn";
+    sha1hasher.update(psk);
+    sha1hasher.update(bldgroom);
+	sha1hasher.update(key);
+	sha1hasher.update(tk);
+	sha1hasher.update(tn);
+	sha1hasher.update(dn);
+    sha1hasher.update(rm);
+    sha1hasher.update(rd);
+	sha1hasher.update(qnStr);
+    sha1hasher.update(eStr);
+    sha1hasher.update(n);
+    sha1hasher.update(tStr);
+    sha1hasher.update(qStr);
+    sha1hasher.update(ec);
+    sha1hasher.update(p1);
+    sha1hasher.update(p2);
+    let rslt = sha1hasher.finalize();
+    let rsltbase64 = base64::encode(rslt);
+
+    // now grab the result of the sha1hashing
+    log::debug!("Debug sha1sum {:x?} {:x?} {:?}", rsltbase64, s1s, nonce);
+	log::info!("{} {} SHA1SUM received = {}\nSHA1SUM calculated = {:?}",module_path!(),line!(),s1s,rsltbase64);
+
+	log::info!("{:?} {:?} ScoreEvent: Org: {} BldgRoom: {}, Key: {}, Tk: {}, TN: {}, DN: {}, Room: {}, Round: {}, Question: {}, EventNumber: {} Name: {} Team: {} Quizzer: {}, Parm1: {} Parm2: {}, Timestamp: {}, MD5: {}, Sha1sum: {}",
+        module_path!(),line!(), org, bldgroom, key, tk, tn, dn, rm, rd, qn, e, n, t, q, p1, p2, ts, md5, s1s );   
 
     // now populate the Game
     let game = GameChangeset {
