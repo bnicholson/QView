@@ -13,7 +13,7 @@ use actix_web::web::Data;
 //use log::{error, info, warn, Record, Level, Metadata, LevelFilter, SetLoggerError };
 //use log4rs::file::{ Deserializers };
 //use log4rs::file::Deserializers;
-use log4rs::config::Deserializers;
+use log4rs::file::Deserializers;
 
 mod schema;
 mod services;
@@ -28,7 +28,7 @@ async fn main() -> std::io::Result<()> {
     #[cfg(not(debug_assertions))] {
          // Handle setting up log4rs (logging)
         // add syslog support
-        let mut deserializers = log4rs::config::Deserializers::new();
+        let mut deserializers = log4rs::file::Deserializers::new();
         log4rs_syslog::register(&mut deserializers);
         // 
         log4rs::init_file("config/logging_prod.yaml",deserializers).unwrap();  
