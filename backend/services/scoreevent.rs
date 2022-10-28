@@ -22,95 +22,95 @@ pub async fn write(
     let ps = qs.to_pairs();
 //    println!("Pairs: {:?}",ps);
     let psiter = ps.iter();
-    let mut key = "";
-    let mut tk="";
+    let mut key = String::new();
+    let mut tk=String::new();
     let org = "Nazarene";
-    let bldgroom = "";
-    let mut tn = "";
-    let mut dn = "";
-    let mut rm = "";
-    let mut rd = "";
+    let bldgroom = String::new();
+    let mut tn = String::new();
+    let mut dn = String::new();
+    let mut rm = String::new();
+    let mut rd = String::new();
     let mut qn: i32 = 0;
-    let mut qnStr = "";
+    let mut qnStr = String::new();
     let mut e: i32  = 0;
-    let mut eStr = "";
-    let mut n = "";
+    let mut eStr = String::new();
+    let mut n = String::new();
     let mut t: i32 = 0;
-    let mut tStr = "";
+    let mut tStr = String::new();
     let mut q: i32  = 0;
-    let mut qStr = "";
-    let mut ec = "";
-    let mut p1 = "";
-    let mut p2 = String{""};
+    let mut qStr = String::new();
+    let mut ec = String::new();
+    let mut p1 = String::new();
+    let mut p2 = String::new();
     let mut md5 = "";
     let mut ts = Utc::now();
     let mut nonce = "";
     let mut s1s = "";
     let mut tdrri: i64  = 0;
-    let mut bldgroom = "none";
+    let mut bldgroom = String::new();
     let mut i = 0;
     let mut field_count = 0;
     for pair in psiter {
         let s = String::from(pair.0);
         match s.as_str() {
             "bldgroom" => {
-                bldgroom = &pair.1.replace("+"," ");
+                bldgroom = pair.1.replace("+"," ");
                 field_count += 1;               
             },
             "key" => {  // key4server - uniquely identifies a particular client
-                key = &pair.1.replace("+"," ");
+                key = pair.1.replace("+"," ");
                 field_count += 1;                
             },
             "tk" => {   // tournament key - short id for a particular tournament
-                tk = &pair.1.replace("+"," ");
+                tk = pair.1.replace("+"," ");
                 field_count += 1;                
             },
             "tn" => { // Tournament Name
-                tn = &pair.1.replace("+"," ");
+                tn = pair.1.replace("+"," ");
                 field_count += 1;
             },
             "dn" => { // Division Name
-                dn = &pair.1.replace("+"," ");
+                dn = pair.1.replace("+"," ");
                 field_count += 1;
             },
             "rm" => { // Room 
-                rm = &pair.1.replace("+"," ");
+                rm = pair.1.replace("+"," ");
                 field_count += 1;
             },
             "rd" => { // Round
-                rd = &pair.1.replace("+"," ");
+                rd = pair.1.replace("+"," ");
                 field_count += 1;
             }, 
             "qn" => { // Question #
-                qnStr = &pair.1.replace("+"," ");
+                qnStr = pair.1.replace("+"," ");
                 qn = pair.1.trim().parse().unwrap(); 
                 field_count += 1;
             },
             "e" => { // event number
-                eStr = &pair.1.replace("+"," ");
+                eStr = pair.1.replace("+"," ");
                 e = pair.1.trim().parse().unwrap();
                 field_count +=1;
             },
             "n" => { // quizzer or team name
-                n = &pair.1.replace("+"," ");
+                n = pair.1.replace("+"," ");
                 field_count +=1;
             },
             "t" => { // team # (0-2)
-                tStr = &pair.1.replace("+"," ");
+                tStr = pair.1.replace("+"," ");
                 t = pair.1.trim().parse().unwrap();
                 field_count +=1;
             },
             "q" => { // quizzer # (0-4)
-                qStr = &pair.1.replace("+"," "); 
+                qStr = pair.1.replace("+"," "); 
                 q = pair.1.trim().parse().unwrap();
                 field_count +=1;
             }, 
             "ec" => { // Event type/class (TC, BE, QT, ... 
-                ec = &pair.1.replace("+"," ");
+                ec = pair.1.replace("+"," ");
                 field_count += 1;
             }, 
             "p1" => { // parameter 1
-                p1 = &pair.1.replace("+"," ");
+                p1 = pair.1.replace("+"," ");
                 field_count += 1;
             }, 
             "p2" => { // parameter 2 - depends upon what ec is
@@ -165,24 +165,24 @@ pub async fn write(
     let mut sha1hasher = Sha1::new();
 
     // 
-    sha1hasher.update(nonce);
+    sha1hasher.update(&nonce);
     let psk = "caakokwy13274125359545uranusplutomarssaturn";
     sha1hasher.update(psk);
-    sha1hasher.update(bldgroom);
-	sha1hasher.update(key);
-	sha1hasher.update(tk);
-	sha1hasher.update(tn);
-	sha1hasher.update(dn);
-    sha1hasher.update(rm);
-    sha1hasher.update(rd);
-	sha1hasher.update(qnStr);
-    sha1hasher.update(eStr);
-    sha1hasher.update(n);
-    sha1hasher.update(tStr);
-    sha1hasher.update(qStr);
-    sha1hasher.update(ec);
-    sha1hasher.update(p1);
-    sha1hasher.update(p2);
+    sha1hasher.update(&bldgroom);
+	sha1hasher.update(&key);
+	sha1hasher.update(&tk);
+	sha1hasher.update(&tn);
+	sha1hasher.update(&dn);
+    sha1hasher.update(&rm);
+    sha1hasher.update(&rd);
+	sha1hasher.update(&qnStr);
+    sha1hasher.update(&eStr);
+    sha1hasher.update(&n);
+    sha1hasher.update(&tStr);
+    sha1hasher.update(&qStr);
+    sha1hasher.update(&ec);
+    sha1hasher.update(&p1);
+    sha1hasher.update(&p2);
     let rslt = sha1hasher.finalize();
     let rsltbase64 = base64::encode(rslt);
 
