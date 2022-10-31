@@ -6,8 +6,12 @@ use crate::models::common::*;
 use chrono::{ Utc, TimeZone };
 use std::line;
 use std::file;
+use base64;
+use sha1::{Sha1, Digest};
 use diesel::result::Error as DBError;
+use crate::models::roominfo::*;
 use crate::models::apicalllog::{apicalllog};
+use crate::models::eventlog;
 
 pub async fn write(
     req: HttpRequest,
@@ -24,7 +28,7 @@ pub async fn write(
     let psiter = ps.iter();
     let mut key = String::new();
     let mut tk=String::new();
-    let org = "Nazarene";
+    let org = "Nazarene".to_string();
     let bldgroom = String::new();
     let mut tn = String::new();
     let mut dn = String::new();
@@ -42,11 +46,12 @@ pub async fn write(
     let mut ec = String::new();
     let mut p1 = String::new();
     let mut p2 = String::new();
-    let mut md5 = "";
+    let mut md5 = "".to_string();
     let mut ts = Utc::now();
-    let mut nonce = "";
-    let mut s1s = "";
+    let mut nonce = "".to_string();
+    let mut s1s = "".to_string();
     let mut tdrri: i64  = 0;
+    let mut clientip = "".to_string();
     let mut bldgroom = String::new();
     let mut i = 0;
     let mut field_count = 0;
@@ -123,17 +128,20 @@ pub async fn write(
                 field_count += 1;
             }, 
             "md5" => {  // md5 hashsum
-                md5 = pair.1;
+                md5 = pair.1.to_string();
                 field_count += 1;
             },
             "nonce" => {
-                nonce = pair.1;
+                nonce = pair.1.to_string();
                 field_count += 1;
             },
             "s1s" => {
-                s1s = pair.1;
+                s1s = pair.1.to_string();
                 field_count += 1;
             },
+            "myip" => {
+                clientip = pair.1.to_string();  // this is optional should only be there sometimes.
+            }
             _ => {
                 log::error!("{:?} {:?} Invalid parameter received in /scoreevent api call {:?} ",module_path!(),line!(),
                     pair);
@@ -142,10 +150,6 @@ pub async fn write(
         // debugging println!("Index: {:?} Pair: {:?} {:?}",i,pair.0,pair.1);
         i += 1;
     }
-
-    // now lets log all this information to the eventlog table.
-    // This is a file on disk in QMServer.  But we'll put it
-    // on the database in the eventlog table
 
     // Check to make sure we got all the parameters
     let content = "bad parameters";
@@ -157,14 +161,12 @@ pub async fn write(
         )
     }
 
-    // create the sha1sum
-    use hex_literal::hex;
-    use base64;
-    use sha1::{Sha1, Digest};
     // create the sha1 object
     let mut sha1hasher = Sha1::new();
 
-    // 
+    // the following code calculates and checks the sha1sum of all the GET parameters.
+    // we had issues with the network (firewalls, app firewalls, etc) corrupting or 
+    // giving false 200s.  This avoids that.
     sha1hasher.update(&nonce);
     let psk = "caakokwy13274125359545uranusplutomarssaturn";
     sha1hasher.update(psk);
@@ -186,21 +188,50 @@ pub async fn write(
     let rslt = sha1hasher.finalize();
     let rsltbase64 = base64::encode(rslt);
 
+
     // now grab the result of the sha1hashing
-    log::debug!("Debug sha1sum {:x?} {:x?} {:?}", rsltbase64, s1s, nonce);
-	log::info!("{} {} SHA1SUM received = {}\nSHA1SUM calculated = {:?}",module_path!(),line!(),s1s,rsltbase64);
+	log::info!("{:?} {:?} ScoreEvent: Org: {} BldgRoom: {}, Key: {}, Tk: {}, TN: {}, DN: {}, Room: {}, Round: {}, Question: {}, EventNumber: {} Name: {} Team: {} Quizzer: {}, EC: {}, Parm1: {} Parm2: {}, Timestamp: {}, Host: {}, MD5: {}, Nonce: {}, Sha1sum: {} Calculated sha1sum: {}",
+        module_path!(),line!(), org, bldgroom, key, tk, tn, dn, rm, rd, qn, e, n, t, q, ec, p1, p2, ts, clientip, md5, nonce, s1s, rsltbase64 );   
+    
+    // now make sure we didn't have any corrupted data.  If so print an error and get out
+    if !s1s.eq(&rsltbase64) {
+        // oh boy!!!
+        log::error!("{} {} /api/scoreevent Sha1sums don't match {} {}",module_path!(), line!(), s1s, rsltbase64);
+        let error_content = format!("Sha1sums don't match! {} {}",s1s, rsltbase64);
+        return Ok(
+            HttpResponse::BadRequest()
+                .content_type("text/html; charset=utf-8")
+                .body(error_content)
+        )
+    }
+    // now lets log all this information to the eventlog table.
+    // This is a file on disk in QMServer.  But we'll put it
+    // on the database in the eventlog table
+    match eventlog::write_eventlog(&mut mdb, org.to_string(), bldgroom, key, tk, tn, dn, rm, rd, qn, e, n, t, q, ec, p1, p2, ts.to_string(), clientip, md5, nonce, s1s) {
+        Ok(eventlog) => {
+            // okay we wrote to eventlog - do nothing
+        },
+        Err(e) => {
+            log::error!("{} {} Eventlog write failure: {}",module_path!(),line!(),e);
+            let error_content = format!("Sha1sums don't match! {} {}", s1s, rsltbase64);
+            return Ok(
+                HttpResponse::BadRequest()
+                    .content_type("text/html; charset=utf-8")
+                    .body(error_content)
+            )
+        }
+    }
 
-	log::info!("{:?} {:?} ScoreEvent: Org: {} BldgRoom: {}, Key: {}, Tk: {}, TN: {}, DN: {}, Room: {}, Round: {}, Question: {}, EventNumber: {} Name: {} Team: {} Quizzer: {}, Parm1: {} Parm2: {}, Timestamp: {}, MD5: {}, Sha1sum: {}",
-        module_path!(),line!(), org, bldgroom, key, tk, tn, dn, rm, rd, qn, e, n, t, q, p1, p2, ts, md5, s1s );   
 
+    // now let's write all this to the database.
     // now populate the Game
     let game = GameChangeset {
         org: "Nazarene".to_string(),
-        tournament: tn.to_string(),
-        division: dn.to_string(),
-        room: rm.to_string(),
-        round: rd.to_string(),
-        key4server: Some(key.to_string()),
+        tournament: tn,
+        division: dn,
+        room: rm,
+        round: rd,
+        key4server: Some(key),
         ignore: Some(false),
         ruleset: "Nazarene".to_string()
     };
@@ -210,15 +241,15 @@ pub async fn write(
         tdrri: tdrri,
         question: qn,
         eventnum: e,
-        name: n.to_string(),
+        name: n,
         team: t,
         quizzer: q,
-        event: ec.to_string(),
-        parm1: Some(p1.to_string()),
-        parm2: Some(p2.to_string()),
+        event: ec,
+        parm1: Some(p1),
+        parm2: Some(p2),
         clientts: Some(ts),
         serverts: Some(Utc::now()),
-        md5digest: Some(md5.to_string())
+        md5digest: Some(md5)
     };
 
     // now let's create an entry in the games table
@@ -261,7 +292,7 @@ pub async fn write(
    
     // now let's write an entry in the quizzes event table
     // Handle errors while we create the entry
-    match models::scoreevent::createQuizEvent(&mut mdb, &quizevent) {
+    match models::scoreevent::create_quiz_event(&mut mdb, &quizevent) {
         Ok(output) => println!("Inserted a Quizevent {:?}",output),
         Err(e) => match e {
             // the most likely cause here is a Unique constraint - the row

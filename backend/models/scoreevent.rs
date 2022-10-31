@@ -95,7 +95,7 @@ pub fn create(db: &mut Connection, item: &GameChangeset) -> QueryResult<Game> {
     insert_into(games).values(item).get_result::<Game>(db)
 }
 
-pub fn createQuizEvent(db: &mut Connection, item: &Quizzes) -> QueryResult<Quizzes> {
+pub fn create_quiz_event(db: &mut Connection, item: &Quizzes) -> QueryResult<Quizzes> {
     use crate::schema::quizzes::dsl::*;
 
     insert_into(quizzes).values(item).get_result::<Quizzes>(db)

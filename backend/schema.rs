@@ -56,10 +56,12 @@ diesel::table! {
 }
 
 diesel::table! {
-    eventlog (eid) {
+    eventlog (evid) {
+        evid -> Int8,
         created_at -> Timestamptz,
-        eid -> Int8,
-        key4server -> Varchar,
+        clientkey -> Varchar,
+        organization -> Varchar,
+        bldgroom -> Varchar,
         tournament -> Varchar,
         division -> Varchar,
         room -> Varchar,
@@ -73,7 +75,7 @@ diesel::table! {
         parm1 -> Varchar,
         parm2 -> Varchar,
         ts -> Varchar,
-        host -> Varchar,
+        clientip -> Varchar,
         md5digest -> Varchar,
         nonce -> Varchar,
         s1s -> Varchar,

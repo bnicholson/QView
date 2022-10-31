@@ -5,3 +5,4 @@ pub mod scoreevent;
 pub mod division;
 pub mod apicalllog;
 pub mod roominfo;
+pub mod eventlog;

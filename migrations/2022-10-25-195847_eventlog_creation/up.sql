@@ -4,9 +4,11 @@ BEGIN;
 
 -- create the new eventlog table 
 create table eventlog (
+    evid BIGSERIAL PRIMARY KEY NOT NULL,                            -- event identifier (unique) -- also ensure all events are unique
     created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,      -- used to ensure we have a unique timestamp to the millisecond    
-    eid BIGSERIAL PRIMARY KEY NOT NULL,                             -- event identifier (unique) -- also ensure all events are unique
-    key4server VARCHAR(32) NOT NULL,                                -- what key/client did this come from
+    clientkey VARCHAR(32) NOT NULL,                                 -- what key/client did this come from
+    organization VARCHAR(32) NOT NULL,                              -- organization? Nazarene? World Bible?
+    bldgroom VARCHAR(32) NOT NULL,                                  -- what building/room
     tournament VARCHAR(32) NOT NULL,                                -- tournament
     division VARCHAR(32) NOT NULL,                                  -- division
     room VARCHAR(32) NOT NULL,                                      -- room
@@ -20,7 +22,7 @@ create table eventlog (
     parm1 VARCHAR(32) NOT NULL,                                     -- parameter used by a specific event
     parm2 VARCHAR(32) NOT NULL,                                     -- another one
     ts VARCHAR(32) NOT NULL,                                        -- timestamp from the clients viewpoint
-    host VARCHAR(32) NOT NULL,                                      -- host
+    clientip VARCHAR(32) NOT NULL,                                  -- clientip
     md5digest VARCHAR(32) NOT NULL,                                 -- used to ensure we don't have corruption in transmission
     nonce VARCHAR(32) NOT NULL,                                     -- part of the corruption avoidance 
     s1s VARCHAR(32) NOT NULL                                       -- 

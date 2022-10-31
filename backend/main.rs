@@ -4,7 +4,6 @@ extern crate log4rs;
 extern crate log4rs_syslog;
 
 use actix_web::guard;
-use std::process;
 use actix_files::{Files};
 use actix_web::{App, HttpServer, web};
 use actix_web::middleware::{Compress, Logger, NormalizePath};
