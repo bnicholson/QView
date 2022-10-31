@@ -31,6 +31,7 @@ log4rs-syslog = "3.0.3"
 sha1="0.10.0"
 base64="0.13.1"
 hex-literal="0.3.4"
+redis="0.22.1"
 
 [dependencies.chrono]
 features = ["serde"]
@@ -65,7 +66,7 @@ edition = "2021"
 name = "qview"
 publish = false
 version = "0.1.1"
-authors = [ "b.nicholson@niceng.com" ]
+authors = [ "Barry Nicholson b.nicholson@niceng.com" ]
 description = "Manage Quizzing Tournaments"
 license = "AGPL"
 repository = "https://github.com/bnicholson/qview"
