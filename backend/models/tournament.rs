@@ -5,6 +5,7 @@ use create_rust_app::Connection;
 use diesel::QueryResult;
 use serde::{Deserialize, Serialize};
 use crate::models::common::*;
+use chrono::{ Utc, DateTime, TimeZone, naive };
 
 #[tsync::tsync]
 #[derive(
@@ -82,6 +83,27 @@ pub fn read_all(db: &mut Connection, pagination: &PaginationParams) -> QueryResu
             pagination.page
                 * std::cmp::max(pagination.page_size, PaginationParams::MAX_PAGE_SIZE as i64),
         )
+        .load::<Tournament>(db);
+    values
+}
+
+pub fn read_bydate(db: &mut Connection, from_dt: i64, to_dt: i64) -> QueryResult<Vec<Tournament>> {
+    use crate::schema::tournaments::dsl::*;
+    
+    let mut nfrom_dt = chrono::naive::NaiveDate::from_ymd(2022,11,1);//imestamp(from_dt/1000,0);
+   //let mut nto_dt = chrono::naive::NaiveDate::from_timestamp(from_dt/1000,0);
+
+    let values = tournaments
+        .order(todate)
+        .filter(todate.ge(nfrom_dt))
+//        .between(from_dt,to_dt)
+//        .filter(todate.ge(from_dt))
+//        .filter(todate.le(to_dt))
+//        .limit(pagination.page_size)
+//        .offset(
+//            pagination.page
+//                * std::cmp::max(pagination.page_size, PaginationParams::MAX_PAGE_SIZE as i64),
+ //       )
         .load::<Tournament>(db);
     values
 }

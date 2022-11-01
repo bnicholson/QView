@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 export const TournamentAPI = {
   get: async (page: number, size: number) =>
     await (await fetch(`/api/tournaments?page=${page}&page_size=${size}`)).json(),
+  getByDate: async (fromDate: number, toDate: number) =>
+    await (await fetch(`/api/tournaments?from_date=${fromDate}&to_date=${toDate}`)).json(),
   create: async (tournament: string) =>
     await (
       await fetch('/api/tournaments', {

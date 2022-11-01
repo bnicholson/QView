@@ -27,6 +27,11 @@ interface PaginationParams {
   page_size: number
 }
 
+interface SearchDateParams {
+  from_date: number
+  to_date: number
+}
+
 interface Division {
   did: BigId
   tid: BigId

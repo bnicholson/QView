@@ -20,3 +20,15 @@ pub struct PaginationParams {
 impl PaginationParams {
     pub const MAX_PAGE_SIZE: u16 = 100;
 }
+
+#[tsync::tsync]
+#[derive(serde::Deserialize)]
+pub struct SearchDateParams {
+    pub from_date: i64,
+    pub to_date: i64,
+}
+
+impl SearchDateParams {
+    pub const MAX_PAGE_SIZE: u16 = 100;
+}
+

@@ -85,7 +85,7 @@ export const Home = () => {
     displayDate = displayDate - (31 * 24 * 3600 * 1000);
     dispatcher(setDisplayDate(displayDate));
   }
-
+ 
   const add31Days = () => {
     displayDate = displayDate + (31 * 24 * 3600 * 1000);
     dispatcher(setDisplayDate(displayDate));
@@ -99,11 +99,11 @@ export const Home = () => {
 
   useEffect(() => {
     setProcessing(true)
-    TournamentAPI.get(0, 25).then((tournaments: Tournament[]) => {
+    TournamentAPI.getByDate(displayDate, (displayDate+(31 * 24 * 3600 * 1000))).then((tournaments: Tournament[]) => {
       setTournaments(tournaments)
       setProcessing(false)
     })
-    console.log("In useeffect - pulling from api")
+    console.log("In useeffect - pulling from api " + displayDate)
   }, [displayDate])
 
   const fromDate = new Date();
