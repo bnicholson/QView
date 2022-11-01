@@ -3,6 +3,6 @@
 BEGIN;
 
 -- drop the eventlog table
-DROP TABLE eventlog;
+DROP TABLE eventlogs;
 
 COMMIT;

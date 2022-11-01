@@ -188,32 +188,32 @@ pub async fn write(
     let rslt = sha1hasher.finalize();
     let rsltbase64 = base64::encode(rslt);
 
-
     // now grab the result of the sha1hashing
-	log::info!("{:?} {:?} ScoreEvent: Org: {} BldgRoom: {}, Key: {}, Tk: {}, TN: {}, DN: {}, Room: {}, Round: {}, Question: {}, EventNumber: {} Name: {} Team: {} Quizzer: {}, EC: {}, Parm1: {} Parm2: {}, Timestamp: {}, Host: {}, MD5: {}, Nonce: {}, Sha1sum: {} Calculated sha1sum: {}",
-        module_path!(),line!(), org, bldgroom, key, tk, tn, dn, rm, rd, qn, e, n, t, q, ec, p1, p2, ts, clientip, md5, nonce, s1s, rsltbase64 );   
+	log::info!("{:?} {:?} ScoreEvent: Org: {} BldgRoom: {}, Key: {}, Tk: {}, TN: {}, DN: {}, Room: {}, Round: {}, Question: {}, EventNumber: {} Name: {} Team: {} Quizzer: {}, EC: {}, Parm1: {} Parm2: {}, Timestamp: {}, Host: {}, MD5: {}, Nonce: {} {}, Sha1sum: {} Calculated sha1sum: {}",
+        module_path!(),line!(), org, bldgroom, key, tk, tn, dn, rm, rd, qn, e, n, t, q, ec, p1, p2, ts, clientip, md5, nonce, nonce.len(), s1s, rsltbase64 );   
     
     // now make sure we didn't have any corrupted data.  If so print an error and get out
     if !s1s.eq(&rsltbase64) {
         // oh boy!!!
         log::error!("{} {} /api/scoreevent Sha1sums don't match {} {}",module_path!(), line!(), s1s, rsltbase64);
-        let error_content = format!("Sha1sums don't match! {} {}",s1s, rsltbase64);
+        let error_content = format!("Sha1sums don't match! {} {}",&s1s, &rsltbase64);
         return Ok(
             HttpResponse::BadRequest()
                 .content_type("text/html; charset=utf-8")
                 .body(error_content)
         )
     }
+
     // now lets log all this information to the eventlog table.
     // This is a file on disk in QMServer.  But we'll put it
     // on the database in the eventlog table
-    match eventlog::write_eventlog(&mut mdb, org.to_string(), bldgroom, key, tk, tn, dn, rm, rd, qn, e, n, t, q, ec, p1, p2, ts.to_string(), clientip, md5, nonce, s1s) {
+    match eventlog::write_eventlog(&mut mdb, &org.to_string(), &bldgroom, &key, &tk, &tn, &dn, &rm, &rd, qn, e, &n, t, q, &ec, &p1, &p2, &ts.to_string(), &clientip, &md5, &nonce, &s1s) {
         Ok(eventlog) => {
             // okay we wrote to eventlog - do nothing
         },
         Err(e) => {
             log::error!("{} {} Eventlog write failure: {}",module_path!(),line!(),e);
-            let error_content = format!("Sha1sums don't match! {} {}", s1s, rsltbase64);
+            let error_content = format!("Eventlog write failure {}", e);
             return Ok(
                 HttpResponse::BadRequest()
                     .content_type("text/html; charset=utf-8")
@@ -222,6 +222,10 @@ pub async fn write(
         }
     }
 
+    // Now given the tournament, division, room, and round, let's see if we can get the tdrrinfo from 
+    // cache.   This would also include the tdrri
+
+    // now we need to update the RoomInfo
 
     // now let's write all this to the database.
     // now populate the Game

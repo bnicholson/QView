@@ -56,7 +56,7 @@ diesel::table! {
 }
 
 diesel::table! {
-    eventlog (evid) {
+    eventlogs (evid) {
         evid -> Int8,
         created_at -> Timestamptz,
         clientkey -> Varchar,
@@ -229,7 +229,7 @@ diesel::allow_tables_to_appear_in_same_query!(
     attachments,
     division_games,
     divisions,
-    eventlog,
+    eventlogs,
     games,
     quizzes,
     role_permissions,

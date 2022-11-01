@@ -20,7 +20,7 @@ AsChangeset,
 #[diesel(table_name=divisions)]
 #[diesel(primary_key(did))]
 pub struct Division {
-    #[diesel(sql_type = Integer)]
+//    #[diesel(sql_type = Integer)]
     pub did: BigId,                             // identifies the division
     pub tid: BigId,                             // id of the associated tournament
     pub dname: String,                          // Name of the division (human readable)

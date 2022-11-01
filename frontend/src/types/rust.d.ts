@@ -45,6 +45,54 @@ interface DivisionChangeset {
   shortinfo: string | undefined
 }
 
+interface Eventlog {
+  evid: BigId
+  created_at: UTC
+  clientkey: string
+  organization: string
+  bldgroom: string
+  tournament: string
+  division: string
+  room: string
+  round: string
+  question: number
+  eventnum: number
+  name: string
+  team: number
+  quizzer: number
+  event: string
+  parm1: string
+  parm2: string
+  ts: string
+  clientip: string
+  md5digest: string
+  nonce: string
+  s1s: string
+}
+
+interface EventlogChangeset {
+  clientkey: string
+  organization: string
+  bldgroom: string
+  tournament: string
+  division: string
+  room: string
+  round: string
+  question: number
+  eventnum: number
+  name: string
+  team: number
+  quizzer: number
+  event: string
+  parm1: string
+  parm2: string
+  ts: string
+  clientip: string
+  md5digest: string
+  nonce: string
+  s1s: string
+}
+
 interface Game {
   tdrri: BigId
   org: string
