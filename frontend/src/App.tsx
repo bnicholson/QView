@@ -32,7 +32,8 @@ import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
 import { ChevronLeft, Inbox, Mail, AccountCircle } from '@mui/icons-material'
 import { Breadcrumbs, Divider, Link, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
-import { createTheme, ThemeProvider } from '@mui/material'
+import { createTheme, ThemeProvider } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
 
 if (process.env.NODE_ENV === 'development') import('./setupDevelopment')
 
@@ -254,6 +255,7 @@ const App = () => {
           </Typography>
         </Box>
       </div >
+      <CssBaseline/>
     </ThemeProvider>
   )
 }
