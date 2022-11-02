@@ -1,0 +1,53 @@
+
+Types of breadcrumbs:
+
+# Provide a list of tournaments
+
+Home
+
+# Provide a list of divisions in a tournament, edit them, and show data for
+# that division
+
+Home / Tournaments
+
+Home / Tournaments / Division
+
+Home / Tournament / Rounds_In_Progress
+
+/tickertape
+/scoreevent
+/pingmsg
+
+Home / Tournament / Division / Team_Standings
+
+Home / Tournament / Division / Individual_Standings
+
+Home / Tournament / (Division) / Room
+
+Home / Tournament / (Division) / Schedule
+
+/namelist
+
+Home / Tournament / (Division) / Scoresheet
+
+Home / Tournament / (Division) / Team
+
+Home / Tournament / (Division) / Chat
+
+/chat_handler
+
+Home / Tournament / (Division) / BldgRoom
+
+/bldgcoord
+/bldg_handler
+
+Home / Tournament / Registration
+
+/registration
+
+Home / Tournament / Helpmsg
+
+/helpmsg
+
+# Now send data to another system
+/api/v1/quizdata
