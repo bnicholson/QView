@@ -64,11 +64,10 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 
 
-const add31Days = (theDate: Date): Date => {
-  theDate.setTime(theDate.getTime() + (31 * 24 * 3600 * 1000));
-  //console.log("Adding: " + theDate.toLocaleDateString());
-  return (theDate);
-}
+//const add31Days = (theDate: Date): Date => {
+//  theDate.setTime(theDate.getTime() + (31 * 24 * 3600 * 1000));
+//  return (theDate);
+//}
 
 export const Home = () => {
   const [expanded, setExpanded] = React.useState(false)
@@ -85,7 +84,7 @@ export const Home = () => {
     displayDate = displayDate - (31 * 24 * 3600 * 1000);
     dispatcher(setDisplayDate(displayDate));
   }
- 
+
   const add31Days = () => {
     displayDate = displayDate + (31 * 24 * 3600 * 1000);
     dispatcher(setDisplayDate(displayDate));
@@ -99,7 +98,7 @@ export const Home = () => {
 
   useEffect(() => {
     setProcessing(true)
-    TournamentAPI.getByDate(displayDate, (displayDate+(31 * 24 * 3600 * 1000))).then((tournaments: Tournament[]) => {
+    TournamentAPI.getByDate(displayDate, (displayDate + (31 * 24 * 3600 * 1000))).then((tournaments: Tournament[]) => {
       setTournaments(tournaments)
       setProcessing(false)
     })
@@ -122,7 +121,6 @@ export const Home = () => {
     // page and page_size.   We start at by displaying all the tournaments
     // that end 30 days before today and 30 days after today.   I need to change
     // the API to not worry abut page size and page.  This is more date based.
-
     <div>
       <Fab color="primary" onClick={() => handleTournamentEditorClickOpen()} aria-label="Add Tournament">
         <AddIcon />
@@ -220,7 +218,9 @@ export const Home = () => {
           <div style={{ display: 'flex' }}>
             <button onClick={() => subtract31Days()}>{`<< Previous Month`}</button>
             <span style={{ flex: 1, textAlign: 'center' }}>
-              {fromDate.toLocaleDateString()}  - {toDate.toLocaleDateString()}
+              <Typography variant="h5">
+                {fromDate.toLocaleDateString()}  - {toDate.toLocaleDateString()}
+              </Typography>
             </span>
             <button
               disabled={processing}
@@ -376,7 +376,7 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
           created_at,
           updated_at,
           history,
-        
+
         </Box>
       </div >
     </Dialog>

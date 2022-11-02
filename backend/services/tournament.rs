@@ -7,7 +7,7 @@ use crate::models::apicalllog::{apicalllog};
 
 
 #[get("")]
-async fn index_bydate(
+async fn get_between_dates(
     db: Data<Database>,
     req: HttpRequest,
     Query(dinfo): Query<SearchDateParams>,
@@ -22,8 +22,7 @@ async fn index_bydate(
     let from_dt = Utc.timestamp_millis(dinfo.from_date );
     let to_dt = Utc.timestamp_millis(dinfo.to_date);
 
-    log::error!("UTC Timestamp = {:?} {:?} ",from_dt, to_dt);
-    let result = models::tournament::read_bydate(&mut db, dinfo.from_date, dinfo.to_date);
+    let result = models::tournament::read_between_dates(&mut db, dinfo.from_date, dinfo.to_date);
 
     if result.is_ok() {
         HttpResponse::Ok().json(result.unwrap())
@@ -32,21 +31,21 @@ async fn index_bydate(
     }
 }
 
-//#[get("")]
-//async fn index(
-//    db: Data<Database>,
-//    Query(info): Query<PaginationParams>,
-//) -> HttpResponse {
-//    let mut db = db.pool.get().unwrap();
-//
-//    let result = models::tournament::read_all(&mut db, &info);
-//
-//    if result.is_ok() {
-//        HttpResponse::Ok().json(result.unwrap())
-//    } else {
-//        HttpResponse::InternalServerError().finish()
-//    }
-//}
+#[get("")]
+async fn index(
+    db: Data<Database>,
+    Query(info): Query<PaginationParams>,
+) -> HttpResponse {
+    let mut db = db.pool.get().unwrap();
+
+    let result = models::tournament::read_all(&mut db, &info);
+
+    if result.is_ok() {
+        HttpResponse::Ok().json(result.unwrap())
+    } else {
+        HttpResponse::InternalServerError().finish()
+    }
+}
 
 #[get("/{id}")]
 async fn read(
@@ -112,7 +111,7 @@ async fn destroy(
 pub fn endpoints(scope: actix_web::Scope) -> actix_web::Scope {
     return scope
 //        .service(index)
-        .service(index_bydate)
+        .service(get_between_dates)
         .service(read)
         .service(create)
         .service(update)

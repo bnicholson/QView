@@ -87,23 +87,16 @@ pub fn read_all(db: &mut Connection, pagination: &PaginationParams) -> QueryResu
     values
 }
 
-pub fn read_bydate(db: &mut Connection, from_dt: i64, to_dt: i64) -> QueryResult<Vec<Tournament>> {
+pub fn read_between_dates(db: &mut Connection, from_dt: i64, to_dt: i64) -> QueryResult<Vec<Tournament>> {
     use crate::schema::tournaments::dsl::*;
     
-    let mut nfrom_dt = chrono::naive::NaiveDate::from_ymd(2022,11,1);//imestamp(from_dt/1000,0);
-   //let mut nto_dt = chrono::naive::NaiveDate::from_timestamp(from_dt/1000,0);
+    let dt_from = Utc.timestamp_millis(from_dt ).naive_utc().date();
+    let dt_to = Utc.timestamp_millis(to_dt).naive_utc().date();
 
     let values = tournaments
         .order(todate)
-        .filter(todate.ge(nfrom_dt))
-//        .between(from_dt,to_dt)
-//        .filter(todate.ge(from_dt))
-//        .filter(todate.le(to_dt))
-//        .limit(pagination.page_size)
-//        .offset(
-//            pagination.page
-//                * std::cmp::max(pagination.page_size, PaginationParams::MAX_PAGE_SIZE as i64),
- //       )
+        .filter(todate.ge(dt_from))
+        .filter(todate.le(dt_to))
         .load::<Tournament>(db);
     values
 }
