@@ -10,28 +10,26 @@ Home
 Home / Tournaments
 Home / Tournaments (CRUD)
 
-Home / Tournaments / Division
-Home / Tournaments / Division (editing/creating)
-Home / Tournament / (Division) / Rounds_In_Progress
-
 /tickertape
 /scoreevent
 /pingmsg
 
+Home / Tournament / (Division) / Rounds_In_Progress
+
+Home / Tournaments / Division
+Home / Tournaments / Division (editing/creating)
+
+
+
 Home / Tournament / Division / Team_Standings
-
 Home / Tournament / Division / Individual_Standings
-
 Home / Tournament / (Division) / Room
-
 Home / Tournament / (Division) / Schedule
 
 /namelist
 
 Home / Tournament / (Division) / Scoresheet
-
 Home / Tournament / (Division) / Team
-
 Home / Tournament / (Division) / Chat
 
 /chat_handler
