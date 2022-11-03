@@ -68,6 +68,34 @@ pub struct EventlogChangeset {
     pub s1s: String                                                 // sha1hashsum -- ensures   
 }
 
+// Create an empty eventlogchangeset
+//
+pub fn empty_changeset() -> EventlogChangeset {
+
+    return EventlogChangeset {
+            clientkey: "".to_string(),                                          // what key/client did this come from
+            organization: "Nazarene".to_string(),                               // what org sent this - defaults to Nazarene for now
+            bldgroom: "".to_string(),                                           // what building is the room in    
+            tournament: "".to_string(),                                         // tournament
+            division: "".to_string(),                                           // division
+            room: "".to_string(),                                               // room
+            round: "".to_string(),                                              // round
+            question: 0,                                                        // question
+            eventnum: 0,                                                        // event number
+            name: "".to_string(),                                               // name of the quizzer or team
+            team: -1,                                                           // team # (0-2)
+            quizzer: 0,                                                         // quizzer (0-4)
+            event: "".to_string(),                                              // event (TC, BE, ...)
+            parm1: "".to_string(),                                              // parameter used by a specific event
+            parm2: "".to_string(),                                              // another one
+            ts: "".to_string(),                                                 // timestamp from the clients viewpoint
+            clientip: "".to_string(),                                           // clientip
+            md5digest: "".to_string(),                                          // used to ensure we don't have corruption in transmission
+            nonce: "".to_string(),                                              // part of the corruption avoidance 
+            s1s: "".to_string()                                                 // sha1hashsum -- ensures 
+        }
+}
+
 // 
 //
 //

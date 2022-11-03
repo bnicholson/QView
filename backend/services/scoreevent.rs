@@ -1,7 +1,6 @@
 
 use actix_web::{delete, HttpRequest, Error, get, HttpResponse, post, put, Result, web::{Data, Json, Path}};
 use create_rust_app::Database;
-use crate::{models, models::scoreevent::{Game, GameChangeset, Quizzes }};
 use crate::models::common::*;
 use chrono::{ Utc, TimeZone };
 use std::line;
@@ -12,6 +11,8 @@ use diesel::result::Error as DBError;
 use crate::models::roominfo::*;
 use crate::models::apicalllog::{apicalllog};
 use crate::models::eventlog;
+use crate::models::game::{ Game, GameChangeset};
+use crate::{models, models::scoreevent::{Quizzes }};
 
 pub async fn write(
     req: HttpRequest,
@@ -22,9 +23,18 @@ pub async fn write(
     // log this api call
     apicalllog(&req);
 
+    // First let's get an eventlog structure, a game structure, and
+    // an empty quiz events structure
+    let mut event_entry = eventlog::empty_changeset();
+    let mut game_entry = game::empty_changeset();
+    let mut quizevent_entry = quizevent::empty_changeset();
+    let mut roominfo_entry = roominfo::empty();
+
+    // Okay, it's now time to search all the parameters and set the associated 
+    // variables set in all the data that we will write to the cache
+    // or to the database
     let qs = qstring::QString::from(req.query_string());
     let ps = qs.to_pairs();
-//    println!("Pairs: {:?}",ps);
     let psiter = ps.iter();
     let mut key = String::new();
     let mut tk=String::new();
@@ -170,7 +180,7 @@ pub async fn write(
     sha1hasher.update(&nonce);
     let psk = "caakokwy13274125359545uranusplutomarssaturn";
     sha1hasher.update(psk);
-    sha1hasher.update(&bldgroom);
+    sha1hasher.update(&event_entry.bldgroom);
 	sha1hasher.update(&key);
 	sha1hasher.update(&tk);
 	sha1hasher.update(&tn);
@@ -190,7 +200,7 @@ pub async fn write(
 
     // now grab the result of the sha1hashing
 	log::info!("{:?} {:?} ScoreEvent: Org: {} BldgRoom: {}, Key: {}, Tk: {}, TN: {}, DN: {}, Room: {}, Round: {}, Question: {}, EventNumber: {} Name: {} Team: {} Quizzer: {}, EC: {}, Parm1: {} Parm2: {}, Timestamp: {}, Host: {}, MD5: {}, Nonce: {} {}, Sha1sum: {} Calculated sha1sum: {}",
-        module_path!(),line!(), org, bldgroom, key, tk, tn, dn, rm, rd, qn, e, n, t, q, ec, p1, p2, ts, clientip, md5, nonce, nonce.len(), s1s, rsltbase64 );   
+        module_path!(),line!(), org, &bldgroom, key, tk, tn, dn, rm, rd, qn, e, n, t, q, ec, p1, p2, ts, clientip, md5, nonce, nonce.len(), s1s, rsltbase64 );   
     
     // now make sure we didn't have any corrupted data.  If so print an error and get out
     if !s1s.eq(&rsltbase64) {
@@ -258,7 +268,7 @@ pub async fn write(
 
     // now let's create an entry in the games table
     // Handle errors while we create the entry
-    match models::scoreevent::create(&mut mdb, &game) {
+    match models::game::create(&mut mdb, &game) {
         Ok(output) => {
             // update the quizevent tdrri so we have the correct one to write
             // the quizevent to the Quizzes table
@@ -348,7 +358,7 @@ pub async fn index_playground(
 
     let content = std::fs::read_to_string("./.cargo/graphql-playground.html").unwrap();
 
-    let result = models::scoreevent::read_all(&mut mdb);
+    let result = models::game::read_all(&mut mdb);
     println!("{:?}",result);
 
     Ok(
@@ -387,7 +397,7 @@ async fn index(
     println!("URI: {:?}",req.uri()); 
     println!("Query_string: {:?}",req.query_string()); 
 
-    let result = models::scoreevent::read_all(&mut db);
+    let result = models::game::read_all(&mut db);
 
     if result.is_ok() {
         HttpResponse::Ok().json(result.unwrap())
@@ -404,7 +414,7 @@ async fn read(
     println!("read endpoint");
     let mut db = db.pool.get().unwrap();
 
-    let result = models::scoreevent::read(&mut db, item_id.into_inner());
+    let result = models::game::read(&mut db, item_id.into_inner());
 
     if result.is_ok() {
         HttpResponse::Ok().json(result.unwrap())
@@ -421,7 +431,7 @@ async fn create(
     println!("create endpoint");
     let mut db = db.pool.get().unwrap();
 
-    let result: Game = models::scoreevent::create(&mut db, &item).expect("Creation error");
+    let result: Game = models::game::create(&mut db, &item).expect("Creation error");
 
     Ok(HttpResponse::Created().json(result))
 }
@@ -435,7 +445,7 @@ async fn update(
     println!("update endpoint");
     let mut db = db.pool.get().unwrap();
 
-    let result = models::scoreevent::update(&mut db, item_id.into_inner(), &item);
+    let result = models::game::update(&mut db, item_id.into_inner(), &item);
 
     if result.is_ok() {
         HttpResponse::Ok().finish()
@@ -452,7 +462,7 @@ async fn destroy(
     println!("destroy endpoint");
     let mut db = db.pool.get().unwrap();
 
-    let result = models::scoreevent::delete(&mut db, item_id.into_inner());
+    let result = models::game::delete(&mut db, item_id.into_inner());
 
     if result.is_ok() {
         HttpResponse::Ok().finish()

@@ -28,7 +28,4 @@ pub struct SearchDateParams {
     pub to_date: i64,
 }
 
-impl SearchDateParams {
-    pub const MAX_PAGE_SIZE: u16 = 100;
-}
 

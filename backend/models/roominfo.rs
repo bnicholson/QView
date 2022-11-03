@@ -23,7 +23,7 @@ pub struct RoomInfoData {
     cmd_list: Vec<String>,
 }
 
-fn new() -> RoomInfoData<> {
+fn empty() -> RoomInfoData<> {
     RoomInfoData {
         clientkey: ";alskjdf".to_string(),
         bldgroom: "bens-room".to_string(),
