@@ -90,14 +90,14 @@ diesel::table! {
         division -> Varchar,
         room -> Varchar,
         round -> Varchar,
-        key4server -> Nullable<Varchar>,
-        ignore -> Nullable<Bool>,
+        clientkey -> Varchar,
+        ignore -> Bool,
         ruleset -> Varchar,
     }
 }
 
 diesel::table! {
-    quizzes (tdrri, question, eventnum) {
+    quizevents (tdrri, question, eventnum) {
         tdrri -> Int8,
         question -> Int4,
         eventnum -> Int4,
@@ -105,11 +105,11 @@ diesel::table! {
         team -> Int4,
         quizzer -> Int4,
         event -> Varchar,
-        parm1 -> Nullable<Varchar>,
-        parm2 -> Nullable<Varchar>,
-        clientts -> Nullable<Timestamptz>,
-        serverts -> Nullable<Timestamptz>,
-        md5digest -> Nullable<Varchar>,
+        parm1 -> Varchar,
+        parm2 -> Varchar,
+        clientts -> Timestamptz,
+        serverts -> Timestamptz,
+        md5digest -> Varchar,
     }
 }
 
@@ -231,7 +231,7 @@ diesel::allow_tables_to_appear_in_same_query!(
     divisions,
     eventlogs,
     games,
-    quizzes,
+    quizevents,
     role_permissions,
     rooms,
     schedules,

@@ -99,32 +99,37 @@ pub fn empty_changeset() -> EventlogChangeset {
 // 
 //
 //
-pub fn write_eventlog(db: &mut Connection, org: &String, bldgroom: &String, ck: &String, tk: &String, tn:  &String, dn:  &String, rm: &String,
-    rd: &String, question: i32, eventnum: i32, name: &String, team: i32, quizzer: i32, event: &String, 
-    parm1: &String, parm2: &String, ts: &String, cip: &String, md5digest: &String, nonce: &String, s1s: &String
-    ) -> QueryResult<Eventlog> {
-    let entry = EventlogChangeset {
-        clientkey: ck.to_string(),                                  // what key/client did this come from
-        organization: org.to_string(),                              // organization
-        bldgroom: bldgroom.to_string(),                             // what building 
-        tournament: tn.to_string(),                                 // tournament
-        division: dn.to_string(),                                   // division
-        room: rm.to_string(),                                       // room
-        round: rd.to_string(),                                      // round
-        question: question,                                         // question
-        eventnum: eventnum,                                         // event number
-        name: name.to_string(),                                     // name of the quizzer or team
-        team: team,                                                 // team # (0-2)
-        quizzer: quizzer,                                           // quizzer (0-4)
-        event: event.to_string(),                                   // event (TC, BE, ...)
-        parm1: parm1.to_string(),                                   // parameter used by a specific event
-        parm2: parm2.to_string(),                                   // another one
-        ts: ts.to_string(),                                         // timestamp from the clients viewpoint
-        clientip: cip.to_string(),                                  // host
-        md5digest: md5digest.to_string(),                           // used to ensure we don't have corruption in transmission
-        nonce: nonce.to_string(),                                   // part of the corruption avoidance 
-        s1s: s1s.to_string(),                                         // sha1sum - validation we don't have corrupted data    
-    };
+//pub fn write_eventlog(db: &mut Connection, org: &String, bldgroom: &String, ck: &String, tk: &String, tn:  &String, dn:  &String, rm: &String,
+//    rd: &String, question: i32, eventnum: i32, name: &String, team: i32, quizzer: i32, event: &String, 
+//    parm1: &String, parm2: &String, ts: &String, cip: &String, md5digest: &String, nonce: &String, s1s: &String
+//    ) -> QueryResult<Eventlog> {
+//    let entry = EventlogChangeset {
+//        clientkey: ck.to_string(),                                  // what key/client did this come from
+//        organization: org.to_string(),                              // organization
+//        bldgroom: bldgroom.to_string(),                             // what building 
+//        tournament: tn.to_string(),                                 // tournament
+//        division: dn.to_string(),                                   // division
+//        room: rm.to_string(),                                       // room
+//        round: rd.to_string(),                                      // round
+//        question: question,                                         // question
+//        eventnum: eventnum,                                         // event number
+//        name: name.to_string(),                                     // name of the quizzer or team
+//        team: team,                                                 // team # (0-2)
+//        quizzer: quizzer,                                           // quizzer (0-4)
+//        event: event.to_string(),                                   // event (TC, BE, ...)
+//        parm1: parm1.to_string(),                                   // parameter used by a specific event
+//        parm2: parm2.to_string(),                                   // another one
+//        ts: ts.to_string(),                                         // timestamp from the clients viewpoint
+//        clientip: cip.to_string(),                                  // host
+//        md5digest: md5digest.to_string(),                           // used to ensure we don't have corruption in transmission
+ //       nonce: nonce.to_string(),                                   // part of the corruption avoidance 
+//        s1s: s1s.to_string(),                                         // sha1sum - validation we don't have corrupted data    
+//    };
+//    // now write the eventlog entry
+//    create(db, &entry)
+//}
+
+pub fn write_eventlog(db: &mut Connection, entry: EventlogChangeset) -> QueryResult<Eventlog> {
     // now write the eventlog entry
     create(db, &entry)
 }

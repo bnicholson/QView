@@ -15,8 +15,8 @@ pub struct Game {
     pub division: String,
     pub room: String,
     pub round: String,
-    pub key4server: Option<String>,
-    pub ignore: Option<bool>,
+    pub clientkey: String,
+    pub ignore: bool,
     pub ruleset: String,
 }
 
@@ -30,9 +30,22 @@ pub struct GameChangeset {
     pub division: String,
     pub room: String,
     pub round: String,
-    pub key4server: Option<String>,
-    pub ignore: Option<bool>,
+    pub clientkey: String,
+    pub ignore: bool,
     pub ruleset: String,
+}
+
+pub fn empty_changeset() -> GameChangeset {
+    return GameChangeset {   
+        org: "".to_string(),
+        tournament: "".to_string(),
+        division: "".to_string(),
+        room: "".to_string(),
+        round: "".to_string(),
+        clientkey: "".to_string(),
+        ignore: false,
+        ruleset: "".to_string()
+    }
 }
 
 pub fn create(db: &mut Connection, item: &GameChangeset) -> QueryResult<Game> {

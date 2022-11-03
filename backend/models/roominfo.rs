@@ -6,24 +6,24 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct RoomInfoData {
-    clientkey: String,
-    bldgroom: String,
-    chkd_in: UTC,
-    client_time: UTC,
-    tournament: String,
-    division: String,
-    room: String,
-    round: String,
-    question: i32,                                
-    error_msgs: Vec<String>,
-    host: String,
-    jobs_pending: i32,
-    qm_version: String,
-    resend_list: Vec<i32>,
-    cmd_list: Vec<String>,
+    pub clientkey: String,
+    pub bldgroom: String,
+    pub chkd_in: UTC,
+    pub client_time: UTC,
+    pub tournament: String,
+    pub division: String,
+    pub room: String,
+    pub round: String,
+    pub question: i32,                                
+    pub error_msgs: Vec<String>,
+    pub host: String,
+    pub jobs_pending: i32,
+    pub qm_version: String,
+    pub resend_list: Vec<i32>,
+    pub cmd_list: Vec<String>,
 }
 
-fn empty() -> RoomInfoData<> {
+pub fn empty() -> RoomInfoData<> {
     RoomInfoData {
         clientkey: ";alskjdf".to_string(),
         bldgroom: "bens-room".to_string(),

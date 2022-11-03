@@ -2,6 +2,7 @@ use crate::diesel::*;
 use crate::schema::*;
 use create_rust_app::Connection;
 use crate::models::common::*;
+use chrono::{ Utc, TimeZone };
 use serde::{Deserialize, Serialize};
 
 // Now define the tables that will store each quiz event
@@ -16,9 +17,9 @@ use serde::{Deserialize, Serialize};
     Identifiable,
     AsChangeset,
 )]
-#[diesel(table_name=quizzes)]
+#[diesel(table_name=quizevents)]
 #[diesel(primary_key(tdrri,question,eventnum))]
-pub struct Quizzes {
+pub struct QuizEvent {
     pub tdrri: BigId,
     pub question: i32,
     pub eventnum: i32,
@@ -26,34 +27,63 @@ pub struct Quizzes {
     pub team: i32,
     pub quizzer: i32,
     pub event: String,
-    pub parm1: Option<String>,
-    pub parm2: Option<String>,
-    pub clientts: Option<UTC>,
-    pub serverts: Option<UTC>,
-    pub md5digest: Option<String>,
+    pub parm1: String,
+    pub parm2: String,
+    pub clientts: UTC,
+    pub serverts: UTC,
+    pub md5digest: String,
 }
 
 #[tsync::tsync]
 #[derive(Debug, Serialize, Deserialize, Clone, Insertable, AsChangeset)]
-#[diesel(table_name=quizzes)]
+#[diesel(table_name=quizevents)]
 #[diesel(primary_key(tdrri,question,eventnum))]
-pub struct QuizzesChangeset {   
+pub struct QuizEventChangeset {   
     pub name: String,
     pub team: i32,
     pub quizzer: i32,
     pub event: String,
-    pub parm1: Option<String>,
-    pub parm2: Option<String>,
-    pub clientts: Option<UTC>,
-    pub serverts: Option<UTC>,
-    pub md5digest: Option<String>,  
+    pub parm1: String,
+    pub parm2: String,
+    pub clientts: UTC,
+    pub serverts: UTC,
+    pub md5digest: String,  
 }
 
+pub fn empty() -> QuizEvent {
+    // Now populate the quizzes event
+    return QuizEvent {
+        tdrri: -1,
+        question: -1,
+        eventnum: -1,
+        name: "".to_string(),
+        team: -1,
+        quizzer: -1,
+        event: "".to_string(),
+        parm1: "".to_string(),
+        parm2: "".to_string(),
+        clientts: Utc::now(),
+        serverts: Utc::now(),
+        md5digest: "".to_string()
+    }
+}
 
+pub fn empty_changeset() -> QuizEventChangeset {
+    return QuizEventChangeset {   
+        name: "".to_string(),
+        team: -1,
+        quizzer: -1,
+        event: "".to_string(),
+        parm1: "".to_string(),
+        parm2: "".to_string(),
+        clientts: Utc::now(),
+        serverts: Utc::now(),
+        md5digest: "".to_string()
+    }
+}
 
+pub fn create_quiz_event(db: &mut Connection, item: &QuizEvent) -> QueryResult<QuizEvent> {
+    use crate::schema::quizevents::dsl::*;
 
-pub fn create_quiz_event(db: &mut Connection, item: &Quizzes) -> QueryResult<Quizzes> {
-    use crate::schema::quizzes::dsl::*;
-
-    insert_into(quizzes).values(item).get_result::<Quizzes>(db)
+    insert_into(quizevents).values(item).get_result::<QuizEvent>(db)
 }

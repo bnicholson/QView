@@ -105,8 +105,8 @@ interface Game {
   division: string
   room: string
   round: string
-  key4server: string | undefined
-  ignore: boolean | undefined
+  clientkey: string
+  ignore: boolean
   ruleset: string
 }
 
@@ -116,12 +116,12 @@ interface GameChangeset {
   division: string
   room: string
   round: string
-  key4server: string | undefined
-  ignore: boolean | undefined
+  clientkey: string
+  ignore: boolean
   ruleset: string
 }
 
-interface Quizzes {
+interface QuizEvent {
   tdrri: BigId
   question: number
   eventnum: number
@@ -129,23 +129,23 @@ interface Quizzes {
   team: number
   quizzer: number
   event: string
-  parm1: string | undefined
-  parm2: string | undefined
-  clientts: UTC | undefined
-  serverts: UTC | undefined
-  md5digest: string | undefined
+  parm1: string
+  parm2: string
+  clientts: UTC
+  serverts: UTC
+  md5digest: string
 }
 
-interface QuizzesChangeset {
+interface QuizEventChangeset {
   name: string
   team: number
   quizzer: number
   event: string
-  parm1: string | undefined
-  parm2: string | undefined
-  clientts: UTC | undefined
-  serverts: UTC | undefined
-  md5digest: string | undefined
+  parm1: string
+  parm2: string
+  clientts: UTC
+  serverts: UTC
+  md5digest: string
 }
 
 interface Todo {
