@@ -1,6 +1,5 @@
 
 Types of breadcrumbs:
-
 # Provide a list of tournaments
 
 Home
@@ -9,10 +8,11 @@ Home
 # that division
 
 Home / Tournaments
+Home / Tournaments (CRUD)
 
 Home / Tournaments / Division
-
-Home / Tournament / Rounds_In_Progress
+Home / Tournaments / Division (editing/creating)
+Home / Tournament / (Division) / Rounds_In_Progress
 
 /tickertape
 /scoreevent
