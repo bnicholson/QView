@@ -16,7 +16,7 @@ pub struct RoomInfoData {
     pub round: String,
     pub question: i32,                                
     pub error_msgs: Vec<String>,
-    pub host: String,
+    pub clientip: String,
     pub jobs_pending: i32,
     pub qm_version: String,
     pub resend_list: Vec<i32>,
@@ -25,26 +25,26 @@ pub struct RoomInfoData {
 
 pub fn empty() -> RoomInfoData<> {
     RoomInfoData {
-        clientkey: ";alskjdf".to_string(),
-        bldgroom: "bens-room".to_string(),
+        clientkey: "".to_string(),
+        bldgroom: "".to_string(),
         chkd_in: Utc::now(),
         client_time: Utc::now(),
-        tournament: "q2023".to_string(),
-        division: "District-Novice".to_string(),
-        room: "Jester 102".to_string(),
-        round: "Tue-07d".to_string(),
-        question: 3,
-        error_msgs: [ "not sure".to_string(), "none".to_string()].to_vec(),
-        host: "nicengl91".to_string(),
-        jobs_pending: 34,
-        qm_version: "5.4J30".to_string(),
-        resend_list: [1,2,3,67].to_vec(),
-        cmd_list: ["".to_string()].to_vec(),
+        tournament: "".to_string(),
+        division: "".to_string(),
+        room: "".to_string(),
+        round: "".to_string(),
+        question: -1,
+        error_msgs: [ ].to_vec(),
+        clientip: "".to_string(),
+        jobs_pending: 0,
+        qm_version: "".to_string(),
+        resend_list: [].to_vec(),
+        cmd_list: [].to_vec(),
     }
 }
 
 pub fn do_something(print: bool, only_one: bool) {               //-> redis::RedisResult<()> {
-    let mut ri = find_roominfo("a".to_string(),"b".to_string(),"c".to_string(),"d".to_string(),"e".to_string());
+    let mut ri = empty();//find_roominfo("a".to_string(),"b".to_string(),"c".to_string(),"d".to_string(),"e".to_string());
     let json = serde_json::to_string(&ri).unwrap();
 
     let client = redis::Client::open("redis://127.0.0.1/").unwrap();
@@ -64,7 +64,7 @@ pub fn do_something(print: bool, only_one: bool) {               //-> redis::Red
     }
 
     // now set something in ri
-    ri.host = "Jackson".to_string();
+    ri.clientip = "127.0.0.33".to_string();
     if print {
         println!("RI is now set to {:?}", ri);
     }
@@ -78,24 +78,41 @@ pub fn do_something(print: bool, only_one: bool) {               //-> redis::Red
     }
 }
 
-fn find_roominfo(org: String, tournament: String, division: String, room: String, round: String) -> RoomInfoData<> {
-    let ri = RoomInfoData {
-        clientkey: ";alskjdf".to_string(),
-        bldgroom: "bens-room".to_string(),
-        chkd_in: Utc::now(),
-        client_time: Utc::now(),
-        tournament: "q2023".to_string(),
-        division: "District-Novice".to_string(),
-        room: "Jester 102".to_string(),
-        round: "Tue-07d".to_string(),
-        question: 3,
-        error_msgs: [ "not sure".to_string(), "none".to_string()].to_vec(),
-        host: "nicengl91".to_string(),
-        jobs_pending: 34,
-        qm_version: "5.4J30".to_string(),
-        resend_list: [1,2,3,67].to_vec(),
-        cmd_list: [].to_vec(),
-    };
-    ri
+// Construct a key for the roominfo information.
+// we will use this to update the roominfo in the cache.
+pub fn update_roominfo( ri: &RoomInfoData,tid: i64 ) -> RoomInfoData {
+    let roomkey = format!("{}:{}:{}",tid,ri.clientkey,ri.clientip);
+
+    let client = redis::Client::open("redis://127.0.0.1/").unwrap();
+    let mut con = client.get_connection().unwrap();
+//    let json : String = redis::cmd("get").arg(roomkey).query(&mut con).unwrap();   
+    let mut json = "".to_string();
+    match redis::cmd("get").arg(roomkey).query::<String>(&mut con) {
+        Ok(nil) => {
+            println!("Got a new from a get command to redis {:?}",line!());
+        },
+        Ok(rjson) => {
+            println!("what is the result of the get {:?} {:?}",rjson,line!());
+            json = rjson; 
+        },
+        Err(e) => {
+            println!("Redis error = {:?}", e);
+        }
+    }
+
+//    let json = serde_json::to_string(&ri).unwrap();     //Result<T, RedisError>
+    //let rslt : Result<e, RedisError> =  
+    match redis::cmd("set").arg("my_key").arg(json).query::<Vec<String>>(&mut con) {
+        Ok(rslt) => {
+            println!("redis set result {:?} {:?} ", rslt,line!());
+        },
+        Err(e) => {
+            println!("redis error {:?} {:?}", e,line!());
+        }
+    } 
+
+    let newri = empty();
+    // return the updated roominfo that was set
+    newri
 }
 

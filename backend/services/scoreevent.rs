@@ -175,7 +175,8 @@ pub async fn write(
             "myip" => {
                 // this is optional should only be there sometimes.
                 let tmp = pair.1.replace("+"," ");
-                eventlog_entry.clientip = tmp;
+                eventlog_entry.clientip = (&tmp).to_string();
+                roominfo_entry.clientip = tmp;
             }
             _ => {
                 log::error!("{:?} {:?} Invalid parameter received in /scoreevent api call {:?} ",module_path!(),line!(),
@@ -260,37 +261,10 @@ pub async fn write(
 
     // Now given the tournament, division, room, and round, let's see if we can get the tdrrinfo from 
     // cache.   This would also include the tdrri
+    update_roominfo(&roominfo_entry,0);
 
     // now we need to update the RoomInfo
 
-    // now let's write all this to the database.
-    // now populate the Game
-//    let game = GameChangeset {
-//        org: "Nazarene".to_string(),
-//        tournament: tn,
-//        division: dn,
-//        room: rm,
-//        round: rd,
-//        key4server: Some(key),
-//        ignore: Some(false),
-//        ruleset: "Nazarene".to_string()
-//    };
-
-    // Now populate the quizzes event
-//    let mut quizevent = QuizEvent {
-//        tdrri: tdrri,
-//        question: qn,
-//        eventnum: e,
-//        name: n,
-//        team: t,
-//        quizzer: q,
-//        event: ec,
-//        parm1: Some(p1),
-//        parm2: Some(p2),
-//        clientts: Some(ts),
-//        serverts: Some(Utc::now()),
-//        md5digest: Some(md5)
-//    };
 
     // now let's create an entry in the games table
     // Handle errors while we create the entry
