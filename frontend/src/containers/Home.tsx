@@ -1,7 +1,8 @@
 
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { styled } from '@mui/material/styles'
+import { createTheme, styled } from '@mui/material/styles'
+import { makeStyles } from '@mui/styles'
 import Card from "@mui/material/Card"
 import CardHeader from '@mui/material/CardHeader'
 import CardMedia from "@mui/material/CardMedia"
@@ -19,7 +20,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
 import { TournamentAPI } from './TournamentPage'
-import { Route, useNavigate, Routes } from 'react-router-dom'
+import { Route, useNavigate, Routes, Form } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import SettingsIcon from '@mui/icons-material/Settings';
 import { selectDisplayDate, selectTournament, setDisplayDate, setTournament, toggleIsOn } from '../breadcrumb'
@@ -46,6 +47,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItem from '@mui/material/ListItem'
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
+//import { Tournament, BigId } from '../types/rust.d';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -254,6 +256,7 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
   const handleChange = (event: SelectChangeEvent) => {
     setAge(event.target.value as string);
   }
+
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode == 'dark' ? '#1a2027' : '#fff',
     ...theme.typography.body2,
@@ -261,6 +264,36 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
     textAlign: 'center',
     color: theme.palette.text.secondary,
   }));
+
+  const theme = createTheme();
+
+//  const useStyle = makeStyles((theme) => {
+//    root: {
+
+//    }
+//  });
+
+//  const classes = useStyle();
+
+  let tournament: Tournament = {
+    tid: 0,
+    organization: "Nazarene",
+    tname: "Q5566",
+    breadcrumb: "",
+    fromdate: new Date(),
+    todate: new Date(),
+    venue: "",
+    city: "",
+    region: "",
+    country: "",
+    contact: "",
+    contactemail: "",
+    hide: true,
+    shortinfo: "",
+    info: "",
+    created_at: new Date(),
+    updated_at: new Date()
+  };
 
   return (
     <Dialog
@@ -288,6 +321,31 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
         </Toolbar>
       </AppBar>
       <List>
+        <ListItem>
+          <Grid container>
+            <Grid item xs={6}>
+              <Select
+                labelId='demo-simple-select-label55'
+                value={tournament.organization}
+                label="Organization:"
+                onChange={handleChange}
+              >
+                <MenuItem value={10}>Nazarene</MenuItem>
+                <MenuItem value={20}>Other</MenuItem>
+              </Select>
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                variant="outlined"
+                label="Tournament Name:"
+                value={tournament.tname}
+              />
+            </Grid>
+            <Grid item xs={6}>
+
+            </Grid>
+          </Grid>
+        </ListItem>
         <ListItem button>
           <ListItemText primary="Phone ringtone" secondary="Titania" />
         </ListItem>
@@ -379,7 +437,7 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
 
         </Box>
       </div >
-    </Dialog>
+    </Dialog >
   )
 
 }

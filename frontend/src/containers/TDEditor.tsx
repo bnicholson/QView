@@ -25,7 +25,7 @@ import Fab from '@mui/material/Fab'
 import AddIcon from "@mui/icons-material/Add"
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs'
-//import TabPanel from '@mui/material/TabPanel'
+import StickyHeadTable from './GamesTable'
 
 export const DivisionAPI = {
   get: async (page: number, size: number) =>
@@ -61,7 +61,40 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export const Divisions = () => {
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+export const TDEditor = () => {
   const [expanded, setExpanded] = React.useState(false)
   const [processing, setProcessing] = React.useState<boolean>(false)
   const [displayDate, setDisplayDate] = React.useState<Date>(new Date())
@@ -83,11 +116,14 @@ export const Divisions = () => {
     console.log("In useeffect - pulling from api")
   }, [displayDate])
 
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
   return (
     <div>
-      <Fab color="primary" onClick={() => handleEditorClickOpen()} aria-label="Add Tournament">
-        <AddIcon />
-      </Fab>
       <Box>
         <Breadcrumbs aria-label="breadcrumb" >
           <Link underline="hover" color="inherit" href="/">
@@ -103,65 +139,34 @@ export const Divisions = () => {
           >
             District Novice
           </Link>
-          <Link href="/tdeditor">
-            <Typography color="text.primary" >Teams</Typography>
-          </Link>
+          <Typography color="text.primary" onClick={() => navigate("/tdeditor")} >Teams</Typography>
         </Breadcrumbs>
       </Box>
-      <div className="Form">
-        {divisions.map((division, index) =>
-          <Card style={{ maxWidth: 845 }} key={division.dname}>
-            <CardHeader
-              action={
-                <IconButton onClick={() => handleEditorClickOpen()} aria-label="settings">
-                  <SettingsIcon />
-                </IconButton>
-              }
-              title={<Typography variant="h5">
-                <Link
-                  underline="hover"
-                  color="primary"
-                  href="//">{division.dname}</Link>
-              </Typography>}
-              subheader={<Typography variant="h6"> Need to put something here for now nothing. </Typography>}
-            />
-            <Box sx={{ display: 'flex' }}>
-              <CardContent>
-                <Typography align="left" variant="h5" color="primary" >
-                  <Link
-                    underline="hover"
-                    color="inherit"
-                    href="/t/q2022/district%20novice"
-                  >
-                    Team Standings
-                  </Link>&nbsp;&nbsp;
-                  <Link
-                    underline="hover"
-                    color="inherit"
-                    href="/t/q2022/district%20novice"
-                  >
-                    Individual Standings
-                  </Link>
-                </Typography>
-                <Typography align="left" variant="body1" color="text.primary" >
-                  Breadcrumb: {division.breadcrumb}
-                </Typography>
-                <Typography align="left" variant="body1" color="text.primary" >
-                  ShortInfo: {division.shortinfo}
-                </Typography>
-                <Typography align="left" variant="body1" color="text.primary" >
-                  ID: {division.did}                   Hidden: {division.hide}
-                </Typography>
-                <Typography align="left" variant="body1" color="text.primary" >
-                  Created: {division.created_at} - Last Update: {division.updated_at}
-                </Typography>
-              </CardContent>
-            </Box>
-          </Card>
-
-        )}
-        {DivisionEditor(openDivisionEditor, setDivisionEditorOpen)}
-      </div>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+          <Tab label="Games/Quizzes" {...a11yProps(0)} />
+          <Tab label="Schedule" {...a11yProps(1)} />
+          <Tab label="Teams" {...a11yProps(2)} />
+          <Tab label="Other" {...a11yProps(3)} />
+          <Tab label="Settings" {...a11yProps(4)} />
+        </Tabs>
+      </Box>
+      <TabPanel value={value} index={0}>
+        Games/Quizzes
+        { StickyHeadTable() }
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        Schedules
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        Teams
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        Other
+      </TabPanel>
+      <TabPanel value={value} index={4}>
+        Settings
+      </TabPanel>
     </div >
   )
 }

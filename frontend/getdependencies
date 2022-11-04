@@ -10,6 +10,7 @@ yarn add @babel/core
 yarn add @mui/material @emotion/react @emotion/styled
 yarn add @mui/icons-material
 yarn add @reduxjs/toolkit react-redux
+yarn add @mui/styles
 #
 # Datepicker
 #

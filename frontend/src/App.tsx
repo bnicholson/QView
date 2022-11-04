@@ -9,6 +9,8 @@ import { RecoveryPage } from './containers/RecoveryPage'
 import { ResetPage } from './containers/ResetPage'
 import { Tournaments } from './containers/TournamentPage'
 import { Divisions } from './containers/DivisionPage'
+import { TDEditor } from './containers/TDEditor'
+
 import React from 'react'
 import './App.css'
 import { Home } from './containers/Home'
@@ -207,7 +209,7 @@ const App = () => {
             ))}
           </List>
         </Drawer>
-        <div style={{ margin: '0 auto', maxWidth: '800px' }}>
+        <div style={{ margin: '0 auto', maxWidth: '1000px' }}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/todos" element={<Todos />} />
@@ -222,6 +224,7 @@ const App = () => {
             <Route path="/account" element={<AccountPage />} />
             <Route path="/tournament" element={<Tournaments />} />
             <Route path="/division" element={<Divisions />} />
+            <Route path="/tdeditor" element={<TDEditor />} />
           </Routes>
         </div>
         <Box textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 }}>
