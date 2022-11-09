@@ -92,6 +92,10 @@ pub async fn write(
                 roominfo_entry.qm_version = pair.1.trim().to_string();
                 field_count += 1;
             },
+            "jp" => {
+                roominfo_entry.jobs_pending = pair.1.trim().parse().unwrap();
+                field_count += 1;
+            },
             "myip" => {
                 // this is optional should only be there sometimes.
                 let tmp = pair.1.replace("+"," ");
@@ -105,8 +109,8 @@ pub async fn write(
     }
 
     // Check to make sure we got all the parameters
-    let content = "bad parameters";
-    if field_count != 10 {
+    let content = format!("bad parameters {:}",field_count);
+    if field_count != 11 {
         return Ok(
             HttpResponse::BadRequest()
                 .content_type("text/html; charset=utf-8")
@@ -120,12 +124,12 @@ pub async fn write(
         &roominfo_entry.room, &roominfo_entry.round, &roominfo_entry.question, ts, &roominfo_entry.clientip);   
     
     // send an update to the cache for this room.  Rounds in  Progress (tickertape)
-    update_roominfo(&mut roominfo_entry,0);
+    update_roominfo(&mut roominfo_entry);
 
     Ok(
         HttpResponse::Ok()
             .content_type("text/html; charset=utf-8")
-            .body(content)
+            .body("All worked")
     )
 }
 

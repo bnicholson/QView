@@ -298,7 +298,7 @@ pub async fn write(
     }
 
     // send an update to the cache for this room.  Rounds in  Progress (tickertape)
-    update_roominfo(&mut roominfo_entry,0);
+    update_roominfo(&mut roominfo_entry);
 
     // now we need to update the RoomInfo
 
