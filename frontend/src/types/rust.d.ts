@@ -47,7 +47,7 @@ interface DivisionChangeset {
   dname: string
   breadcrumb: string
   hide: boolean
-  shortinfo?: string
+  shortinfo: string | undefined
 }
 
 interface Eventlog {
@@ -190,14 +190,14 @@ interface TournamentChangeset {
   region: string
   country: string
   contact: string
-  contactemail?: string
+  contactemail: string | undefined
   hide: boolean
-  info?: string
+  info: string | undefined
 }
 
 interface FileInfo {
   id: number
   key: string
   name: string
-  url?: string
+  url: string | undefined
 }
