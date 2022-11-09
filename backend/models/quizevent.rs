@@ -18,9 +18,9 @@ use serde::{Deserialize, Serialize};
     AsChangeset,
 )]
 #[diesel(table_name=quizevents)]
-#[diesel(primary_key(tdrri,question,eventnum))]
+#[diesel(primary_key(gid,question,eventnum))]
 pub struct QuizEvent {
-    pub tdrri: BigId,
+    pub gid: BigId,
     pub question: i32,
     pub eventnum: i32,
     pub name: String,
@@ -37,7 +37,7 @@ pub struct QuizEvent {
 #[tsync::tsync]
 #[derive(Debug, Serialize, Deserialize, Clone, Insertable, AsChangeset)]
 #[diesel(table_name=quizevents)]
-#[diesel(primary_key(tdrri,question,eventnum))]
+#[diesel(primary_key(gid,question,eventnum))]
 pub struct QuizEventChangeset {   
     pub name: String,
     pub team: i32,
@@ -53,7 +53,7 @@ pub struct QuizEventChangeset {
 pub fn empty() -> QuizEvent {
     // Now populate the quizzes event
     return QuizEvent {
-        tdrri: -1,
+        gid: -1,
         question: -1,
         eventnum: -1,
         name: "".to_string(),

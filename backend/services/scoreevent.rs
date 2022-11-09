@@ -45,7 +45,7 @@ pub async fn write(
     let mut t_str = String::new();
     let mut q_str = String::new();
     let mut ts = Utc::now();
-    let mut tdrri: i64  = 0;
+    let mut gid: i64  = 0;
     let mut field_count = 0;
     for pair in psiter {
         let s = String::from(pair.0);
@@ -259,48 +259,51 @@ pub async fn write(
         }
     }
 
-    // Now given the tournament, division, room, and round, let's see if we can get the tdrrinfo from 
-    // cache.   This would also include the tdrri
-    update_roominfo(&roominfo_entry,0);
+    // first lets see if we have the game cached.  This will give us the gid for
+    // this event.  If gid is <= 0 then this is the first event for this
+    // clientkey, org, tournament, division, room, round.
+    let mut gid = game::get_gid_from_cache(&game_entry);
+    if gid <= 0 {
+        // now let's create an entry in the games table
+        // Handle errors while we create the entry
+        match game::create(&mut mdb, &game_entry) {
+            Ok(output) => {
+                // update the quizevent gid so we have the correct one to write
+                // the quizevent to the Quizzes table
+                quizevent_entry.gid = output.gid;
+            },
+            Err(e) => {
+                match e {
+                   // the most likely cause here is a Unique constraint - the row
+                    // already exists in the database.  We'll ignore those and
+                    // panic or log the others
+                    DBError::DatabaseError(dbek,info) => match dbek {
+                        UniqueViolation => {
+                            // do nothing here.  This is a normal case when another event 
+                            // comes in for this quiz.
+                            log::error!("{:?} {:?} Error {:?}", module_path!(),line!(), info);
+                        },
+                        _ => {
+                            // Okay this error is a database error but not a unique violation
+                            log::error!("{:?} {:?} DB Create error {:?} {:?} {:?}",module_path!(), line!(),dbek,info,game_entry);
+                        },
+                    },
+                    _ => {
+                        // this is some error but not a database error
+                        log::error!("{:?} {:?} DB Create error {:?} {:?}",module_path!(), line!(),e,game_entry);
+                    },
+                };
+           },
+        };
+    }
+
+    // send an update to the cache for this room.  Rounds in  Progress (tickertape)
+    update_roominfo(&mut roominfo_entry,0);
 
     // now we need to update the RoomInfo
 
 
-    // now let's create an entry in the games table
-    // Handle errors while we create the entry
-    match game::create(&mut mdb, &game_entry) {
-        Ok(output) => {
-            // update the quizevent tdrri so we have the correct one to write
-            // the quizevent to the Quizzes table
-            quizevent_entry.tdrri = output.tdrri;
-        },
-        Err(e) => {
-            match e {
-               // the most likely cause here is a Unique constraint - the row
-                // already exists in the database.  We'll ignore those and
-                // panic or log the others
-                DBError::DatabaseError(dbek,info) => match dbek {
-                    UniqueViolation => {
-                        // do nothing here.  This is a normal case when another event 
-                        // comes in for this quiz.
-                        log::error!("{:?} {:?} Error {:?}", module_path!(),line!(), info);
- //                       quizevent.tdrri = output.tdrri;
-                    },
-                    _ => {
-                        // Okay this error is a database error but not a unique violation
-                        log::error!("{:?} {:?} DB Create error {:?} {:?} {:?}",module_path!(), line!(),dbek,info,game_entry);
-                    },
-                },
-                _ => {
-                    // this is some error but not a database error
-                    log::error!("{:?} {:?} DB Create error {:?} {:?}",module_path!(), line!(),e,game_entry);
-                },
-            };
-        },
-    };
 
-    // let's print out the tdrri we got
-//    log::info!("Line: {:?} TDRRI = {:?}",line!(),quiz.tdrri);
     
     let mut content = " it worked ";
    

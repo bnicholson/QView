@@ -83,8 +83,8 @@ diesel::table! {
 }
 
 diesel::table! {
-    games (tdrri) {
-        tdrri -> Int8,
+    games (gid) {
+        gid -> Int8,
         org -> Varchar,
         tournament -> Varchar,
         division -> Varchar,
@@ -97,8 +97,8 @@ diesel::table! {
 }
 
 diesel::table! {
-    quizevents (tdrri, question, eventnum) {
-        tdrri -> Int8,
+    quizevents (gid, question, eventnum) {
+        gid -> Int8,
         question -> Int4,
         eventnum -> Int4,
         name -> Varchar,

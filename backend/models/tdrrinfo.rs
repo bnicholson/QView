@@ -6,14 +6,15 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TDRRInfoData {
+    organization: String,
     tournament: String,
     division: String,
     room: String,
     round: String,
+    clientkey: String,    
     question: i32,                                
     quiz_done: bool,
     data_okay: bool,
-    client_key: String,
     quiz_time: UTC,
     tdrri: BigId,
     num_teams: i32,
