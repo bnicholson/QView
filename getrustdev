@@ -42,6 +42,13 @@ cargo install cargo-watch
 # Node add some node things we need
 sudo npm install -g yarn
 
+# 
+# Make sure we have a recently updated nodejs
+#
+sudo npm install -g n
+sudo n lts
+n ls
+
 #
 # Add ~/.cargo/bin to the user's profile
 #
