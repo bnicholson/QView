@@ -113,7 +113,30 @@ const rows_rip = [
   createData_rip('Q2022', 'District Novice', "Jester 118", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
   createData_rip('Q2022', 'District Novice', "Jester 119", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
   createData_rip('Q2022', 'District Novice', "Jester 120", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Jester 121", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),  
+  createData_rip('Q2022', 'District Novice', "Jester 121", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20), 
+  
+  createData_rip('Q2022', 'District Novice', "Madison 102", "Wed-07b", 4, "Team #A", 110, "Team #2", 10, "Team #3", 50),
+  createData_rip('Q2022', 'District Novice', "Madison 103", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Madison 104", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Madison 105", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Madison 106", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Madison 107", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Madison 108", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Madison 109", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Madison 110", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Madison 111", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+
+  createData_rip('Q2022', 'District Novice', "Madison 112", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Madison 113", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Madison 114", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Madison 115", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Madison 116", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Madison 117", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Madison 118", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Madison 119", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Madison 120", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Madison 121", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20), 
+
 ];
 
 export const RoundsInProgress = () => {
@@ -153,7 +176,7 @@ export const RoundsInProgress = () => {
 
 export const RoundsInProgressTable = () => {  
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(13);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -169,9 +192,9 @@ export const RoundsInProgressTable = () => {
       <TableContainer >
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
-            <TableRow>
+            <TableRow >
               {columns_rip.map((column) => (
-                <TableCell
+                <TableCell 
                   key={column.id}
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
@@ -186,11 +209,11 @@ export const RoundsInProgressTable = () => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.room}>
                     {columns_rip.map((column) => {
                       const value = row[column.id];
                       return (
-                        <TableCell key={column.id} align={column.align}>
+                        <TableCell key={column.id} align={column.align} >
                           {column.format && typeof value === 'number'
                             ? column.format(value)
                             : value}
