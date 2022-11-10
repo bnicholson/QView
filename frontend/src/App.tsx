@@ -1,41 +1,42 @@
-import { useApolloClient } from '@apollo/client'
-import { GraphQLPage } from './containers/GraphQLPage'
-import { useAuth, useAuthCheck } from './hooks/useAuth'
-import { AccountPage } from './containers/AccountPage'
-import { LoginPage } from './containers/LoginPage'
-import { ActivationPage } from './containers/ActivationPage'
-import { RegistrationPage } from './containers/RegistrationPage'
-import { RecoveryPage } from './containers/RecoveryPage'
-import { ResetPage } from './containers/ResetPage'
-import { Tournaments } from './containers/TournamentPage'
-import { Divisions } from './containers/DivisionPage'
-import { TDEditor } from './containers/TDEditor'
+import { useApolloClient } from '@apollo/client';
+import { GraphQLPage } from './containers/GraphQLPage';
+import { useAuth, useAuthCheck } from './hooks/useAuth';
+import { AccountPage } from './containers/AccountPage';
+import { LoginPage } from './containers/LoginPage';
+import { ActivationPage } from './containers/ActivationPage';
+import { RegistrationPage } from './containers/RegistrationPage';
+import { RecoveryPage } from './containers/RecoveryPage';
+import { ResetPage } from './containers/ResetPage';
+import { Tournaments } from './containers/TournamentPage';
+import { Divisions } from './containers/DivisionPage';
+import { TDEditor } from './containers/TDEditor';
 
-import React from 'react'
-import './App.css'
-import { Home } from './containers/Home'
-import { Todos } from './containers/Todo'
-import { Files } from './containers/Files'
-import { Route, useNavigate, Routes } from 'react-router-dom'
+import React from 'react';
+import './App.css';
+import { Home } from './containers/Home';
+import { Todos } from './containers/Todo';
+import { Files } from './containers/Files';
+import { Route, useNavigate, Routes } from 'react-router-dom';
 
-import '@mui/material/colors'
-import AppBar from '@mui/material/AppBar'
-import Box from '@mui/material/Box'
-import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import Container from '@mui/material/Container'
-import Grid from '@mui/material/Grid'
-import MenuIcon from '@mui/icons-material/Menu'
-import Drawer from '@mui/material/Drawer'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
+import '@mui/material/colors';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import MenuIcon from '@mui/icons-material/Menu';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 import { useTheme } from '@emotion/react'
-import styled from '@emotion/styled'
-import { ChevronLeft, Inbox, Mail, AccountCircle } from '@mui/icons-material'
-import { Breadcrumbs, Divider, Link, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
+import styled from '@emotion/styled';
+import { ChevronLeft, Inbox, Mail, AccountCircle } from '@mui/icons-material';
+import { Breadcrumbs, Divider, Link, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
+import { RoundsInProgress } from './containers/RoundsInProgress';
 
 if (process.env.NODE_ENV === 'development') import('./setupDevelopment')
 
@@ -225,6 +226,7 @@ const App = () => {
             <Route path="/tournament" element={<Tournaments />} />
             <Route path="/division" element={<Divisions />} />
             <Route path="/tdeditor" element={<TDEditor />} />
+            <Route path="/roundsinprogress" element={<RoundsInProgress />} />
           </Routes>
         </div>
         <Box textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 }}>
