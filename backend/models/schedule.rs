@@ -9,15 +9,21 @@ use serde::{Deserialize, Serialize};
 #[diesel(table_name=schedules)]
 #[diesel(primary_key(sid))]
 pub struct Schedule {
-    pub gid: BigId,
+    pub sid: BigId,
+    pub tid: BigId,
+    pub roundtime: UTC,
     pub org: String,
     pub tournament: String,
     pub division: String,
     pub room: String,
     pub round: String,
-    pub clientkey: String,
-    pub ignore: bool,
-    pub ruleset: String,
+    pub team1: String,
+    pub team2: String,
+    pub team3: String,
+    pub quizmaster: String,
+    pub contentjudge: String,
+    pub scorekeeper: String,
+    pub stats: String,
 }
 
 #[tsync::tsync]
@@ -25,26 +31,36 @@ pub struct Schedule {
 #[diesel(table_name=schedules)]
 #[diesel(primary_key(sid))]
 pub struct ScheduleChangeset {   
+    pub roundtime: UTC,
     pub org: String,
     pub tournament: String,
     pub division: String,
     pub room: String,
     pub round: String,
-    pub clientkey: String,
-    pub ignore: bool,
-    pub ruleset: String,
+    pub team1: String,
+    pub team2: String,
+    pub team3: String,
+    pub quizmaster: String,
+    pub contentjudge: String,
+    pub scorekeeper: String,
+    pub stats: String,
 }
 
 pub fn empty_changeset() -> ScheduleChangeset {
     return ScheduleChangeset {   
+        roundtime: Utc.now(),
         org: "".to_string(),
         tournament: "".to_string(),
         division: "".to_string(),
         room: "".to_string(),
         round: "".to_string(),
-        clientkey: "".to_string(),
-        ignore: false,
-        ruleset: "".to_string()
+        team1: "".to_string(),
+        team2: "".to_string(),
+        team3: "".to_string(),
+        quizmaster: "".to_string(),
+        contentjudge: "".to_string(),
+        scorekeeper: "".to_string(),
+        stats: "".to_string(),
     }
 }
 
@@ -66,7 +82,7 @@ pub fn read_all(db: &mut Connection) -> QueryResult<Vec<Schedule>> {
     schedules
         .order(sid)
         .limit(10)
-        .offset(44)
+        .koffset(44)
         .load::<Schedule>(db)
 }
 
