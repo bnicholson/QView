@@ -86,6 +86,7 @@ async fn main() -> std::io::Result<()> {
         api_scope = api_scope.service(services::tournament::endpoints(web::scope("/tournaments")));
         api_scope = api_scope.service(services::scoreevent::endpoints(web::scope("/scoreevents")));
         api_scope = api_scope.service(services::scoreevent::endpoints(web::scope("/pingmsg")));    
+        api_scope = api_scope.service(services::scoreevent::endpoints(web::scope("/namelist")));        
         api_scope = api_scope.service(services::division::endpoints(web::scope("/divisions")));
 
         // now route the "/scoreevents" logic to the same place as /api/scoreevents
@@ -93,6 +94,8 @@ async fn main() -> std::io::Result<()> {
         app = app.route("/scoreevent",web::get().to(services::scoreevent::write));
         // now do the same for the /pingmsg old style api call
         app = app.route("/pingmsg",web::get().to(services::pingmsg::write));
+        // and time to do the /namelist
+        app = app.route("/namelist",web::get().to(services::namelist::write));
 
         #[cfg(debug_assertions)]
         {

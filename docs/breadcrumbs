@@ -19,8 +19,6 @@ Home / Tournament / (Division) / Rounds_In_Progress
 Home / Tournaments / Division
 Home / Tournaments / Division (editing/creating)
 
-
-
 Home / Tournament / Division / Team_Standings
 Home / Tournament / Division / Individual_Standings
 Home / Tournament / (Division) / Room
@@ -49,3 +47,4 @@ Home / Tournament / Helpmsg
 
 # Now send data to another system
 /api/v1/quizdata
+

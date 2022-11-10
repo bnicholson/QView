@@ -4,3 +4,4 @@ pub mod file;
 pub mod scoreevent;
 pub mod division;
 pub mod pingmsg;
+pub mod namelist;
