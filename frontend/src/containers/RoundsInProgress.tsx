@@ -15,7 +15,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
 interface Column_rip {
-  id: 'tournament' | 'division' | 'room' | 'round' | 'question' | 'team1' | 'score1' | 'team2' | 'score2' | 'team3' | 'score3' ;
+  id: 'tournament' | 'division' | 'room' | 'round' | 'question' | 'team1' | 'score1' | 'team2' | 'score2' | 'team3' | 'score3';
   label: string;
   minWidth?: number;
   align?: 'right';
@@ -25,7 +25,7 @@ interface Column_rip {
 const columns_rip: readonly Column_rip[] = [
 
   { id: 'division', label: 'Division', minWidth: 100 },
-  { id: 'room', label: 'Room',  minWidth: 100 },
+  { id: 'room', label: 'Room', minWidth: 100 },
   { id: 'round', label: 'Round', minWidth: 100 },
   {
     id: 'question',
@@ -51,7 +51,7 @@ const columns_rip: readonly Column_rip[] = [
     format: (value: number) => value.toFixed(2),
   },
   { id: 'team3', label: 'Team #3', minWidth: 100 },
-  { 
+  {
     id: 'score3',
     label: 'Score',
     minWidth: 100,
@@ -113,8 +113,8 @@ const rows_rip = [
   createData_rip('Q2022', 'District Novice', "Jester 118", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
   createData_rip('Q2022', 'District Novice', "Jester 119", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
   createData_rip('Q2022', 'District Novice', "Jester 120", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Jester 121", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20), 
-  
+  createData_rip('Q2022', 'District Novice', "Jester 121", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+
   createData_rip('Q2022', 'District Novice', "Madison 102", "Wed-07b", 4, "Team #A", 110, "Team #2", 10, "Team #3", 50),
   createData_rip('Q2022', 'District Novice', "Madison 103", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
   createData_rip('Q2022', 'District Novice', "Madison 104", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
@@ -135,7 +135,7 @@ const rows_rip = [
   createData_rip('Q2022', 'District Novice', "Madison 118", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
   createData_rip('Q2022', 'District Novice', "Madison 119", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
   createData_rip('Q2022', 'District Novice', "Madison 120", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Madison 121", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20), 
+  createData_rip('Q2022', 'District Novice', "Madison 121", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
 
 ];
 
@@ -174,7 +174,7 @@ export const RoundsInProgress = () => {
   )
 }
 
-export const RoundsInProgressTable = () => {  
+export const RoundsInProgressTable = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(13);
 
@@ -194,10 +194,18 @@ export const RoundsInProgressTable = () => {
           <TableHead>
             <TableRow >
               {columns_rip.map((column) => (
-                <TableCell 
+                <TableCell
                   key={column.id}
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
+                  sx={{
+                    backgroundColor: "#7aba7a",
+                    borderBottom: "2px solid black",
+                    "& th": {
+                      fontSize: "1.25rem",
+                      color: "rgba(96, 96, 96)"
+                    }
+                  }}
                 >
                   {column.label}
                 </TableCell>
@@ -213,7 +221,15 @@ export const RoundsInProgressTable = () => {
                     {columns_rip.map((column) => {
                       const value = row[column.id];
                       return (
-                        <TableCell key={column.id} align={column.align} >
+                        <TableCell key={column.id} align={column.align}
+                          sx={{
+                            backgroundColor: "#d0342c",
+                            borderBottom: "2px solid black",
+                            "& th": {
+                              fontSize: "1.25rem",
+                              color: "rgba(96, 96, 96)"
+                            }
+                          }}>
                           {column.format && typeof value === 'number'
                             ? column.format(value)
                             : value}
