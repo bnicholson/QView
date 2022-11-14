@@ -47,7 +47,7 @@ interface DivisionChangeset {
   dname: string
   breadcrumb: string
   hide: boolean
-  shortinfo?: string
+  shortinfo: string | undefined
 }
 
 interface Eventlog {
@@ -148,6 +148,40 @@ interface QuizEventChangeset {
   md5digest: string
 }
 
+interface Schedule {
+  sid: BigId
+  tid: BigId
+  roundtime: UTC
+  org: string
+  tournament: string
+  division: string
+  room: string
+  round: string
+  team1: string
+  team2: string
+  team3: string
+  quizmaster: string
+  contentjudge: string
+  scorekeeper: string
+  stats: string
+}
+
+interface ScheduleChangeset {
+  roundtime: UTC
+  org: string
+  tournament: string
+  division: string
+  room: string
+  round: string
+  team1: string
+  team2: string
+  team3: string
+  quizmaster: string
+  contentjudge: string
+  scorekeeper: string
+  stats: string
+}
+
 interface Todo {
   id: ID
   text: string
@@ -190,14 +224,14 @@ interface TournamentChangeset {
   region: string
   country: string
   contact: string
-  contactemail?: string
+  contactemail: string | undefined
   hide: boolean
-  info?: string
+  info: string | undefined
 }
 
 interface FileInfo {
   id: number
   key: string
   name: string
-  url?: string
+  url: string | undefined
 }

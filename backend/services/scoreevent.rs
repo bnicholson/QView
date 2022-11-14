@@ -201,6 +201,17 @@ pub async fn write(
     // the following code calculates and checks the sha1sum of all the GET parameters.
     // we had issues with the network (firewalls, app firewalls, etc) corrupting or 
     // giving false 200s.  This avoids that.
+    // Grab the HOST:PORT the web server should run on.
+    let scoreevent_psk = match std::env::var("SCOREEVENT_PSK") {
+        Ok(scoreevent_psk) => {
+            scoreevent_psk
+        },
+        Err(e) => {
+            log::error!("{:?} {:?} Invalid SCOREEVENT_PSK",module_path!(),line!());
+            "this won't work but fail".to_string()
+        }
+    };
+
     sha1hasher.update(&&eventlog_entry.nonce);
     let psk = "caakokwy13274125359545uranusplutomarssaturn";
     sha1hasher.update(psk);
