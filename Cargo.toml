@@ -10,6 +10,10 @@ path = ".cargo/bin/tsync.rs"
 name = "qview"
 path = "backend/main.rs"
 
+[[bin]]
+name = "replay"
+path = "utils/src/replay.rs"
+
 [dependencies]
 actix-files = "0.6.0"
 actix-http = "3.0.0"
@@ -32,6 +36,12 @@ sha1="0.10.0"
 base64="0.13.1"
 hex-literal="0.3.4"
 redis="0.22.1"
+
+
+[dependencies.hyper]
+features = ["full"]
+version = "0.14"
+tokio = { version = "1", features = ["full"] }
 
 [dependencies.chrono]
 features = ["serde"]
