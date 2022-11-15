@@ -19,11 +19,16 @@ use hyper::client;
 use hyper::body::HttpBody as _;
 use tokio::io::{stdout, AsyncWriteExt as _};
 use std::fs::File;
-use std::io::{self, BufRead};
+use std::io::{self, BufReader};
 use std::path::Path;
+use serde::Deserialize;
+use csv::{ ReaderBuilder, Trim };
+use std::env;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+    let args: Vec<String> = env::args().collect();
+
     // This is where we will setup our HTTP client requests.
     let client = hyper::client::Client::new();
 
@@ -40,17 +45,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     }
 
     println!("Response: {}", resp.status());
-
-    let filename = "old/eventlog";
-    // open the file in read-only mode (ignore errors)
-    let file = File::open(filename).unwrap();
-    let reader = BufReader::new(file);
-    // now go read the file line by line using the lines iterator from std:io:BufRead.
-    for (index, line) in reader.lines().enumerate() {
-        let line = line.unwrap();   // ignore errors
-        //show the line and it's number:
-        println!("{}. {}", index+1, line);
-    }
 
     // File hosts must exist in current path before this produces output
 //    if let Ok(lines) = read_lines("./old/eventlog") {
@@ -83,7 +77,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         question: String,
         eventnum: String,
         name: String,
-        team: String;
+        team: String,
         quizzer: String,
         event: String,
         parm1: String,
@@ -91,8 +85,28 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         clientts: String,
     }
 
+
+    let filename = "old/eventlog.big";
+    // open the file in read-only mode (ignore errors)
+    let file = File::open(filename).unwrap();
+    let reader = BufReader::new(file);
+//    // now go read the file line by line using the lines iterator from std:io:BufRead.
+//    for (index, line) in reader.lines().enumerate() {
+//        let line = line.unwrap();   // ignore errors
+//        //show the line and it's number:
+//        println!("{}. {}", index+1, line);
+//    }
+
+    // construct a reader
+    let mut rdr = ReaderBuilder::new()
+        .delimiter(b',')
+        .trim(Trim::All)
+        .quote(b'\'')
+        .from_reader(reader);
+
+
     // Build the CSV reader and iterate over each record.
-    let mut rdr = csv::Reader::from_reader(io::stdin());
+//    let mut rdr = csv::Reader::from_reader(reader);         //io::stdin());
     for result in rdr.records() {
         // The iterator yields Result<StringRecord, Error>, so we check the
         // error here.
@@ -105,8 +119,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 
 // The output is wrapped in a Result to allow matching on errors
 // Returns an Iterator to the Reader of the lines of the file.
-fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
-where P: AsRef<Path>, {
-    let file = File::open(filename)?;
-    Ok(io::BufReader::new(file).lines())
-}
+//fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
+//where P: AsRef<Path>, {
+//    let file = File::open(filename)?;
+//    Ok(io::BufReader::new(file).lines())
+//}
