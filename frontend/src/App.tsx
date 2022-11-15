@@ -21,6 +21,7 @@ import { Route, useNavigate, Routes } from 'react-router-dom';
 import '@mui/material/colors';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button'
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
@@ -37,6 +38,7 @@ import { Breadcrumbs, Divider, Link, ListItemButton, ListItemIcon, ListItemText 
 import { createTheme, ThemeProvider } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { RoundsInProgress } from './containers/RoundsInProgress';
+import { Swagger } from './containers/Swagger'
 
 if (process.env.NODE_ENV === 'development') import('./setupDevelopment')
 
@@ -46,6 +48,11 @@ const theme = createTheme({
   palette: {
     primary: {
       main: "#008080"
+    }
+  },
+  typography: {
+    button: {
+      textTransform: 'none'
     }
   }
 })
@@ -227,6 +234,7 @@ const App = () => {
             <Route path="/division" element={<Divisions />} />
             <Route path="/tdeditor" element={<TDEditor />} />
             <Route path="/roundsinprogress" element={<RoundsInProgress />} />
+            <Route path="/swagger" element={<Swagger />} />
           </Routes>
         </div>
         <Box textAlign="center" pt={{ xs: 5, sm: 10 }} pb={{ xs: 5, sm: 0 }}>
