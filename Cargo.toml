@@ -36,7 +36,7 @@ sha1="0.10.0"
 base64="0.13.1"
 hex-literal="0.3.4"
 redis="0.22.1"
-
+csv = "1.1"
 
 [dependencies.hyper]
 features = ["full"]
@@ -64,7 +64,7 @@ features = [ "v4", "fast-rng", "macro-diagnostics", "serde" ]
 
 [dependencies.serde]
 features = ["derive"]
-version = "1.0.133"
+version = "1.0"
 
 [dependencies.tokio]
 features = ["full"]

@@ -41,22 +41,63 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 
     println!("Response: {}", resp.status());
 
-    // File hosts must exist in current path before this produces output
-    if let Ok(lines) = read_lines("./old/eventlog") {
-        // Consumes the iterator, returns an (Optional) String
-        for line in lines {
-            if let Ok(ip) = line {
-                println!("{}", ip);
+    let filename = "old/eventlog";
+    // open the file in read-only mode (ignore errors)
+    let file = File::open(filename).unwrap();
+    let reader = BufReader::new(file);
+    // now go read the file line by line using the lines iterator from std:io:BufRead.
+    for (index, line) in reader.lines().enumerate() {
+        let line = line.unwrap();   // ignore errors
+        //show the line and it's number:
+        println!("{}. {}", index+1, line);
+    }
 
-                // now send the call to qview server
-                let mut uri = "http://localhost:3000/scoreevent".parse()?;
-                let mut resp = client.get(uri).await?;
-                // And now...
-                while let Some(chunk) = resp.body_mut().data().await {
-                    stdout().write_all(&chunk?).await?;
-                }
-            }
-        }
+    // File hosts must exist in current path before this produces output
+//    if let Ok(lines) = read_lines("./old/eventlog") {
+//        // Consumes the iterator, returns an (Optional) String
+//        for line in lines {
+//            if let Ok(ip) = line {
+//                println!("{}", ip);
+//
+//                // now send the call to qview server
+//                let mut uri = "http://localhost:3000/scoreevent".parse()?;
+//                let mut resp = client.get(uri).await?;
+//                // And now...
+//                while let Some(chunk) = resp.body_mut().data().await {
+//                    stdout().write_all(&chunk?).await?;
+//                }
+//            }
+//        }
+//    }
+
+
+    // By default, struct field names are deserialized based on the position of
+    // a corresponding field in the CSV data's header record.
+    #[derive(Debug, Deserialize)]
+    struct CSVRecord {
+        clientkey: String,
+        tournament: String,
+        division: String,
+        room: String,
+        round: String,
+        question: String,
+        eventnum: String,
+        name: String,
+        team: String;
+        quizzer: String,
+        event: String,
+        parm1: String,
+        parm2: String,
+        clientts: String,
+    }
+
+    // Build the CSV reader and iterate over each record.
+    let mut rdr = csv::Reader::from_reader(io::stdin());
+    for result in rdr.records() {
+        // The iterator yields Result<StringRecord, Error>, so we check the
+        // error here.
+        let record = result?;
+        println!("{:?}", record);
     }
 
     Ok(())
