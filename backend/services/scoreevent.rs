@@ -213,8 +213,7 @@ pub async fn write(
     };
 
     sha1hasher.update(&&eventlog_entry.nonce);
-    let psk = "caakokwy13274125359545uranusplutomarssaturn";
-    sha1hasher.update(psk);
+    sha1hasher.update(scoreevent_psk);
     sha1hasher.update(&eventlog_entry.bldgroom);
 	sha1hasher.update(&eventlog_entry.clientkey);
 	sha1hasher.update(&tk);
