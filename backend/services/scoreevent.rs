@@ -168,7 +168,7 @@ pub async fn write(
                 field_count += 1;
             },
             "s1s" => {
-                let tmp = pair.1.replace("+"," ");
+                let tmp = pair.1.replace("+","+");
                 eventlog_entry.s1s = tmp;
                 field_count += 1;
             },

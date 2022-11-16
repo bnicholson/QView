@@ -4,15 +4,6 @@ extern crate log4rs;
 extern crate log4rs_syslog;
 extern crate url;
 
-use actix_web::guard;
-use actix_files::{Files};
-use actix_web::{App, HttpServer, web};
-use actix_web::middleware::{Compress, Logger, NormalizePath};
-use actix_web::web::Data;
-//use syslog::{Facility, Formatter3164, Formatter5424, BasicLogger, LogFormat};
-//use log::{error, info, warn, Record, Level, Metadata, LevelFilter, SetLoggerError };
-//use log4rs::file::{ Deserializers };
-//use log4rs::file::Deserializers;
 use log4rs::file::Deserializers;
 use rand::Rng;
 use hyper::http::HeaderMap;
@@ -59,7 +50,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 
     // Parse an `http::Uri`...
     let uri = "http://httpbin.org/ip".parse()?;
-//    let uri = "http://www.amazon.com".parse()?;
 
     // Await the response...
     let mut resp = client.get(uri).await?;
@@ -71,7 +61,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 
     println!("Response: {}", resp.status());
 
-
+    // now let's open the eventlog and start reading it
     let filename = "old/eventlog.big";
     // open the file in read-only mode (ignore errors)
     let file = File::open(filename).unwrap();
@@ -84,20 +74,34 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         .quote(b'\'')
         .from_reader(reader);
 
+    let mut count = 10;
 
     // Build the CSV reader and iterate over each record.
-//    let mut rdr = csv::Reader::from_reader(reader);         //io::stdin());
-    for result in rdr.deserialize() {//records() {
+    for result in rdr.deserialize() {
+        count = count - 1;
+        if count <= 0 {
+            break;
+        }
+        
         // The iterator yields Result<StringRecord, Error>, so we check the
         // error here.
-        let record : CSVRecord = result?;
-        println!("{:?}", record);
+        let mut record : CSVRecord = result?;
+//        println!("{:?}", record);
+
+        // set up the remaining info
+        let bldgroom = "Ben".to_string();
+        let nonce = get_nonce();
+        let tk = "nokey".to_string();
+        let org = "Nazarene".to_string();
+        let md5 = "not valid".to_string();
+        let clientts = "1234".to_string();
+        let s1s = get_s1s(&record, &bldgroom, &nonce, &tk, &org);
 
         let encoded = form_urlencoded::Serializer::new(String::new())
-        .append_pair("bldgroom", "Not there")
+        .append_pair("bldgroom", &bldgroom)
         .append_pair("key", &record.clientkey)
-        .append_pair("tk", "nokey")
-        .append_pair("org","Nazarene")
+        .append_pair("tk", &tk)
+        .append_pair("org",&org)
         .append_pair("tn", &record.tournament)
         .append_pair("dn", &record.division)
         .append_pair("rm", &record.room)
@@ -110,24 +114,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         .append_pair("ec", &record.event)
         .append_pair("p1", &record.parm1)
         .append_pair("p2", &record.parm2)
-        .append_pair("ts", "1234")
-        .append_pair("md5","not valid")
-        .append_pair("nonce",&get_nonce())
-        .append_pair("s1s", &get_s1s(record))
+        .append_pair("ts", &clientts)
+        .append_pair("md5",&md5)
+        .append_pair("nonce",&nonce)
+        .append_pair("s1s", &s1s)
         .finish();
 
-        println!("Encoding: {:?}", encoded);
+//        println!("Encoding: {:?}", encoded);
         // now send the call to qview server
         let url = format!("http://localhost:3000/scoreevent?{}",encoded);
-        println!("Url = {:?}",url);
+        println!("\nUrl = {:?}\n",url);
         let mut uri = url.parse()?;
         let mut resp = client.get(uri).await?;
         // And now...
         while let Some(chunk) = resp.body_mut().data().await {
             stdout().write_all(&chunk?).await?;
         }       
-        
-        get_nonce(); 
+        println!("\n");
     }
 
     Ok(())
@@ -148,11 +151,11 @@ fn get_nonce() -> String {
         let x: u8 = rng.gen();
         rslt.push_str(&(format!("{:x}",x)));
     }
-    println!("Nonce string = {}", rslt);
+//    println!("Nonce string = {}", rslt);
     rslt
 }
 
-fn get_s1s(record : CSVRecord) -> String {
+fn get_s1s(record : &CSVRecord, bldgroom: &String, nonce: &String, tk: &String, org: &String) -> String {
     // create the sha1 object
     let mut sha1hasher = Sha1::new();
 
@@ -170,11 +173,11 @@ fn get_s1s(record : CSVRecord) -> String {
         }
     };
 
-    sha1hasher.update(record.nonce);
+    sha1hasher.update(nonce);
     sha1hasher.update(scoreevent_psk);
-    sha1hasher.update(&record.bldgroom);
+    sha1hasher.update(&bldgroom);
 	sha1hasher.update(&record.clientkey);
-	sha1hasher.update(&"nokey");
+	sha1hasher.update(&tk);
 	sha1hasher.update(&record.tournament);
 	sha1hasher.update(&record.division);
     sha1hasher.update(&record.room);
