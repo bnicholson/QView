@@ -4,6 +4,7 @@ BEGIN;
 
 -- rename the tournaments table to orig_tournaments table
 ALTER TABLE eventlogs rename to orig_eventlogs;
+ALTER TABLE eventlogs_evid_seq rename to orig_eventlogs_evid_seq;
 
 -- create the new eventlog table 
 create table eventlogs (
@@ -40,7 +41,7 @@ INSERT INTO eventlogs (evid, created_at, clientkey, organization, bldgroom, tour
 -- now find out the maximum sequence # and reset the sequence to start one past that
 -- this code isn't working well but it's a start (10 needs to be a variable somehow selected from the maximum id value)
 -- select MAX(id)+1 into maxid from tournaments; 
-alter sequence eventlogs_evid_seq RESTART WITH 212110;
+select pg_catalog.setval('eventlogs_evid_seq'::regclass, MAX("evid"),true) FROM "orig_eventlogs";
 
 DROP TABLE orig_eventlogs;
 
