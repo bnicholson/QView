@@ -71,6 +71,7 @@ pub async fn write(
                 org = pair.1.replace("+"," ");   // don't bump the field count because it's not sent by client
             },
             "tn" => { // Tournament Name
+                println!("Tournament name = {}",pair.1);
                 let tmp = pair.1.replace("+"," ");
                 eventlog_entry.tournament = (&tmp).to_string();
                 roominfo_entry.tournament = (&tmp).to_string();

@@ -137,34 +137,6 @@ fn print_type_of<T>(_: &T) {
     println!("{}", std::any::type_name::<T>())
 }
 
-pub async fn index_playground(
-    req: HttpRequest,
-) -> actix_web::Result<HttpResponse> {
-
-    let db = req.app_data::<Data<Database>>().unwrap();
-    let mut mdb = db.pool.get().unwrap();
-
-    let content = std::fs::read_to_string("./.cargo/graphql-playground.html").unwrap();
-
-    let result = game::read_all(&mut mdb);
-    println!("{:?}",result);
-
-    Ok(
-        HttpResponse::Ok()
-            .content_type("text/html; charset=utf-8")
-            // GraphQL Playground original source:
-            // .body(playground_source(
-            //     GraphQLPlaygroundConfig::new("/api/graphql")
-            //         .with_header("Authorization", "token")
-            //         .subscription_endpoint("/api/graphql/ws"),
-            // ))
-
-            // GraphQL Playground modified source to include authentication:
-            .body(content)
-    )
-}
-
-
 #[get("")]
 async fn index(
     db: Data<Database>,

@@ -4,15 +4,11 @@ extern crate log4rs;
 extern crate log4rs_syslog;
 extern crate url;
 
-use log4rs::file::Deserializers;
 use rand::Rng;
-use hyper::http::HeaderMap;
-use hyper::client;
 use hyper::body::HttpBody as _;
 use tokio::io::{stdout, AsyncWriteExt as _};
 use std::fs::File;
-use std::io::{self, BufReader};
-use std::path::Path;
+use std::io::{ BufReader };
 use serde::Deserialize;
 use csv::{ ReaderBuilder, Trim };
 use std::env;
@@ -93,7 +89,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         
         // The iterator yields Result<StringRecord, Error>, so we check the
         // error here.
-        let mut record : CSVRecord = result?;
+        let record : CSVRecord = result?;
 //        println!("{:?}", record);
 
         // set up the remaining info
@@ -135,7 +131,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         // now send the call to qview server
         let url = format!("http://localhost:3000/scoreevent?{}",encoded);
         println!("\nUrl = {:?}\n",url);
-        let mut uri = url.parse()?;
+        let uri = url.parse()?;
         let mut resp = client.get(uri).await?;
         // And now...
         while let Some(chunk) = resp.body_mut().data().await {
@@ -166,7 +162,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 fn get_nonce() -> String {
     let mut rslt = String::new();
     let mut rng = rand::thread_rng();
-    for i in 0..15 {
+    for _i in 0..15 {
         let x: u8 = rng.gen();
         rslt.push_str(&(format!("{:x}",x)));
     }
@@ -187,7 +183,7 @@ fn get_s1s(record : &CSVRecord, bldgroom: &String, nonce: &String, tk: &String, 
             scoreevent_psk
         },
         Err(e) => {
-            log::error!("{:?} {:?} Invalid SCOREEVENT_PSK",module_path!(),line!());
+            log::error!("{:?} {:?} Invalid SCOREEVENT_PSK {:?}",module_path!(),line!(), e);
             "this won't work but fail".to_string()
         }
     };
