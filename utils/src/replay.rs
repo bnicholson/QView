@@ -45,6 +45,14 @@ struct CSVRecord {
 async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let args: Vec<String> = env::args().collect();
 
+    let limit : i32 = args[1].parse().unwrap();
+
+    // load the environment
+    if dotenv::dotenv().is_err() {
+        panic!("ERROR: Could not load environment variables from dotenv file");
+    }
+
+            
     // This is where we will setup our HTTP client requests.
     let client = hyper::client::Client::new();
 
@@ -74,12 +82,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         .quote(b'\'')
         .from_reader(reader);
 
-    let mut count = 10;
+    let mut count = 0;
 
     // Build the CSV reader and iterate over each record.
     for result in rdr.deserialize() {
-        count = count - 1;
-        if count <= 0 {
+        count = count + 1;
+        if count > limit {
             break;
         }
         
@@ -120,6 +128,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         .append_pair("s1s", &s1s)
         .finish();
 
+        println!("\nMD5 is now this {}\n",md5);
+        println!("Encoded = {}\n",encoded);
+
 //        println!("Encoding: {:?}", encoded);
         // now send the call to qview server
         let url = format!("http://localhost:3000/scoreevent?{}",encoded);
@@ -130,8 +141,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         while let Some(chunk) = resp.body_mut().data().await {
             stdout().write_all(&chunk?).await?;
         }       
-        println!("\n");
+        println!("Resp = {:?}\n",resp);
+
+        // now if it's not a 200 then we need to stop
+        if resp.status() != 200 {
+            panic!("Blew up");
+        }
     }
+
+    // Okay print how many we did.
+    println!("Sent {} eventlogs to the server.",count-1);
 
     Ok(())
 }
@@ -151,7 +170,7 @@ fn get_nonce() -> String {
         let x: u8 = rng.gen();
         rslt.push_str(&(format!("{:x}",x)));
     }
-//    println!("Nonce string = {}", rslt);
+    //    println!("Nonce string = {}", rslt);
     rslt
 }
 
@@ -172,6 +191,7 @@ fn get_s1s(record : &CSVRecord, bldgroom: &String, nonce: &String, tk: &String, 
             "this won't work but fail".to_string()
         }
     };
+    println!("PSK = {}",scoreevent_psk);
 
     sha1hasher.update(nonce);
     sha1hasher.update(scoreevent_psk);
