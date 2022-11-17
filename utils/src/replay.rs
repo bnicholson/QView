@@ -124,7 +124,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         .append_pair("s1s", &s1s)
         .finish();
 
-        println!("\nMD5 is now this {}\n",md5);
+        println!("\nMD5 is now this {} Line: {}\n",md5,count);
         println!("Encoded = {}\n",encoded);
 
 //        println!("Encoding: {:?}", encoded);
@@ -141,7 +141,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 
         // now if it's not a 200 then we need to stop
         if resp.status() != 200 {
-            panic!("Blew up");
+            panic!("Blew up on eventlog line {}",count);
         }
     }
 
@@ -187,7 +187,6 @@ fn get_s1s(record : &CSVRecord, bldgroom: &String, nonce: &String, tk: &String, 
             "this won't work but fail".to_string()
         }
     };
-    println!("PSK = {}",scoreevent_psk);
 
     sha1hasher.update(nonce);
     sha1hasher.update(scoreevent_psk);

@@ -48,6 +48,7 @@ pub async fn write(
     let mut gid: i64  = 0;
     let mut field_count = 0;
     for pair in psiter {
+
         let s = String::from(pair.0);
         match s.as_str() {
             "bldgroom" => {
@@ -71,7 +72,6 @@ pub async fn write(
                 org = pair.1.replace("+"," ");   // don't bump the field count because it's not sent by client
             },
             "tn" => { // Tournament Name
-                println!("Tournament name = {}",pair.1);
                 let tmp = pair.1.replace("+"," ");
                 eventlog_entry.tournament = (&tmp).to_string();
                 roominfo_entry.tournament = (&tmp).to_string();
@@ -134,10 +134,9 @@ pub async fn write(
                 eventlog_entry.quizzer = q;
                 field_count +=1;
             }, 
-            "ec" => { // Event type/class (TC, BE, QT, ... 
-                let tmp = pair.1.replace("+"," ");
-                quizevent_entry.event = (&tmp).to_string();
-                eventlog_entry.event = tmp;
+            "ec" => { // Event type/class (TC, BE, QT, ...
+                quizevent_entry.event = pair.1.to_string();
+                eventlog_entry.event = pair.1.to_string();
                 field_count += 1;
             }, 
             "p1" => { // parameter 1
