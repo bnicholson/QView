@@ -1,4 +1,5 @@
 use crate::diesel::*;
+use diesel::upsert::*;
 use crate::schema::*;
 use create_rust_app::Connection;
 use crate::models::common::*;
@@ -54,6 +55,16 @@ pub fn create(db: &mut Connection, item: &GameChangeset) -> QueryResult<Game> {
     insert_into(games).values(item).get_result::<Game>(db)
 }
 
+pub fn create_update(db: &mut Connection, item: &GameChangeset) -> QueryResult<Game> {
+    use crate::schema::games::dsl::*;
+
+    insert_into(games).values(item).on_conflict(on_constraint(
+        "games_org_tournament_division_room_round_clientkey_key"))
+        .do_update()//games.filter(gid.eq(item_id)))
+        .set(item)
+        .get_result::<Game>(db)
+}
+
 pub fn read(db: &mut Connection, item_id: i64) -> QueryResult<Game> {
     use crate::schema::games::dsl::*;
 
@@ -89,7 +100,6 @@ pub fn delete(db: &mut Connection, item_id: i64) -> QueryResult<usize> {
 // on this particular game.  
 pub fn get_gid_from_cache(game: &GameChangeset) -> BigId {
     let gamekey = format!("QV:GAME:{}:{}:{}:{}:{}:{}",game.org,game.tournament, game.division, game.room, game.round, game.clientkey);
-    println!("gamekey = {:?}",gamekey);
 
     let client = redis::Client::open("redis://127.0.0.1/").unwrap();
     let mut con = client.get_connection().unwrap();

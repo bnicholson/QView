@@ -114,11 +114,11 @@ pub fn update_roominfo( ri: &mut RoomInfoData ) -> RoomInfoData {
     let mut rri = empty();       
     match redis::cmd("get").arg(&roomkey).query::<Option<String>>(&mut con) {
         Ok(nil) => {
-            println!("Got a nil from a get command to redis {:?}",line!());
+//            println!("Got a nil from a get command to redis {:?}",line!());
             rri = ri.to_RoomInfoData();
         },
         Ok(rjson) => {
-            println!("what is the result of the get {:?} {:?}",rjson,line!());
+//            println!("what is the result of the get {:?} {:?}",rjson,line!());
             let json_str : String = rjson.unwrap();
             rri = serde_json::from_str(&json_str).unwrap(); 
             // okay update the input roominfo (ri) with data missing from the old ri (rri)
@@ -135,13 +135,13 @@ pub fn update_roominfo( ri: &mut RoomInfoData ) -> RoomInfoData {
     let json = serde_json::to_string(&ri).unwrap();     //Result<T, RedisError>    
     match redis::Cmd::set_ex(roomkey, json, 1800).query::<Option<String>>(&mut con) {
         Ok(nil) => {
-            println!("Got a nil");
+//            println!("Got a nil");
         },
         Ok(rslt) => {
-            println!("redis set result {:?} {:?} ", rslt,line!());
+            log::error!("{:?} {:?} redis set result {:?} ", module_path!(),line!(), rslt);
         },
         Err(e) => {
-            println!("redis error {:?} {:?}", e,line!());
+            log::error!("{:?} {:?} redis error {:?}", module_path!(),line!(),e);
         },
     }
 

@@ -1,4 +1,5 @@
 use crate::diesel::*;
+use diesel::upsert::*;
 use crate::schema::*;
 use create_rust_app::Connection;
 use crate::models::common::*;
@@ -86,4 +87,14 @@ pub fn create_quiz_event(db: &mut Connection, item: &QuizEvent) -> QueryResult<Q
     use crate::schema::quizevents::dsl::*;
 
     insert_into(quizevents).values(item).get_result::<QuizEvent>(db)
+}
+
+pub fn create_update_quiz_event(db: &mut Connection, item: &QuizEvent) -> QueryResult<QuizEvent> {
+    use crate::schema::quizevents::dsl::*;
+
+    insert_into(quizevents).values(item).on_conflict(on_constraint(
+        "quizevents_pkey1"))
+        .do_update()
+        .set(item)
+        .get_result::<QuizEvent>(db)
 }

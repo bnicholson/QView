@@ -15,6 +15,7 @@ use std::env;
 use url::form_urlencoded;
 use base64;
 use sha1::{Sha1, Digest};
+use chrono::naive::{ NaiveDateTime };
 
 
 // By default, struct field names are deserialized based on the position of
@@ -98,9 +99,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         let tk = "nokey".to_string();
         let org = "Nazarene".to_string();
         let md5 = "not valid".to_string();
-        let clientts = "1234".to_string();
         let s1s = get_s1s(&record, &bldgroom, &nonce, &tk, &org);
 
+        // parse the date time
+        println!("TS = {:?}",record.clientts);
+        let datetime = NaiveDateTime::parse_from_str(&record.clientts,"%Y-%m-%d-%H.%M.%S.%6f").unwrap();
+        let clientts_micros = datetime.timestamp_micros();
+        let clientts_str = (clientts_micros/1000000).to_string();
+        
         let encoded = form_urlencoded::Serializer::new(String::new())
         .append_pair("bldgroom", &bldgroom)
         .append_pair("key", &record.clientkey)
@@ -118,7 +124,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         .append_pair("ec", &record.event)
         .append_pair("p1", &record.parm1)
         .append_pair("p2", &record.parm2)
-        .append_pair("ts", &clientts)
+        .append_pair("ts", &clientts_str)
         .append_pair("md5",&md5)
         .append_pair("nonce",&nonce)
         .append_pair("s1s", &s1s)

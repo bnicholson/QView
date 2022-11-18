@@ -152,8 +152,12 @@ pub async fn write(
                 field_count += 1;
             }, 
             "ts" => { // timestamp from the client
+                println!("TS Input = {:?}",pair.1);
                 let secs : i64 = pair.1.trim().parse().unwrap();
                 ts = Utc.timestamp(secs,0);
+                quizevent_entry.clientts = ts;
+                eventlog_entry.ts = pair.1.to_string();
+                roominfo_entry.client_time = ts;
                 field_count += 1;
             }, 
             "md5" => {  // md5 hashsum
@@ -273,85 +277,94 @@ pub async fn write(
     // this event.  If gid is <= 0 then this is the first event for this
     // clientkey, org, tournament, division, room, round.
     let mut gid = game::get_gid_from_cache(&game_entry);
-    if gid <= 0 {
-        // now let's create an entry in the games table
-        // Handle errors while we create the entry
-        match game::create(&mut mdb, &game_entry) {
-            Ok(output) => {
-                // update the quizevent gid so we have the correct one to write
-                // the quizevent to the Quizzes table
-                quizevent_entry.gid = output.gid;
-            },
-            Err(e) => {
-                match e {
-                   // the most likely cause here is a Unique constraint - the row
-                    // already exists in the database.  We'll ignore those and
-                    // panic or log the others
-                    DBError::DatabaseError(dbek,info) => match dbek {
-                        UniqueViolation => {
-                            // do nothing here.  This is a normal case when another event 
-                            // comes in for this quiz.
-                            log::error!("{:?} {:?} Error {:?}", module_path!(),line!(), info);
-                        },
-                        _ => {
-                            // Okay this error is a database error but not a unique violation
-                            log::error!("{:?} {:?} DB Create error {:?} {:?} {:?}",module_path!(), line!(),dbek,info,game_entry);
-                        },
+    
+    
+    // now let's create an entry in the games table
+    // Handle errors while we create the entry
+    match game::create_update(&mut mdb, &game_entry) {
+        Ok(output) => {
+            // update the quizevent gid so we have the correct one to write
+            // the quizevent to the Quizzes table
+            quizevent_entry.gid = output.gid;
+            gid = output.gid;
+            log::info!("Inserted/Updated a Game {:?}",output)            
+        },
+        Err(e) => {
+            let error_content = format!("Game write failure {}", e);
+            match e {
+                // the most likely cause here is a Unique constraint - the row
+                // already exists in the database.  We'll ignore those and
+                // panic or log the others
+                DBError::DatabaseError(dbek,e) => match dbek {
+                    UniqueViolation => {
+                        // do nothing here.  This is a normal case when another event 
+                        // comes in for this quiz.
+                        log::error!("{:?} {:?} Error {:?} {:?}", module_path!(),line!(), dbek, e);
                     },
                     _ => {
-                        // this is some error but not a database error
-                        log::error!("{:?} {:?} DB Create error {:?} {:?}",module_path!(), line!(),e,game_entry);
+                        // Okay this error is a database error but not a unique violation
+                        log::error!("{:?} {:?} DB Create error {:?} {:?} {:?}",module_path!(), line!(),dbek, e ,game_entry);
                     },
-                };
-           },
-        };
-    }
+                },
+                _ => {
+                    // this is some error but not a database error
+                    log::error!("{:?} {:?} DB Create error {:?} {:?}",module_path!(), line!(),e,game_entry);
+                },
+            };
+
+            return Ok(
+                HttpResponse::BadRequest()
+                    .content_type("text/html; charset=utf-8")
+                    .body(error_content)
+            )
+        },
+    };
 
     // send an update to the cache for this room.  Rounds in  Progress (tickertape)
     update_roominfo(&mut roominfo_entry);
 
-    // now we need to update the RoomInfo
-
-
-
-    
-    let mut content = " it worked ";
-   
     // now let's write an entry in the quizzes event table
-    // Handle errors while we create the entry
-    match quizevent::create_quiz_event(&mut mdb, &quizevent_entry) {
-        Ok(output) => println!("Inserted a Quizevent {:?}",output),
-        Err(err) => match err {
-            // the most likely cause here is a Unique constraint - the row
-            // already exists in the database.  We'll ignore those and
-            // panic or log the others
-            DBError::DatabaseError(dbek,info) => match dbek {
-                UniqueViolation => {
-                    // Okay we've written this one before.  Now we have to update it. 
-                    content = "Update";
+    // Handle errors while we create the entry - this is a database insert or update
+    match quizevent::create_update_quiz_event(&mut mdb, &quizevent_entry) {
+        Ok(output) => {
+            log::info!("Inserted/Updated a Quizevent {:?}",output)
+        },
+        Err(err) => {
+            let error_content = format!("Quizevent write failure {}", err);
+            match err {
+                // the most likely cause here is a Unique constraint - the row
+                // already exists in the database.  We'll ignore those and
+                // panic or log the others
+                DBError::DatabaseError(dbek,info) => match dbek {
+                    UniqueViolation => {
+                        // Okay we've written this one before.  this is some weird error
+                         // since the upsert() in the quizevent model should have 
+                        // handled it.
+                    },
+                    _ => {
+                        // Okay this error is a database error but not a unique violation
+                        log::error!("Line: {:?} DB Create error {:?} {:?} {:?}",line!(),dbek,info,quizevent_entry);
+                    },
                 },
                 _ => {
-                    // Okay this error is a database error but not a unique violation
-                    log::error!("Line: {:?} DB Create error {:?} {:?} {:?}",line!(),dbek,info,quizevent_entry);
+                    // this is some error but not a database error
+                    log::error!("Line: {:?} DB Create error {:?} {:?}",line!(),err,quizevent_entry);
                 },
-            },
-            _ => {
-                // this is some error but not a database error
-                log::error!("Line: {:?} DB Create error {:?} {:?}",line!(),err,quizevent_entry);
-            },
+            };
+
+            return Ok(
+                HttpResponse::BadRequest()
+                    .content_type("text/html; charset=utf-8")
+                    .body(error_content)
+            )
         },
+    
     }
-
-    // now populate the Game Changeset
-//    Json(item): Json<GameChangeset>;
-//    let result: Game = models::scoreevent::create(&mut db, &item).expect("Creation error");
-
-//    Ok(HttpResponse::Created().json(result));
 
     Ok(
         HttpResponse::Ok()
             .content_type("text/html; charset=utf-8")
-            .body(content)
+            .body("Inserted/Updated")
     )
 }
 
