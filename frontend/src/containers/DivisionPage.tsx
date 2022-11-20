@@ -99,7 +99,7 @@ export const Divisions = () => {
             href="/t/q2022/district%20novice"
           >
             District Novice
-          </Link>
+          </Link>&nbsp;&nbsp;
           <Link href="/tdeditor">
             <Typography color="text.primary" >Teams</Typography>
           </Link>
@@ -109,6 +109,31 @@ export const Divisions = () => {
         </Breadcrumbs>
       </Box>
       <div className="Form">
+        <Card>
+          <CardHeader>
+
+          </CardHeader>
+          <Box sx={{ display: 'flex' }}>
+            <CardContent>
+              <Typography align="left" variant="h5" color="primary" >
+                  <Link
+                  underline="hover"
+                  color="inherit"
+                  href="/roundsinprogress"
+                >
+                  Rounds In Progress&nbsp;&nbsp;&nbsp;&nbsp;
+                  </Link>
+                  <Link
+                  underline="hover"
+                  color="inherit"
+                  href="/tdeditor"
+                >
+                  Tournament Editor (tabs)&nbsp;&nbsp;&nbsp;&nbsp;
+                  </Link>
+              </Typography>
+            </CardContent>
+          </Box>
+        </Card>
         {divisions.map((division, index) =>
           <Card style={{ maxWidth: 845 }} key={division.dname}>
             <CardHeader
