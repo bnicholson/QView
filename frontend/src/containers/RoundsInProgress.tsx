@@ -15,7 +15,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
 interface Column_rip {
-  id: 'tournament' | 'division' | 'room' | 'round' | 'question' | 'team1' | 'score1' | 'team2' | 'score2' | 'team3' | 'score3';
+  id: 'tournament' | 'division' | 'room' | 'round' | 'question' | 'team1' | 'score1' | 'team2' | 'score2' | 'team3' | 'score3' | 'message';
   label: string;
   minWidth?: number;
   align?: 'right';
@@ -24,40 +24,41 @@ interface Column_rip {
 
 const columns_rip: readonly Column_rip[] = [
 
-  { id: 'division', label: 'Division', minWidth: 100 },
-  { id: 'room', label: 'Room', minWidth: 100 },
-  { id: 'round', label: 'Round', minWidth: 100 },
+  { id: 'division', label: 'Division', minWidth: 10 },
+  { id: 'room', label: 'Room', minWidth: 10 },
+  { id: 'round', label: 'Round', minWidth: 10 },
   {
     id: 'question',
     label: 'Question',
-    minWidth: 100,
+    minWidth: 10,
     align: 'right',
     format: (value: number) => value.toLocaleString('en-US'),
   },
-  { id: 'team1', label: 'Team #1', minWidth: 100 },
+  { id: 'team1', label: 'Team #1', minWidth: 10 },
   {
     id: 'score1',
     label: 'Score',
-    minWidth: 100,
+    minWidth: 10,
     align: 'right',
     format: (value: number) => value.toLocaleString('en-US'),
   },
-  { id: 'team2', label: 'Team #2', minWidth: 100 },
+  { id: 'team2', label: 'Team #2', minWidth: 10 },
   {
     id: 'score2',
     label: 'Score',
-    minWidth: 100,
+    minWidth: 10,
     align: 'right',
     format: (value: number) => value.toFixed(2),
   },
-  { id: 'team3', label: 'Team #3', minWidth: 100 },
+  { id: 'team3', label: 'Team #3', minWidth: 10 },
   {
     id: 'score3',
     label: 'Score',
-    minWidth: 100,
+    minWidth: 10,
     align: 'right',
     format: (value: number) => value.toFixed(2),
   },
+  { id: 'message', label: 'Message', minWidth: 100 },
 ];
 
 interface Data_rip {
@@ -72,6 +73,7 @@ interface Data_rip {
   score2: number;
   team3: string;
   score3: number;
+  message: string;
 }
 
 var rownum = 0;
@@ -88,54 +90,55 @@ function createData_rip(
   score2: number,
   team3: string,
   score3: number,
+  message: string,
 ): Data_rip {
-  return { tournament, division, room, round, question, team1, score1, team2, score2, team3, score3 };
+  return { tournament, division, room, round, question, team1, score1, team2, score2, team3, score3, message };
 }
 
 const rows_rip = [
-  createData_rip('Q2022', 'District Novice', "Jester 102", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Jester 103", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Jester 104", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Jester 105", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Jester 106", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Jester 107", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Jester 108", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Jester 109", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Jester 110", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Jester 111", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Jester 102", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Jester 103", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Jester 104", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Jester 105", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Jester 106", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Jester 107", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Jester 108", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Jester 109", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Jester 110", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Jester 111", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
 
-  createData_rip('Q2022', 'District Novice', "Jester 112", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Jester 113", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Jester 114", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Jester 115", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Jester 116", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Jester 117", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Jester 118", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Jester 119", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Jester 120", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Jester 121", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Jester 112", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Jester 113", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help" ),
+  createData_rip('Q2022', 'District Novice', "Jester 114", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Jester 115", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Jester 116", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Jester 117", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Jester 118", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Jester 119", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Jester 120", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Jester 121", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
 
-  createData_rip('Q2022', 'District Novice', "Madison 102", "Wed-07b", 4, "Team #A", 110, "Team #2", 10, "Team #3", 50),
-  createData_rip('Q2022', 'District Novice', "Madison 103", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Madison 104", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Madison 105", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Madison 106", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Madison 107", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Madison 108", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Madison 109", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Madison 110", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Madison 111", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Madison 102", "Wed-07b", 4, "Team #A", 110, "Team #2", 10, "Team #3", 50, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Madison 103", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Madison 104", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Madison 105", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Madison 106", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Madison 107", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Madison 108", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Madison 109", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Madison 110", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Madison 111", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
 
-  createData_rip('Q2022', 'District Novice', "Madison 112", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Madison 113", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Madison 114", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Madison 115", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Madison 116", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Madison 117", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Madison 118", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Madison 119", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Madison 120", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
-  createData_rip('Q2022', 'District Novice', "Madison 121", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20),
+  createData_rip('Q2022', 'District Novice', "Madison 112", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Madison 113", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Madison 114", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Madison 115", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Madison 116", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Madison 117", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Madison 118", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Madison 119", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Madison 120", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
+  createData_rip('Q2022', 'District Novice', "Madison 121", "Tue-07b", 3, "Team #1", 120, "Team #2", 180, "Team #3", 20, "Need help"),
 
 ];
 

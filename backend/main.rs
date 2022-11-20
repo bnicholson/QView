@@ -88,6 +88,7 @@ async fn main() -> std::io::Result<()> {
         api_scope = api_scope.service(services::pingmsg::endpoints(web::scope("/pingmsg")));    
         api_scope = api_scope.service(services::namelist::endpoints(web::scope("/namelist")));        
         api_scope = api_scope.service(services::division::endpoints(web::scope("/divisions")));
+        api_scope = api_scope.service(services::roominfo::endpoints(web::scope("/roominfo")));        
 
         // now route the "/scoreevents" logic to the same place as /api/scoreevents
         // this is needed for backwards compatibility with the old quizmachines (pre < 6.0)

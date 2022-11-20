@@ -70,6 +70,7 @@ async fn read_today(
 ) -> HttpResponse {
     let mut db = db.pool.get().unwrap();
 
+    println!("Inside /api/tournaments/today");
     // log this api call
     apicalllog(&req);
 

@@ -5,3 +5,4 @@ pub mod scoreevent;
 pub mod division;
 pub mod pingmsg;
 pub mod namelist;
+pub mod roominfo;

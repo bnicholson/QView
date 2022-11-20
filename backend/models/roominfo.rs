@@ -101,6 +101,38 @@ pub fn do_something(print: bool, only_one: bool) {               //-> redis::Red
     }
 }
 
+pub fn get_roominfo() -> Result<Vec<String>,Vec<String> > {//redis::RedisResult<(String,Vec<String>)> {
+    let client = redis::Client::open("redis://127.0.0.1/").unwrap();
+    let mut con = client.get_connection().unwrap();
+
+    // now load all the roominfo data from redis
+    let result : redis::RedisResult<(String,Vec<String>)> = redis::cmd("scan").arg("0").arg("MATCH").arg("QV:RI*")
+        .arg("COUNT").arg("10000").query(&mut con);//.unwrap();    //Result<T, RedisError>
+    println!("Result = {:?}",result);
+    let mut values = Vec::new();
+    let mut return_value = Vec::new();
+    if result.is_ok() {
+        values = result.unwrap().1;
+        println!("Index = {:?}", values);
+        for i in &values {
+            println!("I = {:?}",i);
+            match redis::cmd("get").arg(i).query(&mut con) {
+                Err(e) => {
+
+                },
+                Ok(rslt) => {
+                    return_value.push(rslt);
+                }
+
+            }
+        }
+    } else {
+        println!("Bad do someting");
+    }
+    
+    Ok(return_value)
+}
+
 // Construct a key for the roominfo information.
 // we will use this to update the roominfo in the cache.
 pub fn update_roominfo( ri: &mut RoomInfoData ) -> RoomInfoData {
