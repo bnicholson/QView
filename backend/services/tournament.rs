@@ -63,6 +63,32 @@ async fn read(
     }
 }
 
+#[get("/today")]
+async fn read_today(
+    db: Data<Database>,
+    req: HttpRequest,
+) -> HttpResponse {
+    let mut db = db.pool.get().unwrap();
+
+    // log this api call
+    apicalllog(&req);
+
+    // convert the query from the api call from timestamps in millis since 1970
+    // to an actual 
+    let now = Utc::now();
+    let from_dt = (now.timestamp()-(7*24*3600*8))*1000;
+    let to_dt = (now.timestamp() + (7*24*3600*8))*1000;
+
+    let result = models::tournament::read_between_dates(&mut db, from_dt, to_dt);
+    println!("Results: {:?} {:?} {:?}", from_dt, to_dt, result);
+
+    if result.is_ok() {
+        HttpResponse::Ok().json(result.unwrap())
+    } else {
+        HttpResponse::InternalServerError().finish()
+    }
+}
+ 
 #[post("")]
 async fn create(
     db: Data<Database>,
@@ -112,6 +138,7 @@ pub fn endpoints(scope: actix_web::Scope) -> actix_web::Scope {
     return scope
 //        .service(index)
         .service(get_between_dates)
+        .service(read_today)
         .service(read)
         .service(create)
         .service(update)
