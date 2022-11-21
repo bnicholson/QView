@@ -22,7 +22,7 @@ pub async fn write(
     let db = req.app_data::<Data<Database>>().unwrap();
     let mut mdb = db.pool.get().unwrap();
 
-    log::info!("Inside pingmsg");
+    log::info!("Inside namelist");
 
     // log this api call
     apicalllog(&req);
