@@ -14,6 +14,31 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
+export const RoomInfoAPI = {
+  get: async (tk: number )=>
+    await (await fetch(`/api/roominfo`)).json(),
+  create: async (division: string) =>
+    await (
+      await fetch('/api/divisions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: division }),
+      })
+    ).json(),
+  delete: async (id: number) =>
+    await fetch(`/api/divisions/${id}`, { method: 'DELETE' }),
+  update: async (id: number, division: string) =>
+    await fetch(`/api/divisions/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text: division }),
+    }),
+}
+
 interface Column_rip {
   id: 'tournament' | 'division' | 'room' | 'round' | 'question' | 'team1' | 'score1' | 'team2' | 'score2' | 'team3' | 'score3' | 'message';
   label: string;
@@ -60,6 +85,26 @@ const columns_rip: readonly Column_rip[] = [
   },
   { id: 'message', label: 'Message', minWidth: 100 },
 ];
+
+interface Room {
+  clientkey: String;
+  bldgroom: String;
+  chkd_in: String;
+  client_time: String;
+  tournament: String;
+  division: String;
+  room: String;
+  round: String;
+  question: number
+  error_msgs: String[];
+  clientip: String;
+  jobs_pending: Number;
+  qm_version: String;
+  resend_list: String[];
+  cmd_list: String[];
+  team: String[];
+  score: number[];
+}
 
 interface Data_rip {
   tournament: string;
@@ -144,12 +189,30 @@ const rows_rip = [
 
 export const RoundsInProgress = () => {
   const navigate = useNavigate();
+  const [processing, setProcessing] = React.useState<boolean>(false)
+  const [displayDate, setDisplayDate] = React.useState<Date>(new Date())
+  const [rooms, setRooms] = React.useState<Room[]>([])
 
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
+  useEffect(() => {
+    setProcessing(true)
+    RoomInfoAPI.get(0).then((rooms: Room[]) => {
+      setRooms(rooms)
+      setProcessing(false)
+    })
+    console.log("In useeffect - pulling from room api")
+    console.log(rooms)
+    const interval=setInterval(()=>{
+      setDisplayDate([])
+    },10000)
+    return()=>clearInterval(interval)
+  }, [displayDate])
+
 
   return (
     <div>

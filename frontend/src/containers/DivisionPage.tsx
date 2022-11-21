@@ -128,7 +128,7 @@ export const Divisions = () => {
                   color="inherit"
                   href="/tdeditor"
                 >
-                  Tournament Editor (tabs)&nbsp;&nbsp;&nbsp;&nbsp;
+                  Tournament Editor&nbsp;&nbsp;&nbsp;&nbsp;
                   </Link>
               </Typography>
             </CardContent>
