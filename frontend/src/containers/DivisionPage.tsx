@@ -68,7 +68,6 @@ export const Divisions = () => {
   const handleEditorClickOpen = () => {
     setDivisionEditorOpen(true);
   };
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -116,20 +115,21 @@ export const Divisions = () => {
           <Box sx={{ display: 'flex' }}>
             <CardContent>
               <Typography align="left" variant="h5" color="primary" >
-                  <Link
+                <Link
                   underline="hover"
                   color="inherit"
                   href="/roundsinprogress"
                 >
                   Rounds In Progress&nbsp;&nbsp;&nbsp;&nbsp;
-                  </Link>
-                  <Link
+                </Link>
+                <Link
                   underline="hover"
                   color="inherit"
                   href="/tdeditor"
                 >
                   Tournament Editor&nbsp;&nbsp;&nbsp;&nbsp;
-                  </Link>
+                </Link>
+                < a href="http://localhost:3000/swagger-ui/">Swagger UI</a>
               </Typography>
             </CardContent>
           </Box>

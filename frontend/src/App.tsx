@@ -112,7 +112,7 @@ const App = () => {
                 {auth.isAuthenticated && <a onClick={() => { auth.logout(); apollo.resetStore(); }}>Logout</a>}
                 {!auth.isAuthenticated && <button onClick={() => navigate('/login')}>Login/Register</button>}
               </Typography>
-              {auth.isAuthenticated && <IconButton onClick={() => navigate('/account')}> <AccountCircle/></IconButton>}
+              {auth.isAuthenticated && <IconButton onClick={() => navigate('/account')}> <AccountCircle /></IconButton>}
             </Toolbar>
           </AppBar>
 
@@ -268,7 +268,7 @@ const App = () => {
           </Typography>
         </Box>
       </div >
-      <CssBaseline/>
+      <CssBaseline />
     </ThemeProvider>
   )
 }

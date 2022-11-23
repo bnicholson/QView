@@ -147,8 +147,9 @@ export const TDEditor = () => {
           <Tab label="Games/Quizzes" {...a11yProps(0)} />
           <Tab label="Schedule" {...a11yProps(1)} />
           <Tab label="Teams" {...a11yProps(2)} />
-          <Tab label="Other" {...a11yProps(3)} />
-          <Tab label="Settings" {...a11yProps(4)} />
+          <Tab label="In Progress" {...a11yProps(3)} />
+          <Tab label="Other" {...a11yProps(4)} />
+          <Tab label="Settings" {...a11yProps(5)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -162,9 +163,12 @@ export const TDEditor = () => {
         Teams
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Other
+        In Progress
       </TabPanel>
       <TabPanel value={value} index={4}>
+        Other
+      </TabPanel>
+      <TabPanel value={value} index={5}>
         Settings
       </TabPanel>
     </div >
