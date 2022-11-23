@@ -5,7 +5,7 @@ appenders:
   qview_stdout:
     kind: console
     encoder:
-      pattern: "{h({d(%Y-%m-%d %H:%M:%S.%f)(utc)} - {l}: {m}{n})}"
+      pattern: "{h({d(%Y-%m-%d %H:%M:%S.%6f)(utc)} - {l}: {m}{n})}"
       
 root:
   level: debug
