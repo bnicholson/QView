@@ -8,11 +8,16 @@ use actix_files::{Files};
 use actix_web::{App, HttpServer, web};
 use actix_web::middleware::{Compress, Logger, NormalizePath};
 use actix_web::web::Data;
-//use syslog::{Facility, Formatter3164, Formatter5424, BasicLogger, LogFormat};
-//use log::{error, info, warn, Record, Level, Metadata, LevelFilter, SetLoggerError };
-//use log4rs::file::{ Deserializers };
-//use log4rs::file::Deserializers;
-use log4rs::file::Deserializers;
+use models::tournament::{ Tournament };
+use services::tournament::{ TournamentDoc };
+
+// Swagger UI stuff
+use utoipa_swagger_ui::SwaggerUi;
+use utoipa::{
+    openapi::security::{ ApiKey, ApiKeyValue, SecurityScheme },
+    Modify, 
+    OpenApi,
+};
 
 mod schema;
 mod services;
@@ -61,6 +66,14 @@ async fn main() -> std::io::Result<()> {
 
     // Start the actix-web server
     HttpServer::new(move || {
+        // Create the swagger app
+//        App::new()
+//        .service(
+//            SwaggerUi::new("/swagger-ui/{_:.*}")
+//                .url("/api-doc/openapi.json",TournamentDoc::openapi()),
+//        );
+
+        // Startup the actual working Application
         let mut app = App::new()
             .wrap(Compress::default())
             .wrap(NormalizePath::trim())
@@ -73,6 +86,11 @@ async fn main() -> std::io::Result<()> {
         app = app.app_data(Data::new(app_data.mailer.clone()));
         app = app.app_data(Data::new(schema.clone()));
         app = app.app_data(Data::new(app_data.storage.clone()));
+
+        app = app.service(
+            SwaggerUi::new("/swagger-ui/{_:.*}")
+                .url("/api-doc/openapi.json",TournamentDoc::openapi()),
+            );
 
         let mut api_scope = web::scope("/api");
         api_scope = api_scope.service(web::resource("/graphql").guard(guard::Post()).to(graphql::index));
@@ -98,6 +116,8 @@ async fn main() -> std::io::Result<()> {
         // and time to do the /namelist
         app = app.route("/namelist",web::get().to(services::namelist::write));
 
+
+
         #[cfg(debug_assertions)]
         {
             /* Development-only routes */
@@ -110,7 +130,10 @@ async fn main() -> std::io::Result<()> {
         }
 
         app = app.service(api_scope);
+
         app = app.default_service(web::get().to(create_rust_app::render_views));
         app
     }).bind(host_port)?.run().await
+
+
 }

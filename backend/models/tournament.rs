@@ -6,6 +6,7 @@ use diesel::QueryResult;
 use serde::{Deserialize, Serialize};
 use crate::models::common::*;
 use chrono::{ Utc, DateTime, TimeZone, naive };
+use utoipa::{ ToSchema };
 
 #[tsync::tsync]
 #[derive(
@@ -16,7 +17,7 @@ Clone,
 Queryable,
 Insertable,
 Identifiable,
-AsChangeset,
+AsChangeset, ToSchema
 )]
 #[diesel(table_name=tournaments)]
 #[diesel(primary_key(tid))]

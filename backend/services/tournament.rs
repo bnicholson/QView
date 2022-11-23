@@ -4,6 +4,8 @@ use crate::{models, models::tournament::{Tournament, TournamentChangeset}};
 use crate::models::common::*;
 use chrono::{ Utc, TimeZone };
 use crate::models::apicalllog::{apicalllog};
+use utoipa::{ ToSchema, OpenApi };
+
 
 
 #[get("")]
@@ -30,7 +32,23 @@ async fn get_between_dates(
         HttpResponse::InternalServerError().finish()
     }
 }
+#[derive(OpenApi)]
+#[openapi(paths(index))]
+pub struct TournamentDoc;
 
+#[utoipa::path(
+        get,
+        path = "/tournaments",
+        responses(
+            (status = 200, description = "Tournaments found successfully", body = Tournament),
+            (status = 404, description = "Tournament not found")
+        ),
+        params(
+            ("page" = u64, Path, description = "Page to read"),
+            ("page_size" = u64, Path, description = "How many Tournaments to return")
+        )
+    )
+]
 #[get("")]
 async fn index(
     db: Data<Database>,
