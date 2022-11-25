@@ -115,6 +115,7 @@ async fn create(
 ) -> Result<HttpResponse, Error> {
     let mut db = db.pool.get().unwrap();
 
+    println!("Inside tournement model create");
     let result: Tournament = models::tournament::create(&mut db, &item).expect("Creation error");
 
     Ok(HttpResponse::Created().json(result))

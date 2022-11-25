@@ -25,16 +25,17 @@ export const TournamentAPI = {
     await (await fetch(`/api/tournaments?page=${page}&page_size=${size}`)).json(),
   getByDate: async (fromDate: number, toDate: number) =>
     await (await fetch(`/api/tournaments?from_date=${fromDate}&to_date=${toDate}`)).json(),
-  create: async (tournament: string) =>
+  create: async (tournament: TournamentChangeset) => {
+    alert(JSON.stringify(tournament));
     await (
       await fetch('/api/tournaments', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ text: tournament }),
+        body: JSON.stringify({ tournament: tournament }),
       })
-    ).json(),
+    ).json()},
   delete: async (id: number) =>
     await fetch(`/api/tournaments/${id}`, { method: 'DELETE' }),
   update: async (id: number, tournament: string) =>

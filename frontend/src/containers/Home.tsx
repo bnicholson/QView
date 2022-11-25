@@ -266,18 +266,20 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
   const handleTournamentEditorClose = () => {
     setTournamentEditorOpen(false);
   };
-  const createTournament = async (tournament: Tournament) => {
-    await TournamentAPI.create(tournament)
+
+  const createTournament = async (tournament: TournamentChangeset) => {
+    await TournamentAPI.create(tournament).catch( err => {
+      alert("Didn't save -")
+    })
   }
 
   const handleTournamentEditorSave = () => {
-    let tournament: Tournament = {
-      tid: 0,
+    let tournamentCS: TournamentChangeset = {
       organization: org,
       tname: tournamentName,
       breadcrumb: breadcrumb,
-      fromdate: fromDate,
-      todate: toDate,
+      fromdate: fromDate?.toDate(),
+      todate: toDate?.toDate(),
       venue: venue,
       city: city,
       region: region,
@@ -286,13 +288,14 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
       contactemail: contactemail,
       hide: true,
       shortinfo: shortinfo,
-      info: info,
-      created_at: new Date(),
-      updated_at: new Date()
+      info: info
     };
 
-    createTournament(tournament);
-    setTournamentEditorOpen(false);
+    createTournament(tournamentCS).catch( err => {
+      setTournamentEditorOpen(false);
+      alert("Didn't save");
+      setTournamentEditorOpen(true);
+    });
   };
 
   const Item = styled(Paper)(({ theme }) => ({
@@ -477,6 +480,30 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
                     }}
                   />
                 </Grid>
+
+                <Grid item xs={6}>
+                <InputLabel>Contact </InputLabel>
+                  <TextField
+                    variant="outlined"
+                    label="Contact"
+                    value={contact}
+                    onChange={(event) => {
+                      setContact(event.target.value as string);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                <InputLabel>Contact Email</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    label="Contact Email"
+                    value={contactemail}
+                    onChange={(event) => {
+                      setContactEmail(event.target.value as string);
+                    }}
+                  />
+                </Grid>
+
                 <Grid item xs={12}>
                 <InputLabel>One line of information about the tournament</InputLabel>
                   <TextField

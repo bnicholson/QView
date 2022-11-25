@@ -224,9 +224,10 @@ interface TournamentChangeset {
   region: string
   country: string
   contact: string
-  contactemail: string | undefined
+  contactemail: string
   hide: boolean
-  info: string | undefined
+  shortinfo: string
+  info: string
 }
 
 interface FileInfo {

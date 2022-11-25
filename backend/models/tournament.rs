@@ -17,7 +17,7 @@ Clone,
 Queryable,
 Insertable,
 Identifiable,
-AsChangeset, ToSchema
+ToSchema
 )]
 #[diesel(table_name=tournaments)]
 #[diesel(primary_key(tid))]
@@ -57,9 +57,10 @@ pub struct TournamentChangeset {
     pub region: String,
     pub country: String,
     pub contact: String,
-    pub contactemail: Option<String>,
+    pub contactemail: String,
     pub hide: bool,
-    pub info: Option<String>
+    pub shortinfo: String,
+    pub info: String
 }
 
 pub fn create(db: &mut Connection, item: &TournamentChangeset) -> QueryResult<Tournament> {
