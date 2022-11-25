@@ -27,6 +27,7 @@ import { selectDisplayDate, selectTournament, setDisplayDate, setTournament, tog
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid'
+import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel'
@@ -47,7 +48,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItem from '@mui/material/ListItem'
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
-//import { Tournament, BigId } from '../types/rust.d';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -171,7 +172,7 @@ export const Home = () => {
               />
               <CardContent>
                 <Typography align="left" variant="body1" color="text.primary" >
-                  <span>
+                  <div>
                     Contact: {tournament.contact} Email:{tournament.contactemail}<br />
                     Organization: {tournament.organization}<br />
                     Venue: {tournament.venue}<br />
@@ -183,7 +184,7 @@ export const Home = () => {
                     Originally created: {tournament.created_at} <br />
                     Last Update: {tournament.updated_at}
                     breadcrumbs.tournament  --- not working correctly - why?
-                  </span>
+                  </div>
                 </Typography>
               </CardContent>
             </Box>
@@ -246,15 +247,53 @@ const Transition = React.forwardRef(function Transition(
 
 
 const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEditorOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
+  const [tournamentName, setTournamentName] = React.useState<string>("")
+  const [venue, setVenue] = React.useState<string>("")
+  const [org, setOrg] = React.useState<string>("Nazarene")
+  const [fromDate, setFromDate] = React.useState<Dayjs | null>(null)
+  const [toDate, setToDate] = React.useState<Dayjs | null>(null)
+  const [city, setCity] = React.useState<string>("")
+  const [region, setRegion] = React.useState<string>("")
+  const [country, setCountry] = React.useState<string>("")
+  const [hide, setHide] = React.useState<string>("True");
+  const [breadcrumb, setBreadcrumb] = React.useState<string>("")
+  const [shortinfo, setShortInfo] = React.useState<string>("");
+  const [info, setInfo] = React.useState<string>("");
+  const [contact, setContact] = React.useState<string>("somebody");
+  const [contactemail, setContactEmail] = React.useState<string>("@@@");
+
+
   const handleTournamentEditorClose = () => {
     setTournamentEditorOpen(false);
   };
-  const [age, setAge] = React.useState('');
-  const [value, setValue] = React.useState<Dayjs | null>(null);
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
+  const createTournament = async (tournament: Tournament) => {
+    await TournamentAPI.create(tournament)
   }
+
+  const handleTournamentEditorSave = () => {
+    let tournament: Tournament = {
+      tid: 0,
+      organization: org,
+      tname: tournamentName,
+      breadcrumb: breadcrumb,
+      fromdate: fromDate,
+      todate: toDate,
+      venue: venue,
+      city: city,
+      region: region,
+      country: country,
+      contact: contact,
+      contactemail: contactemail,
+      hide: true,
+      shortinfo: shortinfo,
+      info: info,
+      created_at: new Date(),
+      updated_at: new Date()
+    };
+
+    createTournament(tournament);
+    setTournamentEditorOpen(false);
+  };
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode == 'dark' ? '#1a2027' : '#fff',
@@ -265,34 +304,6 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
   }));
 
   const theme = createTheme();
-
-//  const useStyle = makeStyles((theme) => {
-//    root: {
-
-//    }
-//  });
-
-//  const classes = useStyle();
-
-  let tournament: Tournament = {
-    tid: 0,
-    organization: "Nazarene",
-    tname: "Q5566",
-    breadcrumb: "",
-    fromdate: new Date(),
-    todate: new Date(),
-    venue: "",
-    city: "",
-    region: "",
-    country: "",
-    contact: "",
-    contactemail: "",
-    hide: true,
-    shortinfo: "",
-    info: "",
-    created_at: new Date(),
-    updated_at: new Date()
-  };
 
   return (
     <Dialog
@@ -314,126 +325,188 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             Tournament Settings
           </Typography>
-          <Button autoFocus color="inherit" onClick={handleTournamentEditorClose}>
-            save
+          <Button autoFocus color="inherit" onClick={handleTournamentEditorSave}>
+            Save
           </Button>
         </Toolbar>
       </AppBar>
-      <List>
-        <ListItem>
-          <Grid container>
-            <Grid item xs={6}>
-              <Select
-                labelId='demo-simple-select-label55'
-                value={tournament.organization}
-                label="Organization:"
-                onChange={handleChange}
-              >
-                <MenuItem value={10}>Nazarene</MenuItem>
-                <MenuItem value={20}>Other</MenuItem>
-              </Select>
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                variant="outlined"
-                label="Tournament Name:"
-                value={tournament.tname}
-              />
-            </Grid>
-            <Grid item xs={6}>
-
-            </Grid>
-          </Grid>
-        </ListItem>
-        <ListItem button>
-          <ListItemText primary="Phone ringtone" secondary="Titania" />
-        </ListItem>
-        <Divider />
-        <ListItem button>
-          <ListItemText
-            primary="Default notification ringtone"
-            secondary="Tethys"
-          />
-        </ListItem>
-      </List>
-      <div className="Form">
-        <Box sx={{ flex: 1 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={6} md={8}>
-              <Item>sx=6 md=8
-                <Box sx={{ flex: 1 }}>
-                  <FormControl fullWidth>
-                    <InputLabel id='demo-simple-select-label'>Age</InputLabel>
-                    <Select
-                      labelId='demo-simple-select-label'
-                      value={age}
-                      label="Age"
-                      onChange={handleChange}
-                    >
-                      <MenuItem value={10}>Nazarene</MenuItem>
-                      <MenuItem value={20}>Other</MenuItem>
-                    </Select>
-                  </FormControl>
-                  <TextField id="standard-basic" label="Standard" variant="standard" />
-                </Box>
-              </Item>
-            </Grid>
-            <Grid item xs={6} md={4}>
-              <Item>xs=6 md=4
-
-              </Item>
-            </Grid>
-            <Grid item xs={6} md={4}>
-              <Item>xs={6} md={4}
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Basic example"
-                    value={value}
-                    onChange={(newValue) => {
-                      setValue(newValue);
+      <div className="form">
+        <Box component="form">
+          <List>
+            <ListItem>
+              <Grid container>
+                <Grid item xs={6} >
+                  <InputLabel>Organization</InputLabel>
+                  <Select
+                    labelId='demo-simple-select-label55'
+                    id="select-organization"
+                    label="Organization"
+                    value={org}
+                    onChange={(event) => {
+                      setOrg(event.target.value as string);
                     }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
-              </Item>
-            </Grid>
-            <Grid item xs={6} md={8}>
-              <Item>xs=6 md=8
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Basic example"
-                    value={value}
-                    onChange={(newValue) => {
-                      setValue(newValue);
+                  >
+                    <MenuItem value={"Nazarene"}>Nazarene</MenuItem>
+                    <MenuItem value={"Other"}>Other</MenuItem>
+                  </Select>
+                </Grid>
+                <Grid item xs={6}>
+                <InputLabel>Tournament Name ( must be unique)</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    label="Tournament Name"
+                    value={tournamentName}
+                    onChange={(event) => {
+                      setTournamentName(event.target.value as string);
                     }}
-                    renderInput={(params) => <TextField {...params} />}
                   />
-                </LocalizationProvider>
-              </Item>
-            </Grid>
-          </Grid>
-        </Box>
-        <Box display="inline-block">
-          tid
-          Organization
-          tname
-          breadcrumb
-          fromdate
-          todate
-          venue
-          city
-          state
-          region,
-          country,
-          contact,
-          contactemail
-          hide,
-          shortinfo,
-          info,
-          created_at,
-          updated_at,
-          history,
+                </Grid>
+                <Grid item xs={6}>
 
+                </Grid>
+              </Grid>
+            </ListItem>
+            <ListItem>
+              <Grid container>
+                <Grid item xs={6} md={4}>
+                <InputLabel>Tournament Start Date</InputLabel>
+                  <Item>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        label="From Date"
+                        value={fromDate}
+                        onChange={(newValue) => {
+                          setFromDate(newValue);
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    </LocalizationProvider>
+                  </Item>
+                </Grid>
+                <Grid item xs={6}>
+                <InputLabel>Tournament End Date</InputLabel>
+                  <Item >
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        label="To Date"
+                        value={toDate}
+                        onChange={(newValue) => {
+                          setToDate(newValue);
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    </LocalizationProvider>
+                  </Item>
+                </Grid>
+              </Grid>
+            </ListItem>
+            <ListItem>
+              <Grid container>
+                <Grid item xs={4}>
+                <InputLabel>Venue</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    label="Venue"
+                    value={venue}
+                    onChange={(event) => {
+                      setVenue(event.target.value as string);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                <InputLabel>Hide or Show this Tournament</InputLabel>
+                  <Select
+                    labelId='demo-simple-select-label55'
+                    id="select-organization"
+                    label="Hide"
+                    value={hide}
+                    onChange={(event) => {
+                      setHide(event.target.value as string);
+                    }}
+                  >
+                    <MenuItem value={"True"}>Hide</MenuItem>
+                    <MenuItem value={"False"}>Show to public</MenuItem>
+                  </Select>
+                </Grid>
+                <Grid item xs={4}>
+                <InputLabel>Breadcrumb (short url name)</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    label="Breadcrumb"
+                    value={breadcrumb}
+                    onChange={(event) => {
+                      setBreadcrumb(event.target.value as string);
+                    }}
+                  />
+                </Grid>
+
+              </Grid>
+            </ListItem>
+            <ListItem>
+              <Grid container>
+                <Grid item xs={4}>
+                <InputLabel>City</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    label="City"
+                    value={city}
+                    onChange={(event) => {
+                      setCity(event.target.value as string);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                <InputLabel>Region/State/Province</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    label="Region/State/Province:"
+                    value={region}
+                    onChange={(event) => {
+                      setRegion(event.target.value as string);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                <InputLabel>Country</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    label="Country"
+                    value={country}
+                    onChange={(event) => {
+                      setCountry(event.target.value as string);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                <InputLabel>One line of information about the tournament</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    label="Short Information"
+                    value={shortinfo}
+                    style={{ width: 900 }}
+                    onChange={(event) => {
+                      setShortInfo(event.target.value as string);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Box>
+                    <InputLabel>Detailed Information.</InputLabel>
+                    <TextareaAutosize
+                      aria-label="minimum height"
+                      minRows={12}
+                      placeholder="Minimum 3 rows"
+                      style={{ width: 900 }}
+                      value={info}
+                      onChange={(event) => {
+                        setInfo(event.target.value as string);
+                      }}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+            </ListItem>
+          </List>
         </Box>
       </div >
     </Dialog >
@@ -441,80 +514,3 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
 
 }
 
-
-const test = () => {
-  const [age, setAge] = React.useState('');
-  const [value, setValue] = React.useState<Dayjs | null>(null);
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
-  }
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode == 'dark' ? '#1a2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  }));
-
-  return (
-    <div className="Form">
-      <Box sx={{ flex: 1 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={6} md={8}>
-            <Item>sx=6 md=8
-              <Box sx={{ flex: 1 }}>
-                <FormControl fullWidth>
-                  <InputLabel id='demo-simple-select-label'>Age</InputLabel>
-                  <Select
-                    labelId='demo-simple-select-label'
-                    value={age}
-                    label="Age"
-                    onChange={handleChange}
-                  >
-                    <MenuItem value={10}>Nazarene</MenuItem>
-                    <MenuItem value={20}>Other</MenuItem>
-                  </Select>
-                </FormControl>
-                <TextField id="standard-basic" label="Standard" variant="standard" />
-              </Box>
-            </Item>
-          </Grid>
-          <Grid item xs={6} md={4}>
-            <Item>xs=6 md=4
-
-            </Item>
-          </Grid>
-          <Grid item xs={6} md={4}>
-            <Item>xs={6} md={4}
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Basic example"
-                  value={value}
-                  onChange={(newValue) => {
-                    setValue(newValue);
-                  }}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              </LocalizationProvider>
-            </Item>
-          </Grid>
-          <Grid item xs={6} md={8}>
-            <Item>xs=6 md=8
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Basic example"
-                  value={value}
-                  onChange={(newValue) => {
-                    setValue(newValue);
-                  }}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              </LocalizationProvider>
-            </Item>
-          </Grid>
-        </Grid>
-      </Box>
-    </div >
-  )
-}

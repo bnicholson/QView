@@ -1,5 +1,25 @@
 import React, { useEffect, useState } from 'react'
 
+let tournament: Tournament = {
+  tid: 0,
+  organization: "Nazarene",
+  tname: "",
+  breadcrumb: "",
+  fromdate: new Date(),
+  todate: new Date(),
+  venue: "",
+  city: "",
+  region: "",
+  country: "",
+  contact: "",
+  contactemail: "",
+  hide: true,
+  shortinfo: "",
+  info: "",
+  created_at: new Date(),
+  updated_at: new Date()
+};
+
 export const TournamentAPI = {
   get: async (page: number, size: number) =>
     await (await fetch(`/api/tournaments?page=${page}&page_size=${size}`)).json(),

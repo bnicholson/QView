@@ -135,7 +135,7 @@ export const Divisions = () => {
           </Box>
         </Card>
         {divisions.map((division, index) =>
-          <Card style={{ maxWidth: 845 }} key={division.dname}>
+          <Card key={division.dname}>
             <CardHeader
               action={
                 <IconButton onClick={() => handleEditorClickOpen()} aria-label="settings">
