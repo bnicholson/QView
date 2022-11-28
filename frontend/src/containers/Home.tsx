@@ -142,11 +142,7 @@ export const Home = () => {
       </div>
       <div className="Form">
         {tournaments.map((tournament, index) =>
-          <Card style={{ maxWidth: 845 }} key={tournament.tname}
-            onClick={() => {
-              dispatcher(setTournament(tournament.tname));
-              navigate("/division")
-            }} >
+          <Card style={{ maxWidth: 845 }} key={tournament.tname} >
             <CardHeader
               avatar={
                 <Avatar sx={{ bgcolor: red[500] }} aria-label="tournament">
@@ -154,14 +150,19 @@ export const Home = () => {
                 </Avatar>
               }
               action={
-                <IconButton aria-label="settings">
-                  <SettingsIcon />
+                <IconButton aria-label="settings" onClick={(index) => 
+                  alert(tournament.tid)
+                }>
+                  <SettingsIcon/>
                 </IconButton>
               }
               title={<Typography variant="h5">{tournament.tname}</Typography>}
               subheader={<Typography variant="h6"> {tournament.fromdate} - {tournament.todate}</Typography>}
             />
-            <Box sx={{ display: 'flex' }}>
+            <Box sx={{ display: 'flex' }}             onClick={() => {
+              dispatcher(setTournament(tournament.tname));
+              navigate("/division")
+            }} >
               <CardMedia
                 component="img"
                 sx={{ width: 200 }}
