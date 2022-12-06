@@ -182,8 +182,8 @@ export const Home = () => {
                     ID: {tournament.tid}<br />
                     Hidden: {tournament.hide}<br />
                     Originally created: {tournament.created_at} <br />
-                    Last Update: {tournament.updated_at}
-                    breadcrumbs.tournament  --- not working correctly - why?
+                    Last Update: {tournament.updated_at}<br />
+                    breadcrumbs: {tournament.breadcrumb}
                   </div>
                 </Typography>
               </CardContent>

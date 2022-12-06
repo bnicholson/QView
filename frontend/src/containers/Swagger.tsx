@@ -99,43 +99,43 @@ export const Swagger = () => {
                         <CardContent>
                             <List>
                                 <ListItem>
-                                    bldgroom -> Building and room the client is in
+                                    bldgroom -- uilding and room the client is in
                                 </ListItem>
                                 <ListItem>
-                                    key   -> client's key
+                                    key   -- client's key
                                 </ListItem>
                                 <ListItem>
-                                    tk    -> Tournament key
+                                    tk    -- Tournament key
                                 </ListItem>
                                 <ListItem>
-                                    org   -> Organization
+                                    org   -- Organization
                                 </ListItem>
                                 <ListItem>
-                                    tn    -> Tournament       
+                                    tn    -- Tournament       
                                 </ListItem>
                                 <ListItem>
-                                    dn    -> Division
+                                    dn    -- Division
                                 </ListItem>
                                 <ListItem>
-                                    rm    -> Room
+                                    rm    -- Room
                                 </ListItem>
                                 <ListItem>
-                                    rd    -> Round
+                                    rd    -- Round
                                 </ListItem>
                                 <ListItem>
-                                    qn    -> Question #
+                                    qn    -- Question #
                                 </ListItem>
                                 <ListItem>
-                                    ts    -> The time this event occurred on the client using the client's clock
+                                    ts    -- The time this event occurred on the client using the client's clock
                                 </ListItem>
                                 <ListItem>
-                                    qmv   -> QuizMachine Version
+                                    qmv   -- QuizMachine Version
                                 </ListItem>
                                 <ListItem>
-                                    jp    -> Jobs Pending (# of jobs that are waiting to be sent to the client)
+                                    jp    -- Jobs Pending (# of jobs that are waiting to be sent to the client)
                                 </ListItem>
                                 <ListItem>
-                                   myip  -> IP address that the client is connect to a network
+                                   myip  -- IP address that the client is connect to a network
                                 </ListItem>
                             </List>
                         </CardContent>
