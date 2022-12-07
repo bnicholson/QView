@@ -2,6 +2,8 @@ extern crate diesel;
 extern crate log;
 extern crate log4rs;
 extern crate log4rs_syslog;
+use tracing::{info, error, Level};
+use tracing_subscriber::FmtSubscriber;
 
 use actix_web::guard;
 use actix_files::{Files};
@@ -29,6 +31,13 @@ mod graphql;
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
 
+    #[cfg(debug_assertions)] {
+        let subscriber = FmtSubscriber::builder()
+            .with_max_level(Level::DEBUG)
+            .finish();
+        tracing::subscriber::set_global_default(subscriber).expect("setting default subscriber failed");
+    }
+    
     #[cfg(not(debug_assertions))] {
          // Handle setting up log4rs (logging)
         // add syslog support
