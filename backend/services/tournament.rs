@@ -1,3 +1,4 @@
+use actix_http::HttpMessage;
 use actix_web::{delete, Error, get, HttpResponse, HttpRequest, post, put, Result, web::{Data, Json, Path, Query}};
 use create_rust_app::Database;
 use crate::{models, models::tournament::{Tournament, TournamentChangeset}};
@@ -131,7 +132,8 @@ pub struct TCS {
 #[post("")]
 async fn create(
     db: Data<Database>,
-    Json(item): Json<TournamentChangeset>,
+    req: HttpRequest,
+    Json(item): Json<TournamentChangeset>    
 ) -> Result<HttpResponse, Error> {
     let mut db = db.pool.get().unwrap();
 
@@ -188,14 +190,15 @@ pub fn endpoints(scope: actix_web::Scope) -> actix_web::Scope {
         .service(destroy);
 }
 
-struct TournamentResult {
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct TournamentResult {
     code : i32,
     message: String,
     data : Option<Tournament>,
 }
 
 
-pub fn process_returns(result : QueryResult<Tournament>) -> TournamentResult {
+pub fn process_response(result : QueryResult<Tournament>) -> TournamentResult {
 
     let mut code = 200;
     let mut msg = "";
@@ -210,9 +213,8 @@ pub fn process_returns(result : QueryResult<Tournament>) -> TournamentResult {
         Ok(output) => {
             println!("Create Tourney (output)-> {:?}",output);
             response.code = 200;
-            response.message = "";
-            response.data = output;
-            response
+            response.message = "".to_string();
+            response.data = Some(output);
         },
         Err(e) => {
             match e {
@@ -220,29 +222,24 @@ pub fn process_returns(result : QueryResult<Tournament>) -> TournamentResult {
                     match dbek {
                         UniqueViolation => {
                             response.code = 200;
-                            response.message = "Duplicate Tournament";
+                            response.message = "Duplicate Tournament".to_string();
                             println!("TOurnament create-> {:?}",e);
-                            response
                         },
                         _ => {
                             response.code = 200;
-                            response.message = "e";
+                            response.message = "e".to_string();
                             println!("TOurnament create-> {:?}",e);
-                            response
-                        }
-                    },
-                    z => {
-                        response.code = 200;
-                        response.message = "";
-                        response
-                    },
+                        },
+                    }
                 },
-                x => {
+                _x => {
                     response.code = 200;
-                    responsee.message = "";         
-                    response
+                    response.message = "".to_string();         
                 },
-            };            
-        },
+            }            
+        }
     }    
+
+    // return the result
+    response
 }

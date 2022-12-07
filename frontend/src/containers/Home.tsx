@@ -182,7 +182,7 @@ export const Home = () => {
                     ID: {tournament.tid}<br />
                     Hidden: {tournament.hide}<br />
                     Originally created: {tournament.created_at} <br />
-                    Last Update: {tournament.updated_at}<br />
+                    Last Update: {tournament.updated_at} <br />
                     breadcrumbs: {tournament.breadcrumb}
                   </div>
                 </Typography>
@@ -291,6 +291,9 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
       shortinfo: shortinfo,
       info: info
     };
+
+    let pDate = fromDate?.toDate();
+    console.log("FromDate = " + pDate);
 
     createTournament(tournamentCS).catch( err => {
       setTournamentEditorOpen(false);
