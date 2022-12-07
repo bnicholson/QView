@@ -236,3 +236,20 @@ interface FileInfo {
   name: string
   url: string | undefined
 }
+
+interface TCS {
+  organization: string | undefined
+  tname: string | undefined
+  breadcrumb: string | undefined
+  fromdate: NaiveDate | undefined
+  todate: NaiveDate | undefined
+  venue: string | undefined
+  city: string | undefined
+  region: string | undefined
+  country: string | undefined
+  contact: string | undefined
+  contactemail: string | undefined
+  hide: boolean | undefined
+  shortinfo: string | undefined
+  info: string | undefined
+}

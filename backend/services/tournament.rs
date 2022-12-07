@@ -5,8 +5,9 @@ use crate::models::common::*;
 use chrono::{ Utc, TimeZone };
 use crate::models::apicalllog::{apicalllog};
 use utoipa::{ ToSchema, OpenApi };
-
-
+use serde::{Serialize, Deserialize };
+use diesel::{QueryResult};
+use diesel::result::Error as DBError;
 
 #[get("")]
 async fn get_between_dates(
@@ -107,7 +108,26 @@ async fn read_today(
         HttpResponse::InternalServerError().finish()
     }
 }
- 
+
+#[tsync::tsync]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct TCS {   
+    pub organization: Option<String>,
+    pub tname: Option<String>,
+    pub breadcrumb: Option<String>,
+    pub fromdate: Option<chrono::naive::NaiveDate>,
+    pub todate: Option<chrono::naive::NaiveDate>,
+    pub venue: Option<String>,
+    pub city: Option<String>,
+    pub region: Option<String>,
+    pub country: Option<String>,
+    pub contact: Option<String>,
+    pub contactemail: Option<String>,
+    pub hide: Option<bool>,
+    pub shortinfo: Option<String>,
+    pub info: Option<String>
+}
+
 #[post("")]
 async fn create(
     db: Data<Database>,
@@ -115,10 +135,13 @@ async fn create(
 ) -> Result<HttpResponse, Error> {
     let mut db = db.pool.get().unwrap();
 
-    println!("Inside tournement model create");
-    let result: Tournament = models::tournament::create(&mut db, &item).expect("Creation error");
+    println!("Inside tournement model create {:?}", item);
+    
+    let result : QueryResult<Tournament> = models::tournament::create(&mut db, &item);
 
-    Ok(HttpResponse::Created().json(result))
+    let response = process_response(result);
+
+    Ok(HttpResponse::Created().json(response))
 }
 
 #[put("/{id}")]
@@ -163,4 +186,63 @@ pub fn endpoints(scope: actix_web::Scope) -> actix_web::Scope {
         .service(create)
         .service(update)
         .service(destroy);
+}
+
+struct TournamentResult {
+    code : i32,
+    message: String,
+    data : Option<Tournament>,
+}
+
+
+pub fn process_returns(result : QueryResult<Tournament>) -> TournamentResult {
+
+    let mut code = 200;
+    let mut msg = "";
+    let mut data : Option<Tournament> = None;
+    let mut response = TournamentResult {
+        code : 200,
+        message : "".to_string(),
+        data : None,
+    };
+
+    match result {
+        Ok(output) => {
+            println!("Create Tourney (output)-> {:?}",output);
+            response.code = 200;
+            response.message = "";
+            response.data = output;
+            response
+        },
+        Err(e) => {
+            match e {
+                DBError::DatabaseError(dbek,e) => {
+                    match dbek {
+                        UniqueViolation => {
+                            response.code = 200;
+                            response.message = "Duplicate Tournament";
+                            println!("TOurnament create-> {:?}",e);
+                            response
+                        },
+                        _ => {
+                            response.code = 200;
+                            response.message = "e";
+                            println!("TOurnament create-> {:?}",e);
+                            response
+                        }
+                    },
+                    z => {
+                        response.code = 200;
+                        response.message = "";
+                        response
+                    },
+                },
+                x => {
+                    response.code = 200;
+                    responsee.message = "";         
+                    response
+                },
+            };            
+        },
+    }    
 }

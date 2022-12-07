@@ -26,16 +26,18 @@ export const TournamentAPI = {
   getByDate: async (fromDate: number, toDate: number) =>
     await (await fetch(`/api/tournaments?from_date=${fromDate}&to_date=${toDate}`)).json(),
   create: async (tournament: TournamentChangeset) => {
-    alert(JSON.stringify(tournament));
-    await (
-      await fetch('/api/tournaments', {
+    let nquery = JSON.stringify(tournament);
+    alert(nquery);
+    const response = await fetch('/api/tournaments', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ tournament: tournament }),
-      })
-    ).json()},
+        body: nquery,
+      });
+      const responseText = await response.text();
+      console.log(responseText);
+    },
   delete: async (id: number) =>
     await fetch(`/api/tournaments/${id}`, { method: 'DELETE' }),
   update: async (id: number, tournament: string) =>

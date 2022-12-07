@@ -65,7 +65,6 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-
 //const add31Days = (theDate: Date): Date => {
 //  theDate.setTime(theDate.getTime() + (31 * 24 * 3600 * 1000));
 //  return (theDate);
@@ -274,12 +273,13 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
   }
 
   const handleTournamentEditorSave = () => {
+
     let tournamentCS: TournamentChangeset = {
       organization: org,
       tname: tournamentName,
       breadcrumb: breadcrumb,
-      fromdate: fromDate?.toDate(),
-      todate: toDate?.toDate(),
+      fromdate: fromDate?.format("YYYY-MM-DD"),
+      todate: toDate?.format("YYYY-MM-DD"),
       venue: venue,
       city: city,
       region: region,
