@@ -36,6 +36,7 @@ export const TournamentAPI = {
       });
       const responseJson = await response.json();
       console.log(responseJson);
+      return responseJson;
     },
   delete: async (id: number) =>
     await fetch(`/api/tournaments/${id}`, { method: 'DELETE' }),

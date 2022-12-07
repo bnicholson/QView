@@ -34,6 +34,7 @@ async fn get_between_dates(
         HttpResponse::InternalServerError().finish()
     }
 }
+
 #[derive(OpenApi)]
 #[openapi(paths(index))]
 pub struct TournamentDoc;
@@ -110,25 +111,6 @@ async fn read_today(
     }
 }
 
-#[tsync::tsync]
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct TCS {   
-    pub organization: Option<String>,
-    pub tname: Option<String>,
-    pub breadcrumb: Option<String>,
-    pub fromdate: Option<chrono::naive::NaiveDate>,
-    pub todate: Option<chrono::naive::NaiveDate>,
-    pub venue: Option<String>,
-    pub city: Option<String>,
-    pub region: Option<String>,
-    pub country: Option<String>,
-    pub contact: Option<String>,
-    pub contactemail: Option<String>,
-    pub hide: Option<bool>,
-    pub shortinfo: Option<String>,
-    pub info: Option<String>
-}
-
 #[post("")]
 async fn create(
     db: Data<Database>,
@@ -197,13 +179,8 @@ pub struct TournamentResult {
     data : Option<Tournament>,
 }
 
-
-
 pub fn process_response(result : QueryResult<Tournament>) -> TournamentResult {
 
-    let mut code = 200;
-    let mut msg = "";
-    let mut data : Option<Tournament> = None;
     let mut response = TournamentResult {
         code : 200,
         message : "".to_string(),
