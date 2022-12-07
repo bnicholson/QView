@@ -137,7 +137,7 @@ async fn create(
 ) -> Result<HttpResponse, Error> {
     let mut db = db.pool.get().unwrap();
 
-    println!("Inside tournement model create {:?}", item);
+    tracing::debug!("{} Inside tournement model create {:?}", line!(), item);
     
     let result : QueryResult<Tournament> = models::tournament::create(&mut db, &item);
 
@@ -198,6 +198,7 @@ pub struct TournamentResult {
 }
 
 
+
 pub fn process_response(result : QueryResult<Tournament>) -> TournamentResult {
 
     let mut code = 200;
@@ -221,20 +222,21 @@ pub fn process_response(result : QueryResult<Tournament>) -> TournamentResult {
                 DBError::DatabaseError(dbek,e) => {
                     match dbek {
                         UniqueViolation => {
-                            response.code = 200;
+                            response.code = 409;
                             response.message = "Duplicate Tournament".to_string();
-                            println!("TOurnament create-> {:?}",e);
+                            tracing::info!("{} Tournament create process_response-> {:?}",line!(), e);
                         },
                         _ => {
-                            response.code = 200;
-                            response.message = "e".to_string();
-                            println!("TOurnament create-> {:?}",e);
+                            response.code = 409;
+                            response.message = format!("{:?}",e);
+                            tracing::error!("{} Tournament create process_response-> {:?}",line!(), e);
                         },
                     }
                 },
-                _x => {
-                    response.code = 200;
-                    response.message = "".to_string();         
+                x => {
+                    response.code = 409;
+                    response.message = format!("{:?}",x);   
+                    tracing::error!("{} Tournament create process_response-> {:?}",line!(), x);     
                 },
             }            
         }

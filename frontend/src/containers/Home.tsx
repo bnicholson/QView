@@ -269,7 +269,7 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
 
   const createTournament = async (tournament: TournamentChangeset) => {
     await TournamentAPI.create(tournament).catch( err => {
-      alert("Didn't save -")
+      alert("Didn't save 1st -")
     })
   }
 
@@ -289,15 +289,18 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
       contactemail: contactemail,
       hide: true,
       shortinfo: shortinfo,
+
       info: info
     };
 
     let pDate = fromDate?.toDate();
     console.log("FromDate = " + pDate);
 
-    createTournament(tournamentCS).catch( err => {
+    createTournament(tournamentCS).then (res => {res.json();
+      alert("Response = "+res);
+    }).catch( err => {
       setTournamentEditorOpen(false);
-      alert("Didn't save");
+      alert("Didn't save "+res);
       setTournamentEditorOpen(true);
     });
   };

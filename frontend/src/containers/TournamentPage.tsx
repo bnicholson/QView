@@ -27,7 +27,6 @@ export const TournamentAPI = {
     await (await fetch(`/api/tournaments?from_date=${fromDate}&to_date=${toDate}`)).json(),
   create: async (tournament: TournamentChangeset) => {
     let nquery = JSON.stringify(tournament);
-    alert(nquery);
     const response = await fetch('/api/tournaments', {
         method: 'POST',
         headers: {
@@ -35,8 +34,8 @@ export const TournamentAPI = {
         },
         body: nquery,
       });
-      const responseText = await response.text();
-      console.log(responseText);
+      const responseJson = await response.json();
+      console.log(responseJson);
     },
   delete: async (id: number) =>
     await fetch(`/api/tournaments/${id}`, { method: 'DELETE' }),
