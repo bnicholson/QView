@@ -50,6 +50,8 @@ import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import { Code } from '@mui/icons-material'
+import Alert from '@mui/material/Alert'
+import AlertTitle from '@mui/material/AlertTitle'
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -151,16 +153,16 @@ export const Home = () => {
                 </Avatar>
               }
               action={
-                <IconButton aria-label="settings" onClick={(index) => 
+                <IconButton aria-label="settings" onClick={(index) =>
                   alert(tournament.tid)
                 }>
-                  <SettingsIcon/>
+                  <SettingsIcon />
                 </IconButton>
               }
               title={<Typography variant="h5">{tournament.tname}</Typography>}
               subheader={<Typography variant="h6"> {tournament.fromdate} - {tournament.todate}</Typography>}
             />
-            <Box sx={{ display: 'flex' }}             onClick={() => {
+            <Box sx={{ display: 'flex' }} onClick={() => {
               dispatcher(setTournament(tournament.tname));
               navigate("/division")
             }} >
@@ -262,23 +264,26 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
   const [info, setInfo] = React.useState<string>("");
   const [contact, setContact] = React.useState<string>("somebody");
   const [contactemail, setContactEmail] = React.useState<string>("@@@");
-
+  const [alertopened, setAlertOpened] = React.useState(false);
+  const [errormsg, setErrorMsg] = React.useState<string>("Simple error message");
 
   const handleTournamentEditorClose = () => {
     setTournamentEditorOpen(false);
   };
 
-  const handleTournamentEditorSave =  async () => {
+  const handleTournamentEditorSave = async () => {
 
-    if ( !fromDate || !toDate) {
-      alert("Invalid dates - please fill in appropriate dates");
+    if (!fromDate || !toDate) {
+      setErrorMsg("Invalid dates - please fill in appropriate dates");
+      setAlertOpened(true); 
       setTournamentEditorOpen(true);
-      return(false);
+      return (false);
     }
-    if ( fromDate.isAfter(toDate ) ) {
-      alert("Invalid dates - please fill in appropriate dates");
+    if (fromDate.isAfter(toDate)) {
+      setErrorMsg("Invalid dates - please fill in appropriate dates");
+      setAlertOpened(true); 
       setTournamentEditorOpen(true);
-      return(false);    
+      return (false);
     }
 
     let tournamentCS: TournamentChangeset = {
@@ -294,26 +299,28 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
       contact: contact,
       contactemail: contactemail,
       hide: true,
-      shortinfo: shortinfo, 
+      shortinfo: shortinfo,
       info: info
     };
 
     // now send the data to the backend microservice
-    const result = await TournamentAPI.create(tournamentCS).catch( err => {
-      alert("Didn't save 1st - " + err);
+    const result = await TournamentAPI.create(tournamentCS).catch(err => {
+      setErrorMsg("Didn't save 1st - " + err);
+      setAlertOpened(true);      
       setTournamentEditorOpen(true);
-      return(false);
+      return (false);
     });
-    
+
     // make sure we had a successful
     if ((result.code < 200) || (result.code > 209)) {
-      alert(result.message + " " + result.code);
+      setErrorMsg(result.message + " " + result.code);
+      setAlertOpened(true);
       setTournamentEditorOpen(true);
-      return(false);
+      return (false);
     }
     console.log(result);
+    setErrorMsg("Tournament Saved");    
     setTournamentEditorOpen(false);
-    alert("Tournament Saved");
   };
 
   const Item = styled(Paper)(({ theme }) => ({
@@ -353,6 +360,27 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
       </AppBar>
       <div className="form">
         <Box component="form">
+          <Collapse in={alertopened}>
+            <Alert severity="error"
+              action={
+                <IconButton
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    setAlertOpened(false);
+                  }}
+                >
+
+                  <CloseIcon fontSize="inherit" />
+                </IconButton>
+              }
+              sx={{ mb: 2 }}
+            >
+              <AlertTitle>Error</AlertTitle>
+              {errormsg} Close me!
+            </Alert>
+          </Collapse>
           <List>
             <ListItem>
               <Grid container>
@@ -372,7 +400,7 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
                   </Select>
                 </Grid>
                 <Grid item xs={6}>
-                <InputLabel>Tournament Name ( must be unique)</InputLabel>
+                  <InputLabel>Tournament Name ( must be unique)</InputLabel>
                   <TextField
                     variant="outlined"
                     label="Tournament Name"
@@ -390,7 +418,7 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
             <ListItem>
               <Grid container>
                 <Grid item xs={6} md={4}>
-                <InputLabel>Tournament Start Date</InputLabel>
+                  <InputLabel>Tournament Start Date</InputLabel>
                   <Item>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
@@ -405,7 +433,7 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
                   </Item>
                 </Grid>
                 <Grid item xs={6}>
-                <InputLabel>Tournament End Date</InputLabel>
+                  <InputLabel>Tournament End Date</InputLabel>
                   <Item >
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
@@ -424,7 +452,7 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
             <ListItem>
               <Grid container>
                 <Grid item xs={4}>
-                <InputLabel>Venue</InputLabel>
+                  <InputLabel>Venue</InputLabel>
                   <TextField
                     variant="outlined"
                     label="Venue"
@@ -435,7 +463,7 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
                   />
                 </Grid>
                 <Grid item xs={4}>
-                <InputLabel>Hide or Show this Tournament</InputLabel>
+                  <InputLabel>Hide or Show this Tournament</InputLabel>
                   <Select
                     labelId='demo-simple-select-label55'
                     id="select-organization"
@@ -450,7 +478,7 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
                   </Select>
                 </Grid>
                 <Grid item xs={4}>
-                <InputLabel>Breadcrumb (short url name)</InputLabel>
+                  <InputLabel>Breadcrumb (short url name)</InputLabel>
                   <TextField
                     variant="outlined"
                     label="Breadcrumb"
@@ -466,7 +494,7 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
             <ListItem>
               <Grid container>
                 <Grid item xs={4}>
-                <InputLabel>City</InputLabel>
+                  <InputLabel>City</InputLabel>
                   <TextField
                     variant="outlined"
                     label="City"
@@ -477,7 +505,7 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
                   />
                 </Grid>
                 <Grid item xs={4}>
-                <InputLabel>Region/State/Province</InputLabel>
+                  <InputLabel>Region/State/Province</InputLabel>
                   <TextField
                     variant="outlined"
                     label="Region/State/Province:"
@@ -488,7 +516,7 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
                   />
                 </Grid>
                 <Grid item xs={4}>
-                <InputLabel>Country</InputLabel>
+                  <InputLabel>Country</InputLabel>
                   <TextField
                     variant="outlined"
                     label="Country"
@@ -500,7 +528,7 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
                 </Grid>
 
                 <Grid item xs={6}>
-                <InputLabel>Contact </InputLabel>
+                  <InputLabel>Contact </InputLabel>
                   <TextField
                     variant="outlined"
                     label="Contact"
@@ -511,7 +539,7 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
                   />
                 </Grid>
                 <Grid item xs={6}>
-                <InputLabel>Contact Email</InputLabel>
+                  <InputLabel>Contact Email</InputLabel>
                   <TextField
                     variant="outlined"
                     label="Contact Email"
@@ -523,7 +551,7 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
                 </Grid>
 
                 <Grid item xs={12}>
-                <InputLabel>One line of information about the tournament</InputLabel>
+                  <InputLabel>One line of information about the tournament</InputLabel>
                   <TextField
                     variant="outlined"
                     label="Short Information"
