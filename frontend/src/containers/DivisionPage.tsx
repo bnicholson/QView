@@ -23,6 +23,8 @@ import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import Fab from '@mui/material/Fab'
 import AddIcon from "@mui/icons-material/Add"
+import { selectDisplayDate, selectTournament, setDisplayDate, setTournament, toggleIsOn, setTid } from '../breadcrumb'
+import { useAppSelector, useAppDispatch } from '../app/hooks';
 
 export const DivisionAPI = {
   get: async (page: number, size: number) =>
@@ -61,10 +63,14 @@ const Transition = React.forwardRef(function Transition(
 export const Divisions = () => {
   const [expanded, setExpanded] = React.useState(false)
   const [processing, setProcessing] = React.useState<boolean>(false)
-  const [displayDate, setDisplayDate] = React.useState<Date>(new Date())
   const [divisions, setDivisions] = React.useState<Division[]>([])
   const [openDivisionEditor, setDivisionEditorOpen] = React.useState(false);
 
+  var displayDate = useAppSelector((state) => state.breadCrumb.displayDate);
+  const tournament = useAppSelector((state) => state.breadCrumb.tournament);
+  const tid = useAppSelector((state) => state.breadCrumb.tid)
+  const division = useAppSelector((state) => state.breadCrumb.division);
+  const did = useAppSelector((state) => state.breadCrumb.did);
   const handleEditorClickOpen = () => {
     setDivisionEditorOpen(true);
   };
@@ -106,6 +112,7 @@ export const Divisions = () => {
             <Typography color="text.primary" >Rounds</Typography>
           </Link>
         </Breadcrumbs>
+        <Typography>Tournament ID: {tournament} {tid} </Typography>
       </Box>
       <div className="Form">
         <Card>
@@ -114,6 +121,7 @@ export const Divisions = () => {
           </CardHeader>
           <Box sx={{ display: 'flex' }}>
             <CardContent>
+            <Typography>Tournament ID: {tournament} {tid} </Typography>
               <Typography align="left" variant="h5" color="primary" >
                 <Link
                   underline="hover"
@@ -134,6 +142,7 @@ export const Divisions = () => {
             </CardContent>
           </Box>
         </Card>
+        <Typography>Tournament ID: {tournament} {tid} </Typography>
         {divisions.map((division, index) =>
           <Card key={division.dname}>
             <CardHeader

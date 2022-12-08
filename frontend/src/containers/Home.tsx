@@ -23,7 +23,7 @@ import { TournamentAPI } from './TournamentPage'
 import { Route, useNavigate, Routes, Form } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import SettingsIcon from '@mui/icons-material/Settings';
-import { selectDisplayDate, selectTournament, setDisplayDate, setTournament, toggleIsOn } from '../breadcrumb'
+import { selectDisplayDate, selectTournament, setDisplayDate, setTournament, toggleIsOn, setTid } from '../breadcrumb'
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid'
@@ -68,11 +68,6 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-//const add31Days = (theDate: Date): Date => {
-//  theDate.setTime(theDate.getTime() + (31 * 24 * 3600 * 1000));
-//  return (theDate);
-//}
-
 export const Home = () => {
   const [expanded, setExpanded] = React.useState(false)
   const [processing, setProcessing] = React.useState<boolean>(false)
@@ -82,6 +77,10 @@ export const Home = () => {
 
   var displayDate = useAppSelector((state) => state.breadCrumb.displayDate);
   const tournament = useAppSelector((state) => state.breadCrumb.tournament);
+  const tid = useAppSelector((state) => state.breadCrumb.tid)
+  const division = useAppSelector((state) => state.breadCrumb.division);
+  const did = useAppSelector((state) => state.breadCrumb.did);
+
   const dispatcher = useAppDispatch();
 
   const subtract31Days = () => {
@@ -94,8 +93,6 @@ export const Home = () => {
     dispatcher(setDisplayDate(displayDate));
   }
 
-  console.log("Display Date = " + displayDate + " Tournament is " + tournament);
-
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -106,7 +103,6 @@ export const Home = () => {
       setTournaments(tournaments)
       setProcessing(false)
     })
-    console.log("In useeffect - pulling from api " + displayDate)
   }, [displayDate])
 
   const fromDate = new Date();
@@ -164,7 +160,8 @@ export const Home = () => {
             />
             <Box sx={{ display: 'flex' }} onClick={() => {
               dispatcher(setTournament(tournament.tname));
-              navigate("/division")
+              dispatcher(setTid(tournament.tid));
+              navigate("/division");
             }} >
               <CardMedia
                 component="img"
