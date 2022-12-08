@@ -98,7 +98,7 @@ pub fn read_between_dates(db: &mut Connection, from_dt: i64, to_dt: i64) -> Quer
     let values = tournaments
         .order(todate)
         .filter(todate.ge(dt_from))
-        .filter(todate.le(dt_to))
+        .filter(fromdate.le(dt_to))
         .load::<Tournament>(db);
     values
 }
