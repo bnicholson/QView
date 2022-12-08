@@ -102,7 +102,7 @@ pub async fn write(
                 roominfo_entry.clientip = tmp.to_string();
             }
             _ => {
-                log::error!("{:?} {:?} Invalid parameter received in /scoreevent api call {:?} ",module_path!(),line!(),
+                log::error!("{:?} {:?} Invalid parameter received in /pingmsg api call {:?} ",module_path!(),line!(),
                     pair);
             }
         }
@@ -118,11 +118,14 @@ pub async fn write(
         )
     }
 
-    // now grab the result of the sha1hashing
+    // now printout all that we received
 	log::info!("{:?} {:?} PingMsg: Org: {} BldgRoom: {}, Key: {}, Tk: {}, TN: {}, DN: {}, Room: {}, Round: {}, Question: {}, Timestamp: {}, Client IP: {}",
         module_path!(),line!(), org, &roominfo_entry.bldgroom, &roominfo_entry.clientkey, tk, &roominfo_entry.tournament, &roominfo_entry.division, 
         &roominfo_entry.room, &roominfo_entry.round, &roominfo_entry.question, ts, &roominfo_entry.clientip);   
     
+
+    // Find out the tournament id using the the tk (tournament key) or the name of the tournament.
+       
     // send an update to the cache for this room.  Rounds in  Progress (tickertape)
     update_roominfo(&mut roominfo_entry);
 

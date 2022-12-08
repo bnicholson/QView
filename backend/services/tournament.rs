@@ -101,6 +101,8 @@ async fn read_today(
     let from_dt = (now.timestamp()-(7*24*3600))*1000;
     let to_dt = (now.timestamp() + (7*24*3600))*1000;
 
+    tracing::debug!("{} /api/tournaments/today {:?} {:?} {:?}",line!(), now, from_dt, to_dt);
+
     let result = models::tournament::read_between_dates(&mut db, from_dt, to_dt);
     println!("Results: {:?} {:?} {:?}", from_dt, to_dt, result);
 
