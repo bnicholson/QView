@@ -119,7 +119,7 @@ async fn create(
 ) -> Result<HttpResponse, Error> {
     let mut db = db.pool.get().unwrap();
 
-    tracing::debug!("{} Inside tournement model create {:?}", line!(), item);
+    tracing::debug!("{} Tournement model create {:?}", line!(), item);
     
     let result : QueryResult<Tournament> = models::tournament::create(&mut db, &item);
 
@@ -136,6 +136,8 @@ async fn update(
 ) -> HttpResponse {
     let mut db = db.pool.get().unwrap();
 
+    tracing::debug!("{} Tournement model update {:?} {:?}", line!(), item_id, item); 
+
     let result = models::tournament::update(&mut db, item_id.into_inner(), &item);
 
     if result.is_ok() {
@@ -151,6 +153,8 @@ async fn destroy(
     item_id: Path<BigId>,
 ) -> HttpResponse {
     let mut db = db.pool.get().unwrap();
+
+    tracing::debug!("{} Tournament model delete {:?}", line!(), item_id);
 
     let result = models::tournament::delete(&mut db, item_id.into_inner());
 

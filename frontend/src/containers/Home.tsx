@@ -49,6 +49,7 @@ import ListItem from '@mui/material/ListItem'
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
+import { Code } from '@mui/icons-material'
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -267,15 +268,18 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
     setTournamentEditorOpen(false);
   };
 
-  const createTournament = async (tournament: TournamentChangeset) => {
-    const result = await TournamentAPI.create(tournament).catch( err => {
-      alert("Didn't save 1st -")
-    });
-    console.log("during creatTournament api call "+result);
-    return result;
-  }
-
   const handleTournamentEditorSave =  async () => {
+
+    if ( !fromDate || !toDate) {
+      alert("Invalid dates - please fill in appropriate dates");
+      setTournamentEditorOpen(true);
+      return(false);
+    }
+    if ( fromDate.isAfter(toDate ) ) {
+      alert("Invalid dates - please fill in appropriate dates");
+      setTournamentEditorOpen(true);
+      return(false);    
+    }
 
     let tournamentCS: TournamentChangeset = {
       organization: org,
@@ -294,11 +298,22 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
       info: info
     };
 
-    createTournament(tournamentCS).catch( err => {
-      setTournamentEditorOpen(false);
-      alert("Didn't save");
+    // now send the data to the backend microservice
+    const result = await TournamentAPI.create(tournamentCS).catch( err => {
+      alert("Didn't save 1st - " + err);
       setTournamentEditorOpen(true);
+      return(false);
     });
+    
+    // make sure we had a successful
+    if ((result.code < 200) || (result.code > 209)) {
+      alert(result.message + " " + result.code);
+      setTournamentEditorOpen(true);
+      return(false);
+    }
+    console.log(result);
+    setTournamentEditorOpen(false);
+    alert("Tournament Saved");
   };
 
   const Item = styled(Paper)(({ theme }) => ({
