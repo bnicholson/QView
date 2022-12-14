@@ -9,7 +9,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
 interface Column {
-  id: 'name' | 'code' | 'population' | 'size' | 'density';
+  id: 'tournament' | 'division' | 'room' | 'round' | 'question' | 'done' | 'dataok' | 'information';
   label: string;
   minWidth?: number;
   align?: 'right';
@@ -17,25 +17,46 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
-  { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
+  { id: 'tournament', label: 'Tournament', minWidth: 170 },
+  { id: 'division', label: 'Division', minWidth: 100 },
   {
-    id: 'population',
-    label: 'Population',
+    id: 'room',
+    label: 'Room',
     minWidth: 170,
     align: 'right',
     format: (value: number) => value.toLocaleString('en-US'),
   },
   {
-    id: 'size',
-    label: 'Size\u00a0(km\u00b2)',
+    id: 'round',
+    label: 'Round',
     minWidth: 170,
     align: 'right',
     format: (value: number) => value.toLocaleString('en-US'),
   },
   {
-    id: 'density',
-    label: 'Density',
+    id: 'question',
+    label: 'Question',
+    minWidth: 170,
+    align: 'right',
+    format: (value: number) => value.toFixed(2),
+  },
+  {
+    id: 'done',
+    label: 'Done',
+    minWidth: 170,
+    align: 'right',
+    format: (value: number) => value.toFixed(2),
+  },
+  {
+    id: 'dataok',
+    label: 'DataOk',
+    minWidth: 170,
+    align: 'right',
+    format: (value: number) => value.toFixed(2),
+  },
+  {
+    id: 'information',
+    label: 'Information',
     minWidth: 170,
     align: 'right',
     format: (value: number) => value.toFixed(2),
@@ -43,23 +64,29 @@ const columns: readonly Column[] = [
 ];
 
 interface Data {
-  name: string;
-  code: string;
-  population: number;
-  size: number;
-  density: number;
+  tournament: string;
+  division: string;
+  room: number;
+  round: number;
+  question: number;
+  done: number;
+  dataok: number;
+  information: number;
 }
 
 var rownum = 0;
 
 function createData(
-  name: string,
-  code: string,
-  population: number,
-  size: number,
+  tournament: string,
+  division: string,
+  room: number,
+  round: number,
 ): Data {
-  const density = population / size;
-  return { name, code, population, size, density };
+  const question = Math.floor((Math.random() * 22) + 1);
+  const dataok = Math.random();
+  const done = Math.random();
+  const information = Math.random();
+  return { tournament, division, room, round, question, done, dataok, information };
 }
 
 const rows3 = [
@@ -194,6 +221,8 @@ const rows = [
     createData('India', 'IN', 1324171354, 3287263),
     createData('China', 'CN', 1403500365, 9596961),
     createData('Italy', 'IT', 60483973, 301340),
+];
+/*
     createData('United States', 'US', 327167434, 9833520),
     createData('Canada', 'CA', 37602103, 9984670),
     createData('Australia', 'AU', 25475400, 7692024),
@@ -4328,3 +4357,4 @@ const rows = [
     createData('Nigeria', 'NG', 200962417, 923768),
     createData('Brazil', 'BR', 210147125, 8515767),
 ];
+*/
