@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { createTheme, styled } from '@mui/material/styles'
@@ -149,9 +148,9 @@ export const Home = () => {
                 </Avatar>
               }
               action={
-                <IconButton aria-label="settings" onClick={(index) =>
-                  alert(tournament.tid)
-                }>
+                <IconButton aria-label="settings" onClick={(index) => navigate("/tdeditor")
+
+                }>                 
                   <SettingsIcon />
                 </IconButton>
               }

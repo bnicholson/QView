@@ -28,6 +28,12 @@ import Tabs from '@mui/material/Tabs'
 import StickyHeadTable from './GamesTable'
 import Alert from '@mui/material/Alert'
 import AlertTitle from '@mui/material/AlertTitle';
+import TournamentSettings from '../components/TournamentSettings'
+import RoomPanel from '../components/RoomPanel'
+import DivisionPanel from '../components/DivisionPanel'
+import SchedulePanel from '../components/SchedulePanel'
+import TeamPanel from '../components/TeamPanel'
+import RoomMonitor from '../components/RoomMonitor'
 
 export const DivisionAPI = {
   get: async (page: number, size: number) =>
@@ -146,51 +152,36 @@ export const TDEditor = () => {
       </Box>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Settings" {...a11yProps(0)} />
+          <Tab label="Tournament Settings" {...a11yProps(0)} />
           <Tab label="Divisions" {...a11yProps(1)} />
-          <Tab label="Games/Quizzes" {...a11yProps(2)} />
-          <Tab label="Schedule" {...a11yProps(3)} />
-          <Tab label="Teams" {...a11yProps(4)} />
-          <Tab label="In Progress" {...a11yProps(5)} />
-          <Tab label="Other" {...a11yProps(6)} />
-
+          <Tab label="Rooms" {...a11yProps(2)} />
+          <Tab label="Teams" {...a11yProps(3)} />
+          <Tab label="Schedule" {...a11yProps(4)} />
+          <Tab label="Games/Quizzes" {...a11yProps(5)} />
+          <Tab label="Room Monitor" {...a11yProps(6)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        Settings
+        {TournamentSettings()}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Divisions
+        {DivisionPanel()}
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Games/Quizzes
-        { StickyHeadTable() }
+        {RoomPanel()}
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Schedules
+        {TeamPanel()}
       </TabPanel>
       <TabPanel value={value} index={4}>
-        Teams
+        {SchedulePanel()}
       </TabPanel>
       <TabPanel value={value} index={5}>
-        In Progress
+        {StickyHeadTable()}
       </TabPanel>
       <TabPanel value={value} index={6}>
-        Other
+        {RoomMonitor()}
       </TabPanel>
-
     </div >
   )
-}
-
-const test = () => {
-  return (
-    <ListItem button>
-      <ListItemText
-        primary="Snake button"
-        secondary="Tethys"
-      />
-    </ListItem>
-  )
-
 }
