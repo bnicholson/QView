@@ -113,6 +113,7 @@ export default function RoomPanel() {
                             <TableCell align="right">Team 3</TableCell>
                             <TableCell align="right">QuizMaster</TableCell>
                             <TableCell align="right">Content Judge</TableCell>
+                            
                         </TableRow>
                     </TableHead>
                     <TableBody>

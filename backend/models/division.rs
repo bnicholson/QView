@@ -59,6 +59,7 @@ pub fn read_all(db: &mut Connection, pagination: &PaginationParams) -> QueryResu
 
     let values = divisions
         .order(created_at)
+        .filter(tid.eq(pagination.page_size))
         .limit(pagination.page_size)
         .offset(
             pagination.page

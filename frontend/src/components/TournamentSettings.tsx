@@ -71,6 +71,12 @@ export default function TournamentSettings() {
 
     const handleTournamentEditorSave = async () => {
 
+        console.log("Invalid tournament_name "+tournament_name);
+        if (tournament_name.length <= 0) {
+            setErrorMsg("Invalid tournament name");
+            setAlertOpened(true);
+            return (false);
+        }
         if (!fromDate || !toDate) {
             setErrorMsg("Invalid dates - please fill in appropriate dates");
             setAlertOpened(true);
@@ -182,8 +188,11 @@ export default function TournamentSettings() {
                                 />
                             </Grid>
                             <Grid item xs={1}>
-                                <Button autoFocus color="primary" onClick={handleTournamentEditorSave}>
+                            <Button autoFocus color="primary" onClick={handleTournamentEditorSave}>
                                     Update
+                                </Button>
+                                <Button autoFocus color="primary" onClick={handleTournamentEditorSave}>
+                                    Delete
                                 </Button>
                             </Grid>
                         </Grid>

@@ -78,12 +78,19 @@ export const Divisions = () => {
 
   useEffect(() => {
     setProcessing(true)
-    DivisionAPI.get(0, 25).then((divisions: Division[]) => {
+    DivisionAPI.get(0, tid).then((divisions: Division[]) => {
       setDivisions(divisions)
       setProcessing(false)
     })
     console.log("In useeffect - pulling from api")
-  }, [displayDate])
+    // make sure we have a valid division and tid
+    if((tid <= 0) ) {//|| (divisions.length < 1)) {
+      console.log("Tid = "+tid+" divisions.length = "+divisions.length);
+      navigate("/");
+    }
+  }, [tid])
+
+
 
   return (
     <div>

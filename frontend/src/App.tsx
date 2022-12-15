@@ -217,7 +217,7 @@ const App = () => {
             ))}
           </List>
         </Drawer>
-        <div style={{ margin: '0 auto', maxWidth: '1000px' }}>
+        <div style={{ margin: '0 auto', maxWidth: '1200px' }}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/todos" element={<Todos />} />

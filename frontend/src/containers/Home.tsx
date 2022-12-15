@@ -120,7 +120,7 @@ export const Home = () => {
     // page and page_size.   We start at by displaying all the tournaments
     // that end 30 days before today and 30 days after today.   I need to change
     // the API to not worry abut page size and page.  This is more date based.
-    <div>
+    <div >
       <Fab color="primary" onClick={() => handleTournamentEditorClickOpen()} aria-label="Add Tournament">
         <AddIcon />
       </Fab>
@@ -140,7 +140,7 @@ export const Home = () => {
       </div>
       <div className="Form">
         {tournaments.map((tournament, index) =>
-          <Card style={{ maxWidth: 845 }} key={tournament.tname} >
+          <Card style={{ maxWidth: 1200 }} key={tournament.tname} >
             <CardHeader
               avatar={
                 <Avatar sx={{ bgcolor: red[500] }} aria-label="tournament">

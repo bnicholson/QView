@@ -17,47 +17,47 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
-  { id: 'tournament', label: 'Tournament', minWidth: 170 },
+  { id: 'tournament', label: 'Tournament', minWidth: 100 },
   { id: 'division', label: 'Division', minWidth: 100 },
   {
     id: 'room',
     label: 'Room',
-    minWidth: 170,
+    minWidth: 100,
     align: 'right',
     format: (value: number) => value.toLocaleString('en-US'),
   },
   {
     id: 'round',
     label: 'Round',
-    minWidth: 170,
+    minWidth: 100,
     align: 'right',
     format: (value: number) => value.toLocaleString('en-US'),
   },
   {
     id: 'question',
     label: 'Question',
-    minWidth: 170,
+    minWidth: 100,
     align: 'right',
     format: (value: number) => value.toFixed(2),
   },
   {
     id: 'done',
     label: 'Done',
-    minWidth: 170,
+    minWidth: 100,
     align: 'right',
     format: (value: number) => value.toFixed(2),
   },
   {
     id: 'dataok',
     label: 'DataOk',
-    minWidth: 170,
+    minWidth: 100,
     align: 'right',
     format: (value: number) => value.toFixed(2),
   },
   {
     id: 'information',
     label: 'Information',
-    minWidth: 170,
+    minWidth: 100,
     align: 'right',
     format: (value: number) => value.toFixed(2),
   },
@@ -221,8 +221,6 @@ const rows = [
     createData('India', 'IN', 1324171354, 3287263),
     createData('China', 'CN', 1403500365, 9596961),
     createData('Italy', 'IT', 60483973, 301340),
-];
-/*
     createData('United States', 'US', 327167434, 9833520),
     createData('Canada', 'CA', 37602103, 9984670),
     createData('Australia', 'AU', 25475400, 7692024),
@@ -4357,4 +4355,3 @@ const rows = [
     createData('Nigeria', 'NG', 200962417, 923768),
     createData('Brazil', 'BR', 210147125, 8515767),
 ];
-*/
