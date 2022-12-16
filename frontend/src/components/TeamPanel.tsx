@@ -58,6 +58,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
 import UpdateIcon from '@mui/icons-material/Update';
+import { Tooltip } from '@mui/material';
 
 function createData(
     name: string,
@@ -70,7 +71,7 @@ function createData(
 }
 
 const rows = [
-    createData("Naperville","Local Experienced", "Barry Nicholson", "630-746-7332", "b.nicholson@niceng.com"),
+    createData("Naperville", "Local Experienced", "Barry Nicholson", "630-746-7332", "b.nicholson@niceng.com"),
 ];
 
 function handleRoomAdd() {
@@ -80,9 +81,11 @@ function handleRoomAdd() {
 export default function TeanPanel() {
     return (
         <div>
-            <Fab color="primary" onClick={() => handleRoomAdd()} aria-label="Add Room">
-                <AddIcon />
-            </Fab>
+            <Tooltip title="Add a new team" arrow>
+                <Fab color="primary" onClick={() => handleRoomAdd()} aria-label="Add Room">
+                    <AddIcon />
+                </Fab>
+            </Tooltip>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="caption table">
                     <TableHead>

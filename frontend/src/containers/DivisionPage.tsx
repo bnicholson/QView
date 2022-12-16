@@ -25,6 +25,7 @@ import Fab from '@mui/material/Fab'
 import AddIcon from "@mui/icons-material/Add"
 import { selectDisplayDate, selectTournament, setDisplayDate, setTournament, toggleIsOn, setTid } from '../breadcrumb'
 import { useAppSelector, useAppDispatch } from '../app/hooks';
+import Tooltip from '@mui/material/Tooltip';
 
 export const DivisionAPI = {
   get: async (page: number, size: number) =>
@@ -154,9 +155,11 @@ export const Divisions = () => {
           <Card key={division.dname}>
             <CardHeader
               action={
+                <Tooltip title="Edit this division" arrow>
                 <IconButton onClick={() => handleEditorClickOpen()} aria-label="settings">
                   <SettingsIcon />
                 </IconButton>
+                </Tooltip>
               }
               title={<Typography variant="h5">
                 <Link

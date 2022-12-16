@@ -49,6 +49,9 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 import { Code } from '@mui/icons-material'
 import Alert from '@mui/material/Alert'
 import AlertTitle from '@mui/material/AlertTitle'
+import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
+import Tooltip from '@mui/material/Tooltip';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
 export default function TournamentSettings() {
     const [tournament_name, setTournamentName] = React.useState<string>("")
@@ -71,7 +74,7 @@ export default function TournamentSettings() {
 
     const handleTournamentEditorSave = async () => {
 
-        console.log("Invalid tournament_name "+tournament_name);
+        console.log("Invalid tournament_name " + tournament_name);
         if (tournament_name.length <= 0) {
             setErrorMsg("Invalid tournament name");
             setAlertOpened(true);
@@ -121,7 +124,7 @@ export default function TournamentSettings() {
         console.log(result);
         setErrorMsg("Tournament Saved");
         setAlertOpened(true);
-        return(true);
+        return (true);
     };
 
     const Item = styled(Paper)(({ theme }) => ({
@@ -155,7 +158,7 @@ export default function TournamentSettings() {
                         sx={{ mb: 2 }}
                     >
                         <AlertTitle>Error</AlertTitle>
-                        {errormsg} 
+                        {errormsg}
                     </Alert>
                 </Collapse>
                 <List>
@@ -188,12 +191,16 @@ export default function TournamentSettings() {
                                 />
                             </Grid>
                             <Grid item xs={1}>
-                            <Button autoFocus color="primary" onClick={handleTournamentEditorSave}>
-                                    Update
-                                </Button>
-                                <Button autoFocus color="primary" onClick={handleTournamentEditorSave}>
-                                    Delete
-                                </Button>
+                                <Tooltip title="Save/Update these settings" arrow>
+                                    <Button color="primary" onClick={handleTournamentEditorSave}>
+                                        <SaveOutlinedIcon />
+                                    </Button>
+                                </Tooltip>
+                                <Tooltip title="Delete this tournament completely" arrow>
+                                    <Button color="primary" onClick={handleTournamentEditorSave}>
+                                        <DeleteOutlinedIcon />
+                                    </Button>
+                                </Tooltip>
                             </Grid>
                         </Grid>
                     </ListItem>

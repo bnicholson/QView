@@ -51,6 +51,7 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 import { Code } from '@mui/icons-material'
 import Alert from '@mui/material/Alert'
 import AlertTitle from '@mui/material/AlertTitle'
+import Tooltip from '@mui/material/Tooltip';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -73,7 +74,6 @@ export const Home = () => {
   const [tournaments, setTournaments] = React.useState<Tournament[]>([])
 
   const navigate = useNavigate();
-
   var displayDate = useAppSelector((state) => state.breadCrumb.displayDate);
   const tournament = useAppSelector((state) => state.breadCrumb.tournament);
   const tid = useAppSelector((state) => state.breadCrumb.tid)
@@ -121,21 +121,27 @@ export const Home = () => {
     // that end 30 days before today and 30 days after today.   I need to change
     // the API to not worry abut page size and page.  This is more date based.
     <div >
-      <Fab color="primary" onClick={() => handleTournamentEditorClickOpen()} aria-label="Add Tournament">
-        <AddIcon />
-      </Fab>
+      <Tooltip title="Add a new tournament" arrow>
+        <Fab color="primary" onClick={() => handleTournamentEditorClickOpen()} aria-label="Add Tournament">
+          <AddIcon />
+        </Fab>
+      </Tooltip>
       <div className="Form">
         <div style={{ display: 'flex' }}>
-          <button onClick={() => subtract31Days()}>{` << Previous Month`}</button>
+          <Tooltip title="Look at last month's tournaments" arrow>
+            <button onClick={() => subtract31Days()}>{` << Previous Month`}</button>
+          </Tooltip>
           <span style={{ flex: 1, textAlign: 'center' }}>
             <Typography variant="h5">
               {fromDate.toLocaleDateString()} - {toDate.toLocaleDateString()}
             </Typography>
           </span>
-          <button
-            disabled={processing}
-            onClick={() => add31Days()}
-          >{`Next Month >>`}</button>
+          <Tooltip title="Look at next month's tournaments" arrow>
+            <button
+              disabled={processing}
+              onClick={() => add31Days()}
+            >{`Next Month >>`}</button>
+          </Tooltip>
         </div>
       </div>
       <div className="Form">
@@ -148,11 +154,13 @@ export const Home = () => {
                 </Avatar>
               }
               action={
-                <IconButton aria-label="settings" onClick={(index) => navigate("/tdeditor")
+                <Tooltip title="Edit this tournament" arrow>
+                  <IconButton aria-label="settings" onClick={(index) => navigate("/tdeditor")
 
-                }>                 
-                  <SettingsIcon />
-                </IconButton>
+                  }>
+                    <SettingsIcon />
+                  </IconButton>
+                </Tooltip>
               }
               title={<Typography variant="h5">{tournament.tname}</Typography>}
               subheader={<Typography variant="h6"> {tournament.fromdate} - {tournament.todate}</Typography>}
@@ -271,13 +279,13 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
 
     if (!fromDate || !toDate) {
       setErrorMsg("Invalid dates - please fill in appropriate dates");
-      setAlertOpened(true); 
+      setAlertOpened(true);
       setTournamentEditorOpen(true);
       return (false);
     }
     if (fromDate.isAfter(toDate)) {
       setErrorMsg("Invalid dates - please fill in appropriate dates");
-      setAlertOpened(true); 
+      setAlertOpened(true);
       setTournamentEditorOpen(true);
       return (false);
     }
@@ -302,7 +310,7 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
     // now send the data to the backend microservice
     const result = await TournamentAPI.create(tournamentCS).catch(err => {
       setErrorMsg("Didn't save 1st - " + err);
-      setAlertOpened(true);      
+      setAlertOpened(true);
       setTournamentEditorOpen(true);
       return (false);
     });
@@ -315,7 +323,7 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
       return (false);
     }
     console.log(result);
-    setErrorMsg("Tournament Saved");    
+    setErrorMsg("Tournament Saved");
     setTournamentEditorOpen(false);
   };
 

@@ -58,6 +58,12 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
 import UpdateIcon from '@mui/icons-material/Update';
+import Filters from '../components/Filters'
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import DownloadIcon from '@mui/icons-material/Download';
+import { Tooltip } from '@mui/material';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import SortFilterMenu from './SortFilterMenu'
 
 function createData(
     start: string,
@@ -80,40 +86,55 @@ function createData(
     stats8: string,
     stats9: string,
 ) {
-    return { start, tournament, division, room, round, team1, team2, team3, quizmaster, contentjudge, stats1, stats2, stats3,stats4,stats5,stats6,stats7,stats8,stats9 };
+    return { start, tournament, division, room, round, team1, team2, team3, quizmaster, contentjudge, stats1, stats2, stats3, stats4, stats5, stats6, stats7, stats8, stats9 };
 }
 
 const rows = [
-    createData("2022-06-28-07:45:00.000000","Q2022","Local Experienced","Hodges 113","Tue07d","Canton Nazarene","","Eikon-ic","Paul Baker","Abbie Baker","",
-    "LX","LXA","","","","","", "" ),
+    createData("2022-06-28-07:45:00.000000", "Q2022", "Local Experienced", "Hodges 113", "Tue07d", "Canton Nazarene", "", "Eikon-ic", "Paul Baker", "Abbie Baker", "",
+        "LX", "LXA", "", "", "", "", "", ""),
 ];
 
 function handleRoomAdd() {
-  // rows.splice(rows.length, 0, { "456" : string, "Big room" : string, "Paul Baker" : string , "Michael Sherman" :string } );
+    // rows.splice(rows.length, 0, { "456" : string, "Big room" : string, "Paul Baker" : string , "Michael Sherman" :string } );
 }
 
 export default function RoomPanel() {
     return (
         <div>
-            <Fab color="primary" onClick={() => handleRoomAdd()} aria-label="Add Room">
-                <AddIcon />
-            </Fab>
+            <Tooltip title="Add a new scheduled quiz" arrow>
+                <Fab color="primary" onClick={() => handleRoomAdd()} aria-label="Add Room">
+                    <AddIcon />
+                </Fab>
+            </Tooltip>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <Button variant="contained" component="label" color="primary">
+                {" "}
+                <FileUploadIcon />
+                Upload
+                <input type="file" hidden />
+            </Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <Button variant="contained" component="label" color="primary">
+                {" "}
+                <DownloadIcon />
+                Download
+                <input type="file" hidden />
+            </Button>
+            {Filters()}
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="caption table">
                     <TableHead>
                         <TableRow>
                             <TableCell> </TableCell>
-                            <TableCell align="right">Start</TableCell>
-                            <TableCell align="right">Tournament</TableCell>
-                            <TableCell align="right">Division</TableCell>
-                            <TableCell align="right">Room</TableCell>
-                            <TableCell align="right">Round</TableCell>
-                            <TableCell align="right">Team 1</TableCell>
-                            <TableCell align="right">Team 2</TableCell>
-                            <TableCell align="right">Team 3</TableCell>
+                            <TableCell align="right"><div style={{display:"flex"}}>Start{SortFilterMenu()}</div></TableCell>
+                            <TableCell align="right"><div style={{display:"flex"}}>Tournament{SortFilterMenu()}</div></TableCell>
+                            <TableCell align="right"><div style={{display:"flex"}}>Division{SortFilterMenu()}</div></TableCell>
+                            <TableCell align="right"><div style={{display:"flex"}}>Room{SortFilterMenu()}</div></TableCell>
+                            <TableCell align="right"><div style={{display:"flex"}}>Round{SortFilterMenu()}</div></TableCell>
+                            <TableCell align="right"><div style={{display:"flex"}}>Team1{SortFilterMenu()}</div></TableCell>
+                            <TableCell align="right"><div style={{display:"flex"}}>Team2{SortFilterMenu()}</div></TableCell>
+                            <TableCell align="right"><div style={{display:"flex"}}>Team3{SortFilterMenu()}</div></TableCell>
                             <TableCell align="right">QuizMaster</TableCell>
                             <TableCell align="right">Content Judge</TableCell>
-                            
+
                         </TableRow>
                     </TableHead>
                     <TableBody>
