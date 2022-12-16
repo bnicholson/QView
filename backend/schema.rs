@@ -126,7 +126,10 @@ diesel::table! {
         roomid -> Int8,
         tid -> Int8,
         name -> Varchar,
-        building -> Nullable<Varchar>,
+        building -> Varchar,
+        quizmaster -> Varchar,
+        contentjudge -> Varchar,
+        comments -> Text,
     }
 }
 
