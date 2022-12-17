@@ -12,6 +12,9 @@ import { ScoreboardOutlined } from '@mui/icons-material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import UpdateIcon from '@mui/icons-material/Update';
 import { Tooltip } from '@mui/material';
+import Button from '@mui/material/Button'
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import DownloadIcon from '@mui/icons-material/Download';
 
 interface Column {
   id: 'icons' | 'tournament' | 'division' | 'room' | 'round' | 'question' | 'done' | 'dataok' | 'information';
@@ -129,6 +132,18 @@ export default function StickyHeadTable() {
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+      <Button variant="contained" component="label" color="primary">
+        {" "}
+        <FileUploadIcon />
+        Upload
+        <input type="file" hidden />
+      </Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <Button variant="contained" component="label" color="primary">
+        {" "}
+        <DownloadIcon />
+        Download
+        <input type="file" hidden />
+      </Button>
       {Filters()}
       <TableContainer >
         <Table stickyHeader aria-label="sticky table">

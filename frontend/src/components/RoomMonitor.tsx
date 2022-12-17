@@ -58,6 +58,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
 import UpdateIcon from '@mui/icons-material/Update';
+import { Tooltip } from '@mui/material';
 
 function createData(
     bldgroom: string,
@@ -145,7 +146,12 @@ export default function RoomMonitor() {
                         {rows.map((row) => (
                             <TableRow key={row.name}>
                                 <TableCell component="th" scope="row">
-                                    <DeleteIcon /> <UpdateIcon />
+                                    <Tooltip title="Delete this division " arrow>
+                                        <DeleteIcon />
+                                    </Tooltip>
+                                    <Tooltip title="Update this division" arrow>
+                                        <UpdateIcon />
+                                    </Tooltip>
                                 </TableCell>
                                 <TableCell align="right">{row.bldgroom}</TableCell>
                                 <TableCell align="right">{row.chkdin}</TableCell>

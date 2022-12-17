@@ -17,3 +17,6 @@ yarn add @mui/styles
 yarn add dayjs
 yarn add '@mui/x-date-pickers'
 yarn add '@mui/system'
+#
+# Virtualized Table
+yarn add react-virtualized

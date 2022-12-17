@@ -102,7 +102,12 @@ export default function TeanPanel() {
                         {rows.map((row) => (
                             <TableRow key={row.name}>
                                 <TableCell component="th" scope="row">
-                                    <DeleteIcon /> <UpdateIcon />
+                                    <Tooltip title="Delete this division " arrow>
+                                        <DeleteIcon />
+                                    </Tooltip>
+                                    <Tooltip title="Update this division" arrow>
+                                        <UpdateIcon />
+                                    </Tooltip>
                                 </TableCell>
                                 <TableCell align="right">{row.name}</TableCell>
                                 <TableCell align="right">{row.division}</TableCell>

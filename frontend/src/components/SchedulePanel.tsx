@@ -124,14 +124,14 @@ export default function RoomPanel() {
                     <TableHead>
                         <TableRow>
                             <TableCell> </TableCell>
-                            <TableCell align="right"><div style={{display:"flex"}}>Start{SortFilterMenu()}</div></TableCell>
-                            <TableCell align="right"><div style={{display:"flex"}}>Tournament{SortFilterMenu()}</div></TableCell>
-                            <TableCell align="right"><div style={{display:"flex"}}>Division{SortFilterMenu()}</div></TableCell>
-                            <TableCell align="right"><div style={{display:"flex"}}>Room{SortFilterMenu()}</div></TableCell>
-                            <TableCell align="right"><div style={{display:"flex"}}>Round{SortFilterMenu()}</div></TableCell>
-                            <TableCell align="right"><div style={{display:"flex"}}>Team1{SortFilterMenu()}</div></TableCell>
-                            <TableCell align="right"><div style={{display:"flex"}}>Team2{SortFilterMenu()}</div></TableCell>
-                            <TableCell align="right"><div style={{display:"flex"}}>Team3{SortFilterMenu()}</div></TableCell>
+                            <TableCell align="right"><div style={{ display: "flex" }}>Start{SortFilterMenu()}</div></TableCell>
+                            <TableCell align="right"><div style={{ display: "flex" }}>Tournament{SortFilterMenu()}</div></TableCell>
+                            <TableCell align="right"><div style={{ display: "flex" }}>Division{SortFilterMenu()}</div></TableCell>
+                            <TableCell align="right"><div style={{ display: "flex" }}>Room{SortFilterMenu()}</div></TableCell>
+                            <TableCell align="right"><div style={{ display: "flex" }}>Round{SortFilterMenu()}</div></TableCell>
+                            <TableCell align="right"><div style={{ display: "flex" }}>Team1{SortFilterMenu()}</div></TableCell>
+                            <TableCell align="right"><div style={{ display: "flex" }}>Team2{SortFilterMenu()}</div></TableCell>
+                            <TableCell align="right"><div style={{ display: "flex" }}>Team3{SortFilterMenu()}</div></TableCell>
                             <TableCell align="right">QuizMaster</TableCell>
                             <TableCell align="right">Content Judge</TableCell>
 
@@ -141,7 +141,12 @@ export default function RoomPanel() {
                         {rows.map((row) => (
                             <TableRow key={row.start}>
                                 <TableCell component="th" scope="row">
-                                    <DeleteIcon /> <UpdateIcon />
+                                    <Tooltip title="Delete this division " arrow>
+                                        <DeleteIcon />
+                                    </Tooltip>
+                                    <Tooltip title="Update this division" arrow>
+                                        <UpdateIcon />
+                                    </Tooltip>
                                 </TableCell>
                                 <TableCell align="right">{row.start}</TableCell>
                                 <TableCell align="right">{row.tournament}</TableCell>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Dayjs } from 'dayjs'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
@@ -75,10 +75,22 @@ const rows = [
 ];
 
 function handleRoomAdd() {
-
+    rows.push(createData("Default Room", "Church", "Default QuizMaster", "Default ContentJudge", "No comment"));
 }
 
 export default function RoomPanel() {
+    const [expanded, setExpanded] = React.useState(false);
+
+//    useEffect(() => {yea
+//        setProcessing(true)
+//        RoomAPI.getByDate(displayDate, (displayDate + (31 * 24 * 3600 * 1000))).then((tournaments: Tournament[]) => {
+ //           setTournaments(tournaments)
+  //          setProcessing(false)
+    //    })
+//    }, [rowsohoh ])
+
+    const dispatcher = useAppDispatch();
+
     return (
         <div>
             <Tooltip title="Add a new room" arrow>
@@ -102,7 +114,12 @@ export default function RoomPanel() {
                         {rows.map((row) => (
                             <TableRow key={row.name}>
                                 <TableCell component="th" scope="row">
-                                    <DeleteIcon /> <UpdateIcon />
+                                <Tooltip title="Delete this room" arrow>
+                                        <DeleteIcon />
+                                    </Tooltip>
+                                    <Tooltip title="Update this room" arrow>
+                                        <UpdateIcon />
+                                    </Tooltip> 
                                 </TableCell>
                                 <TableCell align="right">{row.name}</TableCell>
                                 <TableCell align="right">{row.building}</TableCell>

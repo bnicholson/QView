@@ -100,7 +100,7 @@ export default function RoomPanel() {
                         {rows.map((row) => (
                             <TableRow key={row.name}>
                                 <TableCell component="th" scope="row">
-                                    <Tooltip title="Delete this division " arrow>
+                                <Tooltip title="Delete this division " arrow>
                                         <DeleteIcon />
                                     </Tooltip>
                                     <Tooltip title="Update this division" arrow>
