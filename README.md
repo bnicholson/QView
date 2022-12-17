@@ -10,6 +10,7 @@ The UI is designed using the Material UI framework and components.
 The backend database is Postgresql.
 Redis is used as a cache and as a inter Qview server store.  
 
+Note:  A development environment is up at http://qview.quizstuff.com:3000
 
 # Requirements & how to develop
 
