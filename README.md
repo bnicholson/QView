@@ -8,6 +8,7 @@ The frontend is designed using the React Javascript framework.
 The UI is designed using the Material UI framework and components.
 
 The backend database is Postgresql.
+Redis is used as a cache and as a inter Qview server store.  
 
 
 # Requirements & how to develop
