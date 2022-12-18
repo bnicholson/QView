@@ -52,9 +52,24 @@ psql
 CREATE DATABASE qviewdev ;
 CREATE USER qview;
 ALTER USER qview PASSWORD ‘somepassword’;
+ALTER USER qview WITH SUPERUSER;
 
 // you may have to adjust the permissions since diesel migration is used to populate the database
 \q
+exit
+exit
+
+4b) Now populate the database with the tables needed for qview
+diesel migration run
+
+4c) Remove the superuser permissions from qview
+
+sudo bash
+su - postgres
+psql
+ALTER USER qview with NOSUPERUSER;
+\q
+exit
 exit
 
  5) - now you are ready to build the executables and the frontend code
