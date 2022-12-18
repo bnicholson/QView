@@ -22,7 +22,7 @@ Clone the project in the working direction you desire.
 
     git clone https://github.com/bnicholson/qview.git
     cd qview
-    
+
 2b) getrustdev: this script loads all the required linux (debian) programs needed to develop such as Rust, git, etc.
 
 ./getrustdev
@@ -48,6 +48,8 @@ su - postgres
 psql
 CREATE DATABASE qviewdev ;
 CREATE USER qview;
+ALTER USER qview PASSWORD ‘somepassword’;
+
 // you may have to adjust the permissions since diesel migration is used to populate the database
 
  5) - now you are ready to build the executables and the frontend code
@@ -55,7 +57,7 @@ cargo build
 
  6) - Create and populate all the appropriate environment variables in the .env file.
     SECRET_KEY=some_secret
-    DATABASE_URL=postgres://someuserid:somepasswd@localhost/qviewdev
+    DATABASE_URL=postgres://qview:somepasswd@localhost/qviewdev
     RUST_BACKTRACE=1
 
     // not currently used - future
