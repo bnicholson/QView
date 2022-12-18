@@ -1,25 +1,23 @@
-# Generic Editors
-sudo apt-get install emacs
+# Rust and TypeScript Editor
 sudo snap install code --classic
 
 # Now more development tools
-sudo apt-get install git
-sudo apt-get install cmdtest
-sudo apt-get install erlang
-sudo apt-get install rakudo
-sudo apt-get install npm
+# sudo apt install git # If you followed the readme, you already installed git.
+sudo apt install npm
 
 # Install Rust
-sudo apt-get install rust-all
-# Install libraries for databases
-sudo apt-get install libpq-dev
-sudo apt-get install libmysqlclient-dev
-sudo apt-get install libsqlite3-dev
-#
-# Install the postgresql database because this is the one I use most often
-#
-sudo apt-get install postgresql
-sudo apt-get install postgresql-contrib
+sudo apt install rustc
+sudo apt install cargo
+
+# This is required before running `cargo build` on the create-rust-app project.
+sudo apt install pkg-config
+
+# This is required before running `cargo build` on the qview project.
+sudo apt install libpq-dev
+
+# Install the database library.
+sudo apt install postgresql
+sudo apt install postgresql-contrib
 
 #
 # Install a tool for helping manipulate Diesel (Rust CRUD ORM)
@@ -30,14 +28,12 @@ cargo install diesel_cli
 #
 cargo install tsync
 
-# more libraries necessary for web work
-sudo apt-get install pkgconf
-sudo apt-get install libssl-dev
-sudo apt-get install libclang-dev
-
 # More generic cargo tools
 cargo install cargo-edit
 cargo install cargo-watch
+
+# # Add one of them to the path TODO: You probably don't need this.
+# echo 'export PATH="$PATH":~/.cargo/bin' >> ~/.bashrc
 
 # Node add some node things we need
 sudo npm install -g yarn

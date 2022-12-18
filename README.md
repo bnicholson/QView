@@ -15,7 +15,9 @@ Note:  A development environment is up at http://qview.quizstuff.com:3000
 # Requirements & how to develop
 
 
-1) - Install Ubuntu desktop on a machine or on a VM/Hypervisor/Virtualbox
+1a) - Install Ubuntu desktop on a machine or on a VM/Hypervisor/Virtualbox.
+1b) - Install git.
+      sudo apt install git
 
 2a) - Set up the development environment.
 Clone the project in the working direction you desire.
@@ -31,13 +33,14 @@ Clone the project in the working direction you desire.
 
    cd ..
    git clone http://github.com/bnicholson/create-rust-app
+   cd create-rust-app
    cargo build
    cd ..
    cd qview
 
  3) - now install the javascript libraries needed by the UI frontend
- getdependencies:  This script loads all the javascript modules needed such as react and material-ui.
-cd frontend;./getdependencies
+   cd frontend
+   yarn install
 
 4) - now create a development database.   Qview uses Postgresql as the database.   
 
@@ -51,6 +54,8 @@ CREATE USER qview;
 ALTER USER qview PASSWORD ‘somepassword’;
 
 // you may have to adjust the permissions since diesel migration is used to populate the database
+\q
+exit
 
  5) - now you are ready to build the executables and the frontend code
 cargo build
@@ -76,7 +81,8 @@ cargo build
     SMTP_PASSWORD=secret_mailer_password
     SEND_MAIL=true
 
- 7) - now run 
+ 7a) - Restart the terminal to refresh the environment variables.
+ 7b) - now run 
 cargo fullstack
 
  8) - It's time to use the application
