@@ -14,18 +14,32 @@ Note:  A development environment is up at http://qview.quizstuff.com:3000
 
 # Requirements & how to develop
 
-1 - Install Ubuntu desktop on a machine or on a VM/Hypervisor/Virtualbox
 
- 2 - Set up the development environment.
- getrustdev: this script loads all the required linux (debian) programs needed to develop such as Rust, git, etc.
+1) - Install Ubuntu desktop on a machine or on a VM/Hypervisor/Virtualbox
+
+2a) - Set up the development environment.
+Clone the project in the working direction you desire.
+
+    git clone https://github.com/bnicholson/qview.git
+    cd qview
+    
+2b) getrustdev: this script loads all the required linux (debian) programs needed to develop such as Rust, git, etc.
 
 ./getrustdev
 
- 3 - now install the javascript libraries needed by the UI frontend
+2b) At the same directory level as the main Qview clone the create-rust-app project. 
+
+   cd ..
+   git clone http://github.com/bnicholson/create-rust-app
+   cargo build
+   cd ..
+   cd qview
+
+ 3) - now install the javascript libraries needed by the UI frontend
  getdependencies:  This script loads all the javascript modules needed such as react and material-ui.
 cd frontend;./getdependencies
 
- 4 - now create a development database.   Qview uses Postgresql as the database.   
+4) - now create a development database.   Qview uses Postgresql as the database.   
 
 Create a standard postgres database using the following as the postgres user
 
@@ -36,10 +50,10 @@ CREATE DATABASE qviewdev ;
 CREATE USER qview;
 // you may have to adjust the permissions since diesel migration is used to populate the database
 
- 5 - now you are ready to build the executables and the frontend code
+ 5) - now you are ready to build the executables and the frontend code
 cargo build
 
- 6 - Create and populate all the appropriate environment variables in the .env file.
+ 6) - Create and populate all the appropriate environment variables in the .env file.
     SECRET_KEY=some_secret
     DATABASE_URL=postgres://someuserid:somepasswd@localhost/qviewdev
     RUST_BACKTRACE=1
@@ -60,18 +74,18 @@ cargo build
     SMTP_PASSWORD=secret_mailer_password
     SEND_MAIL=true
 
- 7 - now run 
+ 7) - now run 
 cargo fullstack
 
- 8 - It's time to use the application
+ 8) - It's time to use the application
  Start your favorite browser
 firefox
 
- 9 - go to localhost 
+ 9) - go to localhost 
 http://localhost:3000
 
 
- 10 - For more information
+ 10) - For more information
 Read README.md.create-rust-app for more information on how to use.
 
 
