@@ -7,3 +7,4 @@ pub mod roominfo;
 pub mod eventlog;
 pub mod game;
 pub mod quizevent;
+pub mod room;

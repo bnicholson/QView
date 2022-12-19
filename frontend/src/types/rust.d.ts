@@ -148,6 +148,25 @@ interface QuizEventChangeset {
   md5digest: string
 }
 
+interface Room {
+  roomid: BigId
+  tid: BigId
+  name: string
+  building: string
+  quizmaster: string
+  contentjudge: string
+  comments: string
+}
+
+interface RoomChangeset {
+  tid: BigId
+  name: string
+  building: string
+  quizmaster: string
+  contentjudge: string
+  comments: string
+}
+
 interface Schedule {
   sid: BigId
   tid: BigId
