@@ -12,17 +12,17 @@ sudo apt install cargo
 # This is required before running `cargo build` on the create-rust-app project.
 sudo apt install pkg-config
 
-# This is required before running `cargo build` on the qview project.
-sudo apt install libpq-dev
-
 # Install the database library.
 sudo apt install postgresql
 sudo apt install postgresql-contrib
 
+# Install the database driver for PostgreSQL.
+sudo apt install libpq-dev
+
 #
 # Install a tool for helping manipulate Diesel (Rust CRUD ORM)
 #
-cargo install diesel_cli
+cargo install diesel_cli --no-default-features --features postgres
 #
 # actix-web (Rust Web Server) stuff (mostly creating react web apps)
 #

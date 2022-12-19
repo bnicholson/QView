@@ -1,7 +1,6 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { createTheme, styled } from '@mui/material/styles'
-import { makeStyles } from '@mui/styles'
 import Card from "@mui/material/Card"
 import CardHeader from '@mui/material/CardHeader'
 import CardMedia from "@mui/material/CardMedia"
@@ -10,7 +9,6 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
 import IconButton, { IconButtonProps } from '@mui/material/IconButton'
-import Fab from '@mui/material/Fab'
 import AddIcon from "@mui/icons-material/Add"
 import { red } from '@mui/material/colors'
 import FavoriteIcon from '@mui/icons-material/Favorite'
@@ -19,18 +17,15 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
 import { TournamentAPI } from './TournamentPage'
-import { Route, useNavigate, Routes, Form } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import SettingsIcon from '@mui/icons-material/Settings';
-import { selectDisplayDate, selectTournament, setDisplayDate, setTournament, toggleIsOn, setTid } from '../breadcrumb'
+import { setDisplayDate, setTournament, setTid } from '../breadcrumb'
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid'
-import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
+import Select from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel'
-import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
 import { Dayjs } from 'dayjs'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
@@ -43,12 +38,9 @@ import CloseIcon from '@mui/icons-material/Close'
 import Slide from '@mui/material/Slide'
 import { TransitionProps } from '@mui/material/transitions'
 import Button from '@mui/material/Button';
-import ListItemText from '@mui/material/ListItemText';
 import ListItem from '@mui/material/ListItem'
 import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
-import { Code } from '@mui/icons-material'
 import Alert from '@mui/material/Alert'
 import AlertTitle from '@mui/material/AlertTitle'
 import Tooltip from '@mui/material/Tooltip';
@@ -122,9 +114,25 @@ export const Home = () => {
     // the API to not worry abut page size and page.  This is more date based.
     <div >
       <Tooltip title="Add a new tournament" arrow>
-        <Fab color="primary" onClick={() => handleTournamentEditorClickOpen()} aria-label="Add Tournament">
+        <Button
+          aria-label="Add Tournament"
+          color="primary"
+          onClick={() => handleTournamentEditorClickOpen()}
+          sx={{
+            backgroundColor: "#008080",
+            borderRadius: "50%",
+            color: "#fff",
+            height: 56,
+            minWidth: "unset",
+            width: 56,
+            "&:hover": {
+              backgroundColor: "rgb(0, 89, 89)",
+              boxShadow: "0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12)"
+            }
+          }}
+        >
           <AddIcon />
-        </Fab>
+        </Button>
       </Tooltip>
       <div className="Form">
         <div style={{ display: 'flex' }}>
