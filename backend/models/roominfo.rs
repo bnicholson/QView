@@ -24,7 +24,7 @@ pub struct RoomInfoData {
 }
 
 impl RoomInfoData {
-    pub fn to_RoomInfoData(&mut self) -> RoomInfoData<> {
+    pub fn to_roominfo_data(&mut self) -> RoomInfoData<> {
         RoomInfoData {
             clientkey: self.clientkey.to_string(),
             bldgroom: self.bldgroom.to_string(),
@@ -147,7 +147,7 @@ pub fn update_roominfo( ri: &mut RoomInfoData ) -> RoomInfoData {
     match redis::cmd("get").arg(&roomkey).query::<Option<String>>(&mut con) {
         Ok(nil) => {
 //            println!("Got a nil from a get command to redis {:?}",line!());
-            rri = ri.to_RoomInfoData();
+            rri = ri.to_roominfo_data();
         },
         Ok(rjson) => {
 //            println!("what is the result of the get {:?} {:?}",rjson,line!());
@@ -159,7 +159,7 @@ pub fn update_roominfo( ri: &mut RoomInfoData ) -> RoomInfoData {
         Err(e) => {
             log::error!("{} {} Fault retrieving redis cache for roominfo {:?} {:?}",module_path!(),line!(),
                 e, ri);
-            rri = ri.to_RoomInfoData();
+            rri = ri.to_roominfo_data();
         },
     }
  
