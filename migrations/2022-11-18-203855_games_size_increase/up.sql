@@ -5,7 +5,7 @@ BEGIN;
 -- Save the tables away
 ALTER TABLE games RENAME to orig_games;
 ALTER SEQUENCE games_gid_seq RENAME to orig_games_gid_seq;
-ALTER INDEX games_org_tournament_division_room_round_clientkey_key RENAME to orig_games_org_tournament_division_room_round_clientkey_key;
+ALTER INDEX games_org_tournament_division_room_round_clientkey_key1 RENAME to orig_games_org_tournament_division_room_round_clientkey_key;
 
 -- Now create the new updated tables for games
 CREATE TABLE games (
