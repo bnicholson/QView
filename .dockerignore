@@ -7,6 +7,7 @@ frontend/.pnp
 frontend/**/*.pnp.js
 frontend/coverage
 frontend/build
+node_modules
 Dockerfile
 
 build-log*.txt
