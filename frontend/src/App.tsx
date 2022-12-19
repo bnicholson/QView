@@ -10,18 +10,15 @@ import { ResetPage } from './containers/ResetPage';
 import { Tournaments } from './containers/TournamentPage';
 import { Divisions } from './containers/DivisionPage';
 import { TDEditor } from './containers/TDEditor';
-
 import React from 'react';
 import './App.css';
 import { Home } from './containers/Home';
 import { Todos } from './containers/Todo';
 import { Files } from './containers/Files';
 import { Route, useNavigate, Routes } from 'react-router-dom';
-
 import '@mui/material/colors';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button'
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
@@ -31,10 +28,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled';
 import { ChevronLeft, Inbox, Mail, AccountCircle } from '@mui/icons-material';
-import { Breadcrumbs, Divider, Link, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Backdrop, Divider, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { RoundsInProgress } from './containers/RoundsInProgress';
@@ -117,106 +113,112 @@ const App = () => {
           </AppBar>
 
         </Box>
-        <Drawer
-          sx={{
-            width: drawerWidth,
-            flexShrink: 0,
-            '& .MuiDrawer-paper': {
-              width: drawerWidth,
-              boxSizing: 'border-box',
-            },
-          }}
-          variant="persistent"
-          anchor="left"
+        <Backdrop
+          onClick={handleDrawerClose}
           open={open}
+          sx={{ zIndex: 1 }}
         >
-          <DrawerHeader>
-            <IconButton onClick={handleDrawerClose}>
-              <ChevronLeft />
-            </IconButton>
-          </DrawerHeader>
-          <Divider />
-          <List>
-            {['Tournament', 'Division', 'Room', 'Round'].map((text, index) => (
-              <ListItem key={text} disablePadding
-                onClick={() => {
-                  switch (index % 4) {
-                    case 0:
-                      navigate("/tournament");
-                      break;
-                    case 1:
-                      navigate("/division");
-                      break;
-                    case 2:
-                      alert("room");
-                      break;
-                    case 3:
-                      alert('round');
-                  }
-                }}>
-                <ListItemButton>
-                  <ListItemIcon>
-                    {index % 2 === 0 ? <Inbox /> : <Mail />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-          <List>
-            {['Quizzes', 'Team', 'Individual'].map((text, index) => (
-              <ListItem key={text} disablePadding
-                onClick={() => {
-                  switch (index % 3) {
-                    case 0:
-                      alert("quizzes");
-                      break;
-                    case 1:
-                      alert("team");
-                      break;
-                    case 2:
-                      alert("individual");
-                      break;
-                  }
-                }}>
-                <ListItemButton>
-                  <ListItemIcon>
-                    {index % 2 === 0 ? <Inbox /> : <Mail />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-          <List>
-            {['Todos', 'Files', 'GraphQL'].map((text, index) => (
-              <ListItem key={text} disablePadding
-                onClick={() => {
-                  switch (index % 3) {
-                    case 0:
-                      navigate("/todos");
-                      break;
-                    case 1:
-                      navigate("/files");
-                      break;
-                    case 2:
-                      navigate("/gql");
-                      break;
-                  }
-                }}
-              >
-                <ListItemButton>
-                  <ListItemIcon>
-                    {index % 2 === 0 ? <Inbox /> : <Mail />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </Drawer>
+          <Drawer
+            sx={{
+              width: drawerWidth,
+              flexShrink: 0,
+              '& .MuiDrawer-paper': {
+                width: drawerWidth,
+                boxSizing: 'border-box',
+              },
+            }}
+            variant="persistent"
+            anchor="left"
+            open={open}
+          >
+            <DrawerHeader>
+              <IconButton onClick={handleDrawerClose}>
+                <ChevronLeft />
+              </IconButton>
+            </DrawerHeader>
+            <Divider />
+            <List>
+              {['Tournament', 'Division', 'Room', 'Round'].map((text, index) => (
+                <ListItem key={text} disablePadding
+                  onClick={() => {
+                    switch (index % 4) {
+                      case 0:
+                        navigate("/tournament");
+                        break;
+                      case 1:
+                        navigate("/division");
+                        break;
+                      case 2:
+                        alert("room");
+                        break;
+                      case 3:
+                        alert('round');
+                    }
+                  }}>
+                  <ListItemButton>
+                    <ListItemIcon>
+                      {index % 2 === 0 ? <Inbox /> : <Mail />}
+                    </ListItemIcon>
+                    <ListItemText primary={text} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+            <Divider />
+            <List>
+              {['Quizzes', 'Team', 'Individual'].map((text, index) => (
+                <ListItem key={text} disablePadding
+                  onClick={() => {
+                    switch (index % 3) {
+                      case 0:
+                        alert("quizzes");
+                        break;
+                      case 1:
+                        alert("team");
+                        break;
+                      case 2:
+                        alert("individual");
+                        break;
+                    }
+                  }}>
+                  <ListItemButton>
+                    <ListItemIcon>
+                      {index % 2 === 0 ? <Inbox /> : <Mail />}
+                    </ListItemIcon>
+                    <ListItemText primary={text} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+            <Divider />
+            <List>
+              {['Todos', 'Files', 'GraphQL'].map((text, index) => (
+                <ListItem key={text} disablePadding
+                  onClick={() => {
+                    switch (index % 3) {
+                      case 0:
+                        navigate("/todos");
+                        break;
+                      case 1:
+                        navigate("/files");
+                        break;
+                      case 2:
+                        navigate("/gql");
+                        break;
+                    }
+                  }}
+                >
+                  <ListItemButton>
+                    <ListItemIcon>
+                      {index % 2 === 0 ? <Inbox /> : <Mail />}
+                    </ListItemIcon>
+                    <ListItemText primary={text} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </Drawer>
+        </Backdrop>
         <div style={{ margin: '0 auto', maxWidth: '1200px' }}>
           <Routes>
             <Route path="/" element={<Home />} />

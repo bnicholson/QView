@@ -2,9 +2,7 @@ import { AuthProvider } from '../src/hooks/useAuth'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from '../src/App'
-import reportWebVitals from '../src/reportWebVitals'
 import { BrowserRouter } from 'react-router-dom'
-
 import { ApolloProvider } from "@apollo/client";
 import { useAuthenticatedApolloClient } from "../src/hooks/useAuthenticatedApolloClient";
 import { Provider } from 'react-redux'

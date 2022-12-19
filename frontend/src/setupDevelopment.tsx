@@ -5,7 +5,7 @@
 /* require() this file in development mode to enable development hints */
 
 import React, { useEffect, useRef, useState } from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import {
   QueryClient,
   QueryClientProvider,
@@ -316,13 +316,13 @@ const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: false } },
 })
 
-ReactDOM.render (
+const root = createRoot(devBox.children[1])
+root.render (
   <>
     <QueryClientProvider client={queryClient}>
       <DevBox />
     </QueryClientProvider>
-  </>,
-  devBox.children[1]
+  </>
 )
 
 export {}
