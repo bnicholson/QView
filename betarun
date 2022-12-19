@@ -1,1 +1,9 @@
+#!/bin/sh
+#
+# This file contains the code that will run QView in beta and or production mode.
+#
+# The current vision is to have two environments active on the web (beta and production).
+# All development environments would be on developer or tester laptops.
+# Beta would be used for testing activiites and trying out new designs, new code, etc.
+#
 export $(cat .env | xargs) && cargo run --release >output
