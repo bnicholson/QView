@@ -41,7 +41,7 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 import Alert from '@mui/material/Alert'
 import AlertTitle from '@mui/material/AlertTitle'
 import Tooltip from '@mui/material/Tooltip';
-import { DatePickerComponent } from './DatePickerComponent'
+import { DatePickerComponent } from '../components/DatePickerComponent'
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;

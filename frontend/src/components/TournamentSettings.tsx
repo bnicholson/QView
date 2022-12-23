@@ -50,7 +50,7 @@ import AlertTitle from '@mui/material/AlertTitle'
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import { DatePickerComponent } from '../containers/DatePickerComponent'
+import { DatePickerComponent } from './DatePickerComponent'
 
 export default function TournamentSettings() {
     const [tournament_name, setTournamentName] = React.useState<string>("")
