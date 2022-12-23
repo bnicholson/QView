@@ -11,6 +11,9 @@ interface Props {
   setDay: (newValue: Dayjs | null) => void
 }
 
+/**
+ * Render a MUI date picker and manage its state.
+ */
 export const DatePickerComponent = (props: Props) => {
   const { initialDay, label, setDay } = props;
   const [value, setValue] = React.useState<Dayjs | null>(initialDay ? initialDay : null);
