@@ -35,6 +35,7 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { RoundsInProgress } from './containers/RoundsInProgress';
 import { Swagger } from './containers/Swagger'
+import { Home as Home2 } from './pages/Home'
 
 if (process.env.NODE_ENV === 'development') import('./setupDevelopment')
 
@@ -149,7 +150,10 @@ const App = () => {
                         navigate("/division");
                         break;
                       case 2:
-                        alert("room");
+                        // TODO: This still needs to be implemented, but at the moment
+                        //       it is used as a place to test the new home page.
+                        // alert("room");
+                        navigate("/home2");
                         break;
                       case 3:
                         alert('round');
@@ -222,6 +226,7 @@ const App = () => {
         <div style={{ margin: '0 auto', maxWidth: '1200px' }}>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/home2" element={<Home2 />} />
             <Route path="/todos" element={<Todos />} />
             {/* CRA: routes */}
             <Route path="/gql" element={<GraphQLPage />} />
