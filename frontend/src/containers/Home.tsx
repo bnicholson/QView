@@ -27,10 +27,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel'
 import TextField from '@mui/material/TextField'
-import { Dayjs } from 'dayjs'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+import dayjs, { Dayjs } from 'dayjs'
 import AppBar from '@mui/material/AppBar'
 import Dialog from '@mui/material/Dialog'
 import Toolbar from '@mui/material/Toolbar'
@@ -44,6 +41,7 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 import Alert from '@mui/material/Alert'
 import AlertTitle from '@mui/material/AlertTitle'
 import Tooltip from '@mui/material/Tooltip';
+import { DatePickerComponent } from './DatePickerComponent'
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -265,8 +263,8 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
   const [tournamentName, setTournamentName] = React.useState<string>("")
   const [venue, setVenue] = React.useState<string>("")
   const [org, setOrg] = React.useState<string>("Nazarene")
-  const [fromDate, setFromDate] = React.useState<Dayjs | null>(null)
-  const [toDate, setToDate] = React.useState<Dayjs | null>(null)
+  const fromDateRef = React.useRef<Dayjs | null>(null)
+  const toDateRef = React.useRef<Dayjs | null>(null)
   const [city, setCity] = React.useState<string>("")
   const [region, setRegion] = React.useState<string>("")
   const [country, setCountry] = React.useState<string>("")
@@ -285,13 +283,13 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
 
   const handleTournamentEditorSave = async () => {
 
-    if (!fromDate || !toDate) {
+    if (!fromDateRef.current || !toDateRef.current) {
       setErrorMsg("Invalid dates - please fill in appropriate dates");
       setAlertOpened(true);
       setTournamentEditorOpen(true);
       return (false);
     }
-    if (fromDate.isAfter(toDate)) {
+    if (fromDateRef.current.isAfter(toDateRef.current)) {
       setErrorMsg("Invalid dates - please fill in appropriate dates");
       setAlertOpened(true);
       setTournamentEditorOpen(true);
@@ -302,8 +300,8 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
       organization: org,
       tname: tournamentName,
       breadcrumb: breadcrumb,
-      fromdate: fromDate?.format("YYYY-MM-DD"),
-      todate: toDate?.format("YYYY-MM-DD"),
+      fromdate: fromDateRef.current?.format("YYYY-MM-DD"),
+      todate: toDateRef.current?.format("YYYY-MM-DD"),
       venue: venue,
       city: city,
       region: region,
@@ -432,31 +430,19 @@ const TournamentEditorDialog = (openTournamentEditor: boolean, setTournamentEdit
                 <Grid item xs={6} md={4}>
                   <InputLabel>Tournament Start Date</InputLabel>
                   <Item>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        label="From Date"
-                        value={fromDate}
-                        onChange={(newValue) => {
-                          setFromDate(newValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </LocalizationProvider>
+                    <DatePickerComponent
+                      label="From Date"
+                      setDay={(newValue) => { fromDateRef.current = newValue }}
+                    />
                   </Item>
                 </Grid>
                 <Grid item xs={6}>
                   <InputLabel>Tournament End Date</InputLabel>
                   <Item >
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        label="To Date"
-                        value={toDate}
-                        onChange={(newValue) => {
-                          setToDate(newValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </LocalizationProvider>
+                    <DatePickerComponent
+                      label="To Date"
+                      setDay={(newValue) => { toDateRef.current = newValue }}
+                    />
                   </Item>
                 </Grid>
               </Grid>
