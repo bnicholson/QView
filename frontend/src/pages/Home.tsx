@@ -15,11 +15,11 @@ interface Props {
 export const Home = (props: Props) => {
   const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs())
   const [stopDate, setStopDate] = React.useState<Dayjs | null>(dayjs().add(1, 'month'))
-  const [selectedCountry, setSelectedCountry] = React.useState<string>("")
-  const [selectedRegion, setSelectedRegion] = React.useState<string>("USA")
+  const [selectedCountry, setSelectedCountry] = React.useState<string>("USA")
+  const [selectedRegion, setSelectedRegion] = React.useState<string>("")
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const [tournaments, setTournaments] = React.useState<Tournament[]>([])
-  const [tournamentEditorIsOpen, setTournamentEditorIsOpen] = React.useState(false);
+  const [tournamentEditor, setTournamentEditor] = React.useState<{ isOpen: boolean, tournament: Tournament | undefined }>({ isOpen: false, tournament: undefined });
   React.useEffect(() => {
     setIsLoading(true)
     const startMillis = startDate ? startDate.valueOf() : 0;
@@ -121,8 +121,11 @@ export const Home = (props: Props) => {
             </Select>
           </FormControl>
         </div>
-        <div>
-          <Card onClick={() => setTournamentEditorIsOpen(true)}>
+        <div style={{
+          display: "flex",
+          flexWrap: "wrap"
+        }}>
+          <Card onClick={() => setTournamentEditor({ isOpen: true, tournament: undefined })}>
             <CardContent>
               Click to create a new tournament.
             </CardContent>
@@ -131,7 +134,7 @@ export const Home = (props: Props) => {
             "Loading tournaments..."
           ) : (
             tournaments.map(tournament => (
-              <Card key={tournament.tid} onClick={() => {}}>
+              <Card key={tournament.tid} onClick={() => setTournamentEditor({ isOpen: true, tournament })}>
                 <CardContent>
                   {`Organization: ${tournament.organization}`}
                   <br />
@@ -147,8 +150,9 @@ export const Home = (props: Props) => {
         </div>
       </div>
       <TournamentEditorDialog
-        isOpen={tournamentEditorIsOpen}
-        onCancel={() => setTournamentEditorIsOpen(false)}
+        initialTournament={tournamentEditor.tournament}
+        isOpen={tournamentEditor.isOpen}
+        onCancel={() => setTournamentEditor({ isOpen: false, tournament: undefined })}
         onSave={tournament => setTournaments(tournaments => tournaments.concat([tournament]))}
       />
     </div>

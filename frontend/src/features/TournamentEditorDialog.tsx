@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Collapse from '@mui/material/Collapse'
-import { TournamentAPI } from '../containers/TournamentPage'
+import { TournamentAPI, TournamentCreateUpdateResult } from '../containers/TournamentPage'
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid'
 import MenuItem from '@mui/material/MenuItem'
@@ -36,30 +36,6 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-// {
-//   "code": 200,
-//   "message": "",
-//   "data": {
-//     "tid": 13,
-//     "organization": "Nazarene",
-//     "tname": "Boxing Day",
-//     "breadcrumb": "",
-//     "fromdate": "2022-12-26",
-//     "todate": "2022-12-27",
-//     "venue": "",
-//     "city": "",
-//     "region": "Michigan",
-//     "country": "",
-//     "contact": "somebody",
-//     "contactemail": "@@@",
-//     "hide": true,
-//     "shortinfo": "",
-//     "info": "",
-//     "created_at": "2022-12-26T22:41:25.973816Z",
-//     "updated_at": "2022-12-26T22:41:25.973816Z"
-//   }
-// }
-
 const confirmDialogDefaultState = {
   isOpen: false,
   message: "",
@@ -68,31 +44,61 @@ const confirmDialogDefaultState = {
   title: ""
 };
 
+const tournamentEmptyState: Omit<Tournament, "created_at" | "tid" | "updated_at"> = {
+  breadcrumb: "",
+  city: "",
+  contact: "somebody",
+  contactemail: "@@@",
+  country: "",
+  fromdate: null,
+  hide: true,
+  info: "",
+  organization: "Nazarene",
+  region: "",
+  shortinfo: "",
+  tname: "",
+  todate: null,
+  venue: ""
+}
+
 interface Props {
+  initialTournament?: Tournament;
   isOpen: boolean;
   onCancel: VoidFunction;
   onSave: (tournament: Tournament) => void;
 }
 
 export const TournamentEditorDialog = (props: Props) => {
-  const { isOpen, onCancel, onSave } = props;
-  const [tournamentName, setTournamentName] = React.useState<string>("")
-  const [venue, setVenue] = React.useState<string>("")
-  const [org, setOrg] = React.useState<string>("Nazarene")
-  const fromDateRef = React.useRef<Dayjs | null>(null)
-  const toDateRef = React.useRef<Dayjs | null>(null)
-  const [city, setCity] = React.useState<string>("")
-  const [region, setRegion] = React.useState<string>("")
-  const [country, setCountry] = React.useState<string>("")
-  const [hide, setHide] = React.useState<string>("True");
-  const [breadcrumb, setBreadcrumb] = React.useState<string>("")
-  const [shortinfo, setShortInfo] = React.useState<string>("");
-  const [info, setInfo] = React.useState<string>("");
-  const [contact, setContact] = React.useState<string>("somebody");
-  const [contactemail, setContactEmail] = React.useState<string>("@@@");
+  const { initialTournament, isOpen, onCancel, onSave } = props;
+  const [tournament, setTournament] = React.useState(initialTournament ? initialTournament : tournamentEmptyState);
+  const fromDateRef = React.useRef<Dayjs | null>(initialTournament ? initialTournament.fromdate : null)
+  const toDateRef = React.useRef<Dayjs | null>(initialTournament ? initialTournament.todate : null)
   const [alertopened, setAlertOpened] = React.useState(false);
   const [errormsg, setErrorMsg] = React.useState<string>("Simple error message");
   const [confirmDialog, setConfirmDialog] = React.useState(confirmDialogDefaultState);
+
+  // If the tournament editor is closed, reset the state.
+  React.useEffect(() => {
+    if (!isOpen && confirmDialog.isOpen) {
+      setTournament(tournamentEmptyState);
+      setConfirmDialog(confirmDialogDefaultState);
+      fromDateRef.current = initialTournament ? initialTournament.fromdate : null;
+      toDateRef.current = initialTournament ? initialTournament.todate : null;
+    }
+  }, [confirmDialog.isOpen, isOpen]);
+
+  // If the initial tournament changes, set or clear the initial fields.
+  React.useEffect(() => {
+    if (initialTournament !== undefined) {
+      setTournament(initialTournament);
+      fromDateRef.current = initialTournament.fromdate;
+      toDateRef.current = initialTournament.todate;
+    } else {
+      setTournament(tournamentEmptyState);
+      fromDateRef.current = null;
+      toDateRef.current = null;
+    }
+  }, [initialTournament])
 
   const openCancelDialog = () => setConfirmDialog({
     isOpen: true,
@@ -110,28 +116,34 @@ export const TournamentEditorDialog = (props: Props) => {
     }
 
     let tournamentCS: TournamentChangeset = {
-      organization: org,
-      tname: tournamentName,
-      breadcrumb: breadcrumb,
+      organization: tournament.organization,
+      tname: tournament.tname,
+      breadcrumb: tournament.breadcrumb,
       fromdate: fromDateRef.current?.format("YYYY-MM-DD"),
       todate: toDateRef.current?.format("YYYY-MM-DD"),
-      venue: venue,
-      city: city,
-      region: region,
-      country: country,
-      contact: contact,
-      contactemail: contactemail,
+      venue: tournament.venue,
+      city: tournament.city,
+      region: tournament.region,
+      country: tournament.country,
+      contact: tournament.contact,
+      contactemail: tournament.contactemail,
       hide: true,
-      shortinfo: shortinfo,
-      info: info
+      shortinfo: tournament.shortinfo,
+      info: tournament.info
     };
 
     // now send the data to the backend microservice
-    const result = await TournamentAPI.create(tournamentCS).catch((err: any) => {
+    let result: TournamentCreateUpdateResult;
+    try {
+      // TODO: Modify TournamentAPI.update() to accept a tournament object?
+      result = initialTournament
+        ? await TournamentAPI.update(initialTournament.tid, tournamentCS as any as string)
+        : await TournamentAPI.create(tournamentCS);
+    } catch(err: any) {
       setErrorMsg("Didn't save 1st - " + err);
-      setAlertOpened(true);
-      return;
-    });
+          setAlertOpened(true);
+          return;
+    }
 
     // make sure we had a successful
     if ((result.code < 200) || (result.code > 209)) {
@@ -217,9 +229,9 @@ export const TournamentEditorDialog = (props: Props) => {
                     labelId='demo-simple-select-label55'
                     id="select-organization"
                     label="Organization"
-                    value={org}
+                    value={tournament.organization}
                     onChange={(event) => {
-                      setOrg(event.target.value as string);
+                      setTournament(state => ({ ...state, organization: event.target.value as string }));
                     }}
                   >
                     <MenuItem value={"Nazarene"}>Nazarene</MenuItem>
@@ -231,9 +243,9 @@ export const TournamentEditorDialog = (props: Props) => {
                   <TextField
                     variant="outlined"
                     label="Tournament Name"
-                    value={tournamentName}
+                    value={tournament.tname}
                     onChange={(event) => {
-                      setTournamentName(event.target.value as string);
+                      setTournament(state => ({ ...state, tname: event.target.value as string }));
                     }}
                   />
                 </Grid>
@@ -271,9 +283,9 @@ export const TournamentEditorDialog = (props: Props) => {
                   <TextField
                     variant="outlined"
                     label="Venue"
-                    value={venue}
+                    value={tournament.venue}
                     onChange={(event) => {
-                      setVenue(event.target.value as string);
+                      setTournament(state => ({ ...state, venue: event.target.value as string }));
                     }}
                   />
                 </Grid>
@@ -283,9 +295,9 @@ export const TournamentEditorDialog = (props: Props) => {
                     labelId='demo-simple-select-label55'
                     id="select-organization"
                     label="Hide"
-                    value={hide}
+                    value={tournament.hide ? "True" : "False"}
                     onChange={(event) => {
-                      setHide(event.target.value as string);
+                      setTournament(state => ({ ...state, hide: event.target.value === "True" }));
                     }}
                   >
                     <MenuItem value={"True"}>Hide</MenuItem>
@@ -297,9 +309,9 @@ export const TournamentEditorDialog = (props: Props) => {
                   <TextField
                     variant="outlined"
                     label="Breadcrumb"
-                    value={breadcrumb}
+                    value={tournament.breadcrumb}
                     onChange={(event) => {
-                      setBreadcrumb(event.target.value as string);
+                      setTournament(state => ({ ...state, breadcrumb: event.target.value as string }));
                     }}
                   />
                 </Grid>
@@ -313,9 +325,9 @@ export const TournamentEditorDialog = (props: Props) => {
                   <TextField
                     variant="outlined"
                     label="City"
-                    value={city}
+                    value={tournament.city}
                     onChange={(event) => {
-                      setCity(event.target.value as string);
+                      setTournament(state => ({ ...state, city: event.target.value as string }));
                     }}
                   />
                 </Grid>
@@ -324,9 +336,9 @@ export const TournamentEditorDialog = (props: Props) => {
                   <TextField
                     variant="outlined"
                     label="Region/State/Province:"
-                    value={region}
+                    value={tournament.region}
                     onChange={(event) => {
-                      setRegion(event.target.value as string);
+                      setTournament(state => ({ ...state, region: event.target.value as string }));
                     }}
                   />
                 </Grid>
@@ -335,9 +347,9 @@ export const TournamentEditorDialog = (props: Props) => {
                   <TextField
                     variant="outlined"
                     label="Country"
-                    value={country}
+                    value={tournament.country}
                     onChange={(event) => {
-                      setCountry(event.target.value as string);
+                      setTournament(state => ({ ...state, country: event.target.value as string }));
                     }}
                   />
                 </Grid>
@@ -347,9 +359,9 @@ export const TournamentEditorDialog = (props: Props) => {
                   <TextField
                     variant="outlined"
                     label="Contact"
-                    value={contact}
+                    value={tournament.contact}
                     onChange={(event) => {
-                      setContact(event.target.value as string);
+                      setTournament(state => ({ ...state, contact: event.target.value as string }));
                     }}
                   />
                 </Grid>
@@ -358,9 +370,9 @@ export const TournamentEditorDialog = (props: Props) => {
                   <TextField
                     variant="outlined"
                     label="Contact Email"
-                    value={contactemail}
+                    value={tournament.contactemail}
                     onChange={(event) => {
-                      setContactEmail(event.target.value as string);
+                      setTournament(state => ({ ...state, contactemail: event.target.value as string }));
                     }}
                   />
                 </Grid>
@@ -370,10 +382,10 @@ export const TournamentEditorDialog = (props: Props) => {
                   <TextField
                     variant="outlined"
                     label="Short Information"
-                    value={shortinfo}
+                    value={tournament.shortinfo}
                     style={{ width: 900 }}
                     onChange={(event) => {
-                      setShortInfo(event.target.value as string);
+                      setTournament(state => ({ ...state, shortinfo: event.target.value as string }));
                     }}
                   />
                 </Grid>
@@ -385,9 +397,9 @@ export const TournamentEditorDialog = (props: Props) => {
                       minRows={12}
                       placeholder="Minimum 3 rows"
                       style={{ width: 900 }}
-                      value={info}
+                      value={tournament.info}
                       onChange={(event) => {
-                        setInfo(event.target.value as string);
+                        setTournament(state => ({ ...state, info: event.target.value as string }));
                       }}
                     />
                   </Box>
@@ -406,5 +418,4 @@ export const TournamentEditorDialog = (props: Props) => {
       </div >
     </Dialog >
   )
-
-}
+};
