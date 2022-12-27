@@ -1,4 +1,5 @@
-import { Button, Card, CardActions, CardContent, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import { Button, Card, CardActions, CardContent, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
@@ -126,12 +127,23 @@ export const Home = (props: Props) => {
         <div style={{
           display: "flex",
           flexWrap: "wrap",
-          gap: 10,
+          gap: 10
         }}>
           {isUserAdmin && (
             <Card onClick={() => setTournamentEditor({ isOpen: true, tournament: undefined })}>
-              <CardContent>
-                Click to create a new tournament.
+              <CardContent sx={{ alignItems: "center", display: "flex", flexDirection: "column", height: "100%", justifyContent: "center" }}>
+                <div style={{
+                  alignItems: "center",
+                  background: "#e5e5e5",
+                  borderRadius: 40,
+                  display: "flex",
+                  height: 80,
+                  justifyContent: "center",
+                  width: 80
+                }}>
+                  <AddIcon fontSize="large" />
+                </div>
+                Create a New Tournament
               </CardContent>
             </Card>
           )}
@@ -146,7 +158,6 @@ export const Home = (props: Props) => {
                   }}
                   tournament={tournament}
                 />
-                <div />
                 {isUserAdmin && (
                   <CardActions sx={{ justifyContent: "flex-end" }}>
                     <Button size="small">Edit</Button>
