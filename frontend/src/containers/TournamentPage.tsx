@@ -20,12 +20,18 @@ let tournament: Tournament = {
   updated_at: new Date()
 };
 
+export interface TournamentCreateUpdateResult {
+  code: number;
+  message: string;
+  data: Tournament;
+}
+
 export const TournamentAPI = {
   get: async (page: number, size: number) =>
     await (await fetch(`/api/tournaments?page=${page}&page_size=${size}`)).json(),
   getByDate: async (fromDate: number, toDate: number) =>
     await (await fetch(`/api/tournaments?from_date=${fromDate}&to_date=${toDate}`)).json(),
-  create: async (tournament: TournamentChangeset) => {
+  create: async (tournament: TournamentChangeset): Promise<TournamentCreateUpdateResult> => {
     let nquery = JSON.stringify(tournament);
     let response = await fetch('/api/tournaments', {
         method: 'POST',
@@ -40,14 +46,16 @@ export const TournamentAPI = {
     },
   delete: async (id: number) =>
     await fetch(`/api/tournaments/${id}`, { method: 'DELETE' }),
-  update: async (id: number, tournament: string) =>
-    await fetch(`/api/tournaments/${id}`, {
+  update: async (id: number, tournament: string): Promise<TournamentCreateUpdateResult> => {
+    const response = await fetch(`/api/tournaments/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ text: tournament }),
-    }),
+    });
+    return await response.json();
+  }
 }
 
 export const Tournaments = () => {

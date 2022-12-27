@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import React from 'react';
 
 interface Props {
+  isOpen: boolean;
   message: string;
   onCancel: React.MouseEventHandler<HTMLButtonElement>;
   onConfirm: React.MouseEventHandler<HTMLButtonElement>;
@@ -21,7 +22,7 @@ interface Props {
  */
 export const ConfirmDialog = (props: Props) => {
   return (
-    <Dialog open={true} maxWidth="sm" fullWidth>
+    <Dialog open={props.isOpen} maxWidth="sm" fullWidth>
       <DialogTitle>{props.title}</DialogTitle>
       <Box position="absolute" top={0} right={0}>
         <IconButton aria-label="Close">
