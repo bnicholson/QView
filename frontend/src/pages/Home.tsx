@@ -1,4 +1,4 @@
-import { Card, CardContent, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Button, Card, CardActions, CardContent, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
@@ -6,6 +6,7 @@ import React from 'react'
 import { TournamentAPI } from '../containers/TournamentPage';
 import { makeCancelable } from '../features/makeCancelable';
 import { states } from '../features/states';
+import { TournamentCardContent } from '../features/TournamentCardContent';
 import { TournamentEditorDialog } from '../features/TournamentEditorDialog';
 
 interface Props {
@@ -20,6 +21,7 @@ export const Home = (props: Props) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const [tournaments, setTournaments] = React.useState<Tournament[]>([])
   const [tournamentEditor, setTournamentEditor] = React.useState<{ isOpen: boolean, tournament: Tournament | undefined }>({ isOpen: false, tournament: undefined });
+  const isUserAdmin = true;
   React.useEffect(() => {
     setIsLoading(true)
     const startMillis = startDate ? startDate.valueOf() : 0;
@@ -123,27 +125,33 @@ export const Home = (props: Props) => {
         </div>
         <div style={{
           display: "flex",
-          flexWrap: "wrap"
+          flexWrap: "wrap",
+          gap: 10,
         }}>
-          <Card onClick={() => setTournamentEditor({ isOpen: true, tournament: undefined })}>
-            <CardContent>
-              Click to create a new tournament.
-            </CardContent>
-          </Card>
+          {isUserAdmin && (
+            <Card onClick={() => setTournamentEditor({ isOpen: true, tournament: undefined })}>
+              <CardContent>
+                Click to create a new tournament.
+              </CardContent>
+            </Card>
+          )}
           {isLoading ? (
             "Loading tournaments..."
           ) : (
             tournaments.map(tournament => (
               <Card key={tournament.tid} onClick={() => setTournamentEditor({ isOpen: true, tournament })}>
-                <CardContent>
-                  {`Organization: ${tournament.organization}`}
-                  <br />
-                  {`Venue: ${tournament.venue}`}
-                  <br />
-                  {`Location: ${tournament.city}, ${tournament.region}, ${tournament.country}`}
-                  <br />
-                  {`ShortInfo: ${tournament.shortinfo}`}
-                </CardContent>
+                <TournamentCardContent
+                  sx={{
+                    textAlign: "left",
+                  }}
+                  tournament={tournament}
+                />
+                <div />
+                {isUserAdmin && (
+                  <CardActions sx={{ justifyContent: "flex-end" }}>
+                    <Button size="small">Edit</Button>
+                  </CardActions>
+                )}
               </Card>
             ))
           )}
