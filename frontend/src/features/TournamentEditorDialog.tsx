@@ -84,6 +84,7 @@ export const TournamentEditorDialog = (props: Props) => {
       setConfirmDialog(confirmDialogDefaultState);
       fromDateRef.current = initialTournament ? initialTournament.fromdate : null;
       toDateRef.current = initialTournament ? initialTournament.todate : null;
+      setErrorMsg("Simple error message");
     }
   }, [confirmDialog.isOpen, isOpen]);
 

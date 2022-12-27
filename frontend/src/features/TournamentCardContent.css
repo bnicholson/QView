@@ -1,0 +1,38 @@
+.tournamentCardContent {
+  text-align: left;
+}
+
+.tournamentCardContent p,
+.tournamentCardContent h3 {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.tournamentCardContent p:first-child,
+.tournamentCardContent h3:first-child {
+  margin-top: 0px;
+}
+
+.tournamentCardContent h3 span.dates {
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.tournamentCardContent p:last-child {
+  margin-bottom: 0px;
+}
+
+.tournamentCardContent p {
+  font-size: 14px;
+}
+
+.tournamentCardContent h3 {
+  font-size: 16px;
+}
+
+.tournamentCardContent p .descriptionTitle {
+  color: gray;
+  font-size: 12px;
+  font-weight: normal;
+}
