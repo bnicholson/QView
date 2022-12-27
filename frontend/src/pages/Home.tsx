@@ -152,12 +152,7 @@ export const Home = (props: Props) => {
           ) : (
             tournaments.map(tournament => (
               <Card key={tournament.tid} onClick={() => setTournamentEditor({ isOpen: true, tournament })}>
-                <TournamentCardContent
-                  sx={{
-                    textAlign: "left",
-                  }}
-                  tournament={tournament}
-                />
+                <TournamentCardContent tournament={tournament} />
                 {isUserAdmin && (
                   <CardActions sx={{ justifyContent: "flex-end" }}>
                     <Button size="small">Edit</Button>

@@ -1,3 +1,7 @@
+.tournamentCardContent {
+  text-align: left;
+}
+
 .tournamentCardContent p,
 .tournamentCardContent h3 {
   display: flex;
