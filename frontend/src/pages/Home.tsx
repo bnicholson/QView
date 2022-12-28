@@ -4,6 +4,9 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../app/hooks';
+import { setTid, setTournament } from '../breadcrumb';
 import { TournamentAPI } from '../containers/TournamentPage';
 import { makeCancelable } from '../features/makeCancelable';
 import { states } from '../features/states';
@@ -23,6 +26,14 @@ export const Home = (props: Props) => {
   const [tournaments, setTournaments] = React.useState<Tournament[]>([])
   const [tournamentEditor, setTournamentEditor] = React.useState<{ isOpen: boolean, tournament: Tournament | undefined }>({ isOpen: false, tournament: undefined });
   const isUserAdmin = true;
+  const dispatcher = useAppDispatch();
+  const navigate = useNavigate();
+  const openTournament = (tournament: Tournament) => {
+    dispatcher(setTournament(tournament.tname));
+    dispatcher(setTid(tournament.tid));
+    navigate("/division");
+  }
+  const closeTournamentEditor = () => setTournamentEditor({ isOpen: false, tournament: undefined });
   React.useEffect(() => {
     setIsLoading(true)
     const startMillis = startDate ? startDate.valueOf() : 0;
@@ -151,11 +162,13 @@ export const Home = (props: Props) => {
             "Loading tournaments..."
           ) : (
             tournaments.map(tournament => (
-              <Card key={tournament.tid} onClick={() => setTournamentEditor({ isOpen: true, tournament })}>
-                <TournamentCardContent tournament={tournament} />
+              <Card key={tournament.tid}>
+                <TournamentCardContent onClick={() => openTournament(tournament)} tournament={tournament} />
                 {isUserAdmin && (
                   <CardActions sx={{ justifyContent: "flex-end" }}>
-                    <Button size="small">Edit</Button>
+                    <Button onClick={() => setTournamentEditor({ isOpen: true, tournament })} size="small">
+                      Edit
+                    </Button>
                   </CardActions>
                 )}
               </Card>
@@ -166,8 +179,8 @@ export const Home = (props: Props) => {
       <TournamentEditorDialog
         initialTournament={tournamentEditor.tournament}
         isOpen={tournamentEditor.isOpen}
-        onCancel={() => setTournamentEditor({ isOpen: false, tournament: undefined })}
-        onSave={tournament => setTournaments(tournaments => tournaments.concat([tournament]))}
+        onCancel={closeTournamentEditor}
+        onSave={tournament => { closeTournamentEditor; setTournaments(tournaments => tournaments.concat([tournament])); }}
       />
     </div>
   )
