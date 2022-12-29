@@ -77,16 +77,14 @@ export const TournamentEditorDialog = (props: Props) => {
   const [errormsg, setErrorMsg] = React.useState<string>("Simple error message");
   const [confirmDialog, setConfirmDialog] = React.useState(confirmDialogDefaultState);
 
-  // If the tournament editor is closed, reset the state.
-  React.useEffect(() => {
-    if (!isOpen && confirmDialog.isOpen) {
-      setTournament(tournamentEmptyState);
-      setConfirmDialog(confirmDialogDefaultState);
-      fromDateRef.current = initialTournament ? initialTournament.fromdate : null;
-      toDateRef.current = initialTournament ? initialTournament.todate : null;
-      setErrorMsg("Simple error message");
-    }
-  }, [confirmDialog.isOpen, isOpen]);
+  /** Call this whenever the tournament editor is closed. */
+  const resetState = () => {
+    setTournament(tournamentEmptyState);
+    setConfirmDialog(confirmDialogDefaultState);
+    fromDateRef.current = initialTournament ? initialTournament.fromdate : null;
+    toDateRef.current = initialTournament ? initialTournament.todate : null;
+    setErrorMsg("Simple error message");
+  };
 
   // If the initial tournament changes, set or clear the initial fields.
   React.useEffect(() => {
@@ -101,13 +99,20 @@ export const TournamentEditorDialog = (props: Props) => {
     }
   }, [initialTournament])
 
-  const openCancelDialog = () => setConfirmDialog({
-    isOpen: true,
-    message: "Any changes you've made to the tournament will be lost.",
-    handleCancel: () => setConfirmDialog(confirmDialogDefaultState),
-    handleConfirm: () => onCancel(),
-    title: "Are you sure you want to cancel tournament edit?"
-  });
+  const openCancelDialog = () => {
+    if (tournament == initialTournament || tournament == tournamentEmptyState) {
+      onCancel();
+      resetState();
+    } else {
+      setConfirmDialog({
+        isOpen: true,
+        message: "Any changes you've made to the tournament will be lost.",
+        handleCancel: () => setConfirmDialog(confirmDialogDefaultState),
+        handleConfirm: () => { onCancel(); resetState(); },
+        title: "Are you sure you want to cancel tournament edit?"
+      })
+    }
+  };
 
   const handleTournamentEditorSave = async () => {
     if (!fromDateRef.current || !toDateRef.current || fromDateRef.current.isAfter(toDateRef.current)) {
@@ -161,7 +166,7 @@ export const TournamentEditorDialog = (props: Props) => {
     isOpen: true,
     message: "Cancel if you want to make more changes.",
     handleCancel: () => setConfirmDialog(confirmDialogDefaultState),
-    handleConfirm: () => handleTournamentEditorSave(),
+    handleConfirm: () => { handleTournamentEditorSave(); resetState(); },
     title: "Save changes to the tournament?"
   });
 
