@@ -21,7 +21,7 @@ import ShareIcon from '@mui/icons-material/Share'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
-import { TournamentAPI } from '../containers/TournamentPage'
+import { TournamentAPI } from '../features/TournamentAPI'
 import { Route, useNavigate, Routes, Form } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import SettingsIcon from '@mui/icons-material/Settings';
