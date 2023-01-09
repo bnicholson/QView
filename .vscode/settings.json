@@ -1,0 +1,14 @@
+{
+    "[css]": {
+        "editor.tabSize": 2
+    },
+    "[html]": {
+        "editor.tabSize": 2
+    },
+    "[javascript]": {
+        "editor.tabSize": 2
+    },
+    "[rust]": {
+        "editor.tabSize": 4
+    }
+}

@@ -7,7 +7,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../app/hooks';
 import { setTid, setTournament } from '../breadcrumb';
-import { TournamentAPI } from '../containers/TournamentPage';
+import { TournamentAPI, TournamentTS } from '../features/TournamentAPI';
 import { makeCancelable } from '../features/makeCancelable';
 import { states } from '../features/states';
 import { TournamentCardContent } from '../features/TournamentCardContent';
@@ -23,12 +23,12 @@ export const Home = (props: Props) => {
   const [selectedCountry, setSelectedCountry] = React.useState<string>("USA")
   const [selectedRegion, setSelectedRegion] = React.useState<string>("")
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
-  const [tournaments, setTournaments] = React.useState<Tournament[]>([])
-  const [tournamentEditor, setTournamentEditor] = React.useState<{ isOpen: boolean, tournament: Tournament | undefined }>({ isOpen: false, tournament: undefined });
+  const [tournaments, setTournaments] = React.useState<TournamentTS[]>([])
+  const [tournamentEditor, setTournamentEditor] = React.useState<{ isOpen: boolean, tournament: TournamentTS | undefined }>({ isOpen: false, tournament: undefined });
   const isUserAdmin = true;
   const dispatcher = useAppDispatch();
   const navigate = useNavigate();
-  const openTournament = (tournament: Tournament) => {
+  const openTournament = (tournament: TournamentTS) => {
     dispatcher(setTournament(tournament.tname));
     dispatcher(setTid(tournament.tid));
     navigate("/division");
@@ -40,7 +40,7 @@ export const Home = (props: Props) => {
     const stopMillis = stopDate ? stopDate.valueOf() : dayjs().add(1, 'month').valueOf();
     const cancelable = makeCancelable(TournamentAPI.getByDate(startMillis, stopMillis));
     cancelable.promise
-      .then((tournaments: Tournament[]) => {
+      .then((tournaments: TournamentTS[]) => {
         setTournaments(tournaments)
         setIsLoading(false)
       })
@@ -180,7 +180,18 @@ export const Home = (props: Props) => {
         initialTournament={tournamentEditor.tournament}
         isOpen={tournamentEditor.isOpen}
         onCancel={closeTournamentEditor}
-        onSave={tournament => { closeTournamentEditor; setTournaments(tournaments => tournaments.concat([tournament])); }}
+        onSave={tournament => {
+          closeTournamentEditor();
+          if (tournamentEditor.tournament === undefined) {
+            setTournaments(tournaments => tournaments.concat([tournament]));
+          } else {
+            setTournaments(state => {
+              const index = state.findIndex(t => t.tid === tournament.tid);
+              state[index] = tournament;
+              return state;
+            })
+          }
+        }}
       />
     </div>
   )

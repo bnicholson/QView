@@ -15,7 +15,7 @@ export const TournamentCardContent = (props: Props) => {
       {(tournament.tname || tournament.fromdate || tournament.todate) && (
         <h3>
           <span>{tournament.tname}</span>
-          <span className="dates">{`${tournament.fromdate} - ${tournament.todate}`}</span>
+          <span className="dates">{`${tournament.fromdate.format("YYYY-MM-DD")} - ${tournament.todate.format("YYYY-MM-DD")}`}</span>
         </h3>
       )}
       {tournament.venue && (

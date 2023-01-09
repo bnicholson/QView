@@ -1,62 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { TournamentAPI } from '../features/TournamentAPI'
 
-let tournament: Tournament = {
-  tid: 0,
-  organization: "Nazarene",
-  tname: "",
-  breadcrumb: "",
-  fromdate: new Date(),
-  todate: new Date(),
-  venue: "",
-  city: "",
-  region: "",
-  country: "",
-  contact: "",
-  contactemail: "",
-  hide: true,
-  shortinfo: "",
-  info: "",
-  created_at: new Date(),
-  updated_at: new Date()
-};
-
-export interface TournamentCreateUpdateResult {
-  code: number;
-  message: string;
-  data: Tournament;
-}
-
-export const TournamentAPI = {
-  get: async (page: number, size: number) =>
-    await (await fetch(`/api/tournaments?page=${page}&page_size=${size}`)).json(),
-  getByDate: async (fromDate: number, toDate: number) =>
-    await (await fetch(`/api/tournaments?from_date=${fromDate}&to_date=${toDate}`)).json(),
-  create: async (tournament: TournamentChangeset): Promise<TournamentCreateUpdateResult> => {
-    let nquery = JSON.stringify(tournament);
-    let response = await fetch('/api/tournaments', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: nquery,
-      });
-      let result = await response.json();
-      console.log(result);
-      return result;
-    },
-  delete: async (id: number) =>
-    await fetch(`/api/tournaments/${id}`, { method: 'DELETE' }),
-  update: async (id: number, tournament: string): Promise<TournamentCreateUpdateResult> => {
-    const response = await fetch(`/api/tournaments/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ text: tournament }),
-    });
-    return await response.json();
-  }
-}
 
 export const Tournaments = () => {
   const [text, setText] = useState<string>('')
@@ -69,7 +13,7 @@ export const Tournaments = () => {
 
   const createTournament = async (tournament: string) => {
     setProcessing(true)
-    await TournamentAPI.create(tournament)
+    await TournamentAPI.create(tournament as any)
     setTournaments(await TournamentAPI.get(page, pageSize))
     setText('')
     setProcessing(false)
@@ -77,7 +21,7 @@ export const Tournaments = () => {
 
   const updateTournament = async (tournament: Tournament) => {
     setProcessing(true)
-    await TournamentAPI.update(tournament.tid, text)
+    await TournamentAPI.update(tournament.tid, {} as any)
     setTournaments(await TournamentAPI.get(page, pageSize))
     setText('')
     editTournament(null)

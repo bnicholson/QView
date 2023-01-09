@@ -16,7 +16,7 @@ import ShareIcon from '@mui/icons-material/Share'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
-import { TournamentAPI } from './TournamentPage'
+import { TournamentAPI } from '../features/TournamentAPI'
 import { useNavigate } from 'react-router-dom'
 import SettingsIcon from '@mui/icons-material/Settings';
 import { setDisplayDate, setTournament, setTid } from '../breadcrumb'

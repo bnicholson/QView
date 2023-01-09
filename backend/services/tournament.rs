@@ -135,18 +135,16 @@ async fn update(
     db: Data<Database>,
     item_id: Path<BigId>,
     Json(item): Json<TournamentChangeset>,
-) -> HttpResponse {
+) -> Result<HttpResponse, Error> {
     let mut db = db.pool.get().unwrap();
 
     tracing::debug!("{} Tournement model update {:?} {:?}", line!(), item_id, item); 
 
     let result = models::tournament::update(&mut db, item_id.into_inner(), &item);
 
-    if result.is_ok() {
-        HttpResponse::Ok().finish()
-    } else {
-        HttpResponse::InternalServerError().finish()
-    }
+    let response = process_response(result);
+
+    Ok(HttpResponse::Ok().json(response))
 }
 
 #[delete("/{id}")]
@@ -195,7 +193,7 @@ pub fn process_response(result : QueryResult<Tournament>) -> TournamentResult {
 
     match result {
         Ok(output) => {
-            println!("Create Tourney (output)-> {:?}",output);
+            println!("Create/Update Tourney (output)-> {:?}",output);
             response.code = 200;
             response.message = "".to_string();
             response.data = Some(output);
