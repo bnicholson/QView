@@ -17,8 +17,12 @@ interface Props {
 
 }
 
-export const Home = (props: Props) => {
-  const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs())
+/**
+ * This renders a tournament finder and tournament editor and serves as the main component for the
+ * home page.
+ */
+export const TournamentFinder = (props: Props) => {
+  const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs().subtract(1, 'month'))
   const [stopDate, setStopDate] = React.useState<Dayjs | null>(dayjs().add(1, 'month'))
   const [selectedCountry, setSelectedCountry] = React.useState<string>("USA")
   const [selectedRegion, setSelectedRegion] = React.useState<string>("")
