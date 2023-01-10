@@ -22,7 +22,7 @@ interface Props {
  * home page.
  */
 export const TournamentFinder = (props: Props) => {
-  const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs())
+  const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs().subtract(1, 'month'))
   const [stopDate, setStopDate] = React.useState<Dayjs | null>(dayjs().add(1, 'month'))
   const [selectedCountry, setSelectedCountry] = React.useState<string>("USA")
   const [selectedRegion, setSelectedRegion] = React.useState<string>("")

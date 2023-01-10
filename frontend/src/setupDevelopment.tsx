@@ -49,8 +49,8 @@ const DevBoxItem = (props: {
     <div style={{ display: 'flex', flexFlow: 'column nowrap' }}>
       <div>{props.children}</div>
       <div style={{ display: 'flex' }}>
-        {props.actions?.map((action) => (
-          <button onClick={() => action.fn()}>{action.label}</button>
+        {props.actions?.map((action, index) => (
+          <button key={`DevBoxItem${index}`} onClick={() => action.fn()}>{action.label}</button>
         ))}
       </div>
     </div>
