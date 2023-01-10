@@ -12,7 +12,6 @@ import { Divisions } from './containers/DivisionPage';
 import { TDEditor } from './containers/TDEditor';
 import React from 'react';
 import './App.css';
-import { Home } from './containers/Home';
 import { Todos } from './containers/Todo';
 import { Files } from './containers/Files';
 import { Route, useNavigate, Routes } from 'react-router-dom';
@@ -35,7 +34,7 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { RoundsInProgress } from './containers/RoundsInProgress';
 import { Swagger } from './containers/Swagger'
-import { Home as Home2 } from './pages/Home'
+import { TournamentFinder } from './pages/TournamentFinder'
 
 if (process.env.NODE_ENV === 'development') import('./setupDevelopment')
 
@@ -150,10 +149,7 @@ const App = () => {
                         navigate("/division");
                         break;
                       case 2:
-                        // TODO: This still needs to be implemented, but at the moment
-                        //       it is used as a place to test the new home page.
-                        // alert("room");
-                        navigate("/home2");
+                        alert("room");
                         break;
                       case 3:
                         alert('round');
@@ -225,8 +221,7 @@ const App = () => {
         </Backdrop>
         <div style={{ margin: '0 auto', maxWidth: '1200px' }}>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/home2" element={<Home2 />} />
+            <Route path="/" element={<TournamentFinder />} />
             <Route path="/todos" element={<Todos />} />
             {/* CRA: routes */}
             <Route path="/gql" element={<GraphQLPage />} />
