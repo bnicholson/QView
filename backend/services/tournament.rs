@@ -202,7 +202,7 @@ pub fn process_response(result : QueryResult<Tournament>) -> TournamentResult {
             match e {
                 DBError::DatabaseError(dbek,e) => {
                     match dbek {
-                        UniqueViolation => {
+                        diesel::result::DatabaseErrorKind::UniqueViolation => {
                             response.code = 409;
                             response.message = "Duplicate Tournament".to_string();
                             tracing::info!("{} Tournament create process_response-> {:?}",line!(), e);

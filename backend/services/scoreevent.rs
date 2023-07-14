@@ -296,7 +296,7 @@ pub async fn write(
                 // already exists in the database.  We'll ignore those and
                 // panic or log the others
                 DBError::DatabaseError(dbek,e) => match dbek {
-                    UniqueViolation => {
+                    diesel::result::DatabaseErrorKind::UniqueViolation => {
                         // do nothing here.  This is a normal case when another event 
                         // comes in for this quiz.
                         log::error!("{:?} {:?} Error {:?} {:?}", module_path!(),line!(), dbek, e);
@@ -336,7 +336,7 @@ pub async fn write(
                 // already exists in the database.  We'll ignore those and
                 // panic or log the others
                 DBError::DatabaseError(dbek,info) => match dbek {
-                    UniqueViolation => {
+                    diesel::result::DatabaseErrorKind::UniqueViolation => {
                         // Okay we've written this one before.  this is some weird error
                          // since the upsert() in the quizevent model should have 
                         // handled it.
