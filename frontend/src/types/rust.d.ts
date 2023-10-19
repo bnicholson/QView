@@ -47,7 +47,7 @@ interface DivisionChangeset {
   dname: string
   breadcrumb: string
   hide: boolean
-  shortinfo?: string
+  shortinfo: string | undefined
 }
 
 interface Eventlog {
@@ -253,5 +253,5 @@ interface FileInfo {
   id: number
   key: string
   name: string
-  url?: string
+  url: string | undefined
 }
