@@ -12,10 +12,11 @@ DECLARE
     city text[] = array['Nampa', 'Nashville', 'Tokyo', 'Bourbanse', 'Olathe', 'Mount Vernon', 'Ferguson', 'Point Loma', 'Toronto', 'Pyonyang'];
     region text[] = array['Idaho', 'Tennessee', 'Prefect', 'Illinois', 'Kansas', 'Ohio', 'Missouri', 'California', 'Yukon', 'Corellas'];
     country text[] = array['US', 'USA', 'Japan', 'USA', 'USA', 'USA', 'USA', 'USA', 'Canada', 'North Korea'];
-    contact text[] = array['Barry Nicholson','Barry Nicholson','Barry Nicholson','Barry Nicholson','Barry Nicholson',
-        'Barry Nicholson','Barry Nicholson','Barry Nicholson','Barry Nicholson','Barry Nicholson' ];
-    email text[] = array['someone@someplace.com','someone@someplace.com','someone@someplace.com','someone@someplace.com','someone@someplace.com',
-        'someone@someplace.com','someone@someplace.com','someone@someplace.com','someone@someplace.com','someone@someplace.com'];
+    contact text[] = array['Vernon Preston','Kendrick Larson','Simon Meskill','Elise Shillingford','Cole Terry',
+        'Noelle Lawrence','Ross Malcom','Charlie Simonds','George Mendoza','Diana Shepherd' ];
+    email text[] = array['vernon.preston@someplace.com','kendrick.larson@someplace.com','simon.meskill@someplace.com',
+        'elise.shillingford@someplace.com','cole.terry@someplace.com','noelle.lawrence@someplace.com','ross.malcom@someplace.com',
+        'charlie.simonds@someplace.com','george.mendoza@someplace.com','diana.shepherd@someplace.com'];
 
     fromdate Date := CURRENT_DATE;
     todate Date := CURRENT_DATE + ((random()::integer * 7));
