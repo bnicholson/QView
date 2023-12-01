@@ -4,7 +4,8 @@
 #
 psql -d qviewdev <populate-testdata.sql
 #
-# Now it's time  
+# Now it's time to start populating the event data
+# from a huge eventlog.  This is used to test some of the apis
+# and to create test data
 #
-cd ..
-.cargo/.build/debug/replay 1000000 >/dev/null
+../.cargo/.build/debug/replay 1000000 2&>/dev/null
