@@ -12,6 +12,9 @@ path = "backend/main.rs"
 
 [[bin]]
 name = "replay"
+edition="2021"
+publish = false
+version = "0.1.0"
 path = "utils/src/replay.rs"
 
 [dependencies]
