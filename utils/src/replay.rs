@@ -67,7 +67,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     println!("Response: {}", resp.status());
 
     // now let's open the eventlog and start reading it
-    let filename = "old/eventlog.big";
+    let filename = "eventlog.big";
     // open the file in read-only mode (ignore errors)
     let file = File::open(filename).unwrap();
     let reader = BufReader::new(file);
