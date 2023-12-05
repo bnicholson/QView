@@ -1,6 +1,8 @@
 /frontend/dist
 /.cargo/.build
 .env*
+.env_beta
+.env_prod
 !.env.example
 node_modules/*
 build-log*.txt
