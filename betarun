@@ -6,4 +6,4 @@
 # All development environments would be on developer or tester laptops.
 # Beta would be used for testing activiites and trying out new designs, new code, etc.
 #
-export $(cat .env | xargs) && cargo run --release >output
+export $(cat .env_beta | xargs) && cargo run --release >output
