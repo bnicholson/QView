@@ -2,8 +2,8 @@ DO $$
 DECLARE
     uniqchars	Varchar(6) := left(md5(random()::text),6);
     tidvar  BIGINT := 33;
-    tournament_names text[] = array['Q2023-','Kentucky Invitational-', 'Mission Invitational-', 'Quizfest Invitational-',
-        'Olathe Invitational-', 'Tristate-', 'St. Louis-', 'California-', 'Canada-', 'Korea-'];
+    tournament_names text[] = array['Q2023','Kentucky Invitational', 'Mission Invitational', 'Quizfest Invitational',
+        'Olathe Invitational', 'Tristate', 'St. Louis', 'California', 'Canada', 'Korea'];
     bread_crumbs text[] = array['qf2023', 'kinv', 'minv', 'qf2022', 'oinv', 'tri', 'stlouis', 'california', 'canada', 'sk'];
 
     venue text[] = array['MVNU', 'Treveca', 'Japan', 'College Church', 'College Church', 'Mount Vernon', 'Bretage', 
@@ -40,11 +40,11 @@ BEGIN
         fromdate := CURRENT_DATE + ((random()*60)::integer) - 30;
         todate := fromdate + ((random()*7)::integer);
         Insert into tournaments (organization,tname,breadcrumb,fromdate,todate,venue,city,region,country,contact,contactemail,hide,shortinfo,info) 
-            values ('Nazarene', CONCAT(tournament_names[cnt],uniqchars),bread_crumbs[cnt], fromdate, todate, venue[cnt],
+            values ('Nazarene', tournament_names[cnt],bread_crumbs[cnt], fromdate, todate, venue[cnt],
                 city[cnt], region[cnt], country[cnt], contact[cnt], email[cnt] ,false, CONCAT('Held at ',venue[cnt]),
                 CONCAT('lots of info about this quiz',region[cnt]));
 
-        select tid from tournaments into tidvar where tname = CONCAT(tournament_names[cnt],uniqchars);
+        select tid from tournaments into tidvar where tname = tournament_names[cnt];
         RAISE NOTICE 'TID = % fromdate = % todate = % ', tidvar, fromdate, todate;
         Insert into divisions (tid,dname,breadcrumb,hide,shortinfo) values (tidvar,'District Novice','dn',false,'Quizzers must have quizzed less than one year');
         Insert into divisions (tid,dname,breadcrumb,hide,shortinfo) values (tidvar,'District Experienced','dx',false,'Any quizzer at all');
