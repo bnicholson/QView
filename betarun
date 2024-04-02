@@ -6,4 +6,9 @@
 # All development environments would be on developer or tester laptops.
 # Beta would be used for testing activiites and trying out new designs, new code, etc.
 #
+#
+# Generally to run this you use the following command line.
+#
+# user@host:~/projects/qview$ nohup ./betarun &
+#
 export $(cat .env_beta | xargs) && cargo run --release >output

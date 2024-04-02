@@ -1,19 +1,19 @@
 /* This file is generated and managed by tsync */
 
 interface ApiCalllog {
-  created_at: UTC
-  apicallid: BigId
-  method: string
-  uri: string
-  version: string
-  headers: string
+  created_at: UTC;
+  apicallid: BigId;
+  method: string;
+  uri: string;
+  version: string;
+  headers: string;
 }
 
 interface ApiCalllogChangeset {
-  method: string
-  uri: string
-  version: string
-  headers: string
+  method: string;
+  uri: string;
+  version: string;
+  headers: string;
 }
 
 type ID = number
@@ -23,235 +23,235 @@ type BigId = number
 type UTC = Date
 
 interface PaginationParams {
-  page: number
-  page_size: number
+  page: number;
+  page_size: number;
 }
 
 interface SearchDateParams {
-  from_date: number
-  to_date: number
+  from_date: number;
+  to_date: number;
 }
 
 interface Division {
-  did: BigId
-  tid: BigId
-  dname: string
-  breadcrumb: string
-  hide: boolean
-  shortinfo: string
-  created_at: UTC
-  updated_at: UTC
+  did: BigId;
+  tid: BigId;
+  dname: string;
+  breadcrumb: string;
+  hide: boolean;
+  shortinfo: string;
+  created_at: UTC;
+  updated_at: UTC;
 }
 
 interface DivisionChangeset {
-  dname: string
-  breadcrumb: string
-  hide: boolean
-  shortinfo: string | undefined
+  dname: string;
+  breadcrumb: string;
+  hide: boolean;
+  shortinfo?: string;
 }
 
 interface Eventlog {
-  evid: BigId
-  created_at: UTC
-  clientkey: string
-  organization: string
-  bldgroom: string
-  tournament: string
-  division: string
-  room: string
-  round: string
-  question: number
-  eventnum: number
-  name: string
-  team: number
-  quizzer: number
-  event: string
-  parm1: string
-  parm2: string
-  ts: string
-  clientip: string
-  md5digest: string
-  nonce: string
-  s1s: string
+  evid: BigId;
+  created_at: UTC;
+  clientkey: string;
+  organization: string;
+  bldgroom: string;
+  tournament: string;
+  division: string;
+  room: string;
+  round: string;
+  question: number;
+  eventnum: number;
+  name: string;
+  team: number;
+  quizzer: number;
+  event: string;
+  parm1: string;
+  parm2: string;
+  ts: string;
+  clientip: string;
+  md5digest: string;
+  nonce: string;
+  s1s: string;
 }
 
 interface EventlogChangeset {
-  clientkey: string
-  organization: string
-  bldgroom: string
-  tournament: string
-  division: string
-  room: string
-  round: string
-  question: number
-  eventnum: number
-  name: string
-  team: number
-  quizzer: number
-  event: string
-  parm1: string
-  parm2: string
-  ts: string
-  clientip: string
-  md5digest: string
-  nonce: string
-  s1s: string
+  clientkey: string;
+  organization: string;
+  bldgroom: string;
+  tournament: string;
+  division: string;
+  room: string;
+  round: string;
+  question: number;
+  eventnum: number;
+  name: string;
+  team: number;
+  quizzer: number;
+  event: string;
+  parm1: string;
+  parm2: string;
+  ts: string;
+  clientip: string;
+  md5digest: string;
+  nonce: string;
+  s1s: string;
 }
 
 interface Game {
-  gid: BigId
-  org: string
-  tournament: string
-  division: string
-  room: string
-  round: string
-  clientkey: string
-  ignore: boolean
-  ruleset: string
+  gid: BigId;
+  org: string;
+  tournament: string;
+  division: string;
+  room: string;
+  round: string;
+  clientkey: string;
+  ignore: boolean;
+  ruleset: string;
 }
 
 interface GameChangeset {
-  org: string
-  tournament: string
-  division: string
-  room: string
-  round: string
-  clientkey: string
-  ignore: boolean
-  ruleset: string
+  org: string;
+  tournament: string;
+  division: string;
+  room: string;
+  round: string;
+  clientkey: string;
+  ignore: boolean;
+  ruleset: string;
 }
 
 interface QuizEvent {
-  gid: BigId
-  question: number
-  eventnum: number
-  name: string
-  team: number
-  quizzer: number
-  event: string
-  parm1: string
-  parm2: string
-  clientts: UTC
-  serverts: UTC
-  md5digest: string
+  gid: BigId;
+  question: number;
+  eventnum: number;
+  name: string;
+  team: number;
+  quizzer: number;
+  event: string;
+  parm1: string;
+  parm2: string;
+  clientts: UTC;
+  serverts: UTC;
+  md5digest: string;
 }
 
 interface QuizEventChangeset {
-  name: string
-  team: number
-  quizzer: number
-  event: string
-  parm1: string
-  parm2: string
-  clientts: UTC
-  serverts: UTC
-  md5digest: string
+  name: string;
+  team: number;
+  quizzer: number;
+  event: string;
+  parm1: string;
+  parm2: string;
+  clientts: UTC;
+  serverts: UTC;
+  md5digest: string;
 }
 
 interface Room {
-  roomid: BigId
-  tid: BigId
-  name: string
-  building: string
-  quizmaster: string
-  contentjudge: string
-  comments: string
+  roomid: BigId;
+  tid: BigId;
+  name: string;
+  building: string;
+  quizmaster: string;
+  contentjudge: string;
+  comments: string;
 }
 
 interface RoomChangeset {
-  tid: BigId
-  name: string
-  building: string
-  quizmaster: string
-  contentjudge: string
-  comments: string
+  tid: BigId;
+  name: string;
+  building: string;
+  quizmaster: string;
+  contentjudge: string;
+  comments: string;
 }
 
 interface Schedule {
-  sid: BigId
-  tid: BigId
-  roundtime: UTC
-  org: string
-  tournament: string
-  division: string
-  room: string
-  round: string
-  team1: string
-  team2: string
-  team3: string
-  quizmaster: string
-  contentjudge: string
-  scorekeeper: string
-  stats: string
+  sid: BigId;
+  tid: BigId;
+  roundtime: UTC;
+  org: string;
+  tournament: string;
+  division: string;
+  room: string;
+  round: string;
+  team1: string;
+  team2: string;
+  team3: string;
+  quizmaster: string;
+  contentjudge: string;
+  scorekeeper: string;
+  stats: string;
 }
 
 interface ScheduleChangeset {
-  roundtime: UTC
-  org: string
-  tournament: string
-  division: string
-  room: string
-  round: string
-  team1: string
-  team2: string
-  team3: string
-  quizmaster: string
-  contentjudge: string
-  scorekeeper: string
-  stats: string
+  roundtime: UTC;
+  org: string;
+  tournament: string;
+  division: string;
+  room: string;
+  round: string;
+  team1: string;
+  team2: string;
+  team3: string;
+  quizmaster: string;
+  contentjudge: string;
+  scorekeeper: string;
+  stats: string;
 }
 
 interface Todo {
-  id: ID
-  text: string
-  created_at: UTC
-  updated_at: UTC
+  id: ID;
+  text: string;
+  created_at: UTC;
+  updated_at: UTC;
 }
 
 interface TodoChangeset {
-  text: string
+  text: string;
 }
 
 interface Tournament {
-  tid: BigId
-  organization: string
-  tname: string
-  breadcrumb: string
-  fromdate: NaiveDate
-  todate: NaiveDate
-  venue: string
-  city: string
-  region: string
-  country: string
-  contact: string
-  contactemail: string
-  hide: boolean
-  shortinfo: string
-  info: string
-  created_at: UTC
-  updated_at: UTC
+  tid: BigId;
+  organization: string;
+  tname: string;
+  breadcrumb: string;
+  fromdate: NaiveDate;
+  todate: NaiveDate;
+  venue: string;
+  city: string;
+  region: string;
+  country: string;
+  contact: string;
+  contactemail: string;
+  hide: boolean;
+  shortinfo: string;
+  info: string;
+  created_at: UTC;
+  updated_at: UTC;
 }
 
 interface TournamentChangeset {
-  organization: string
-  tname: string
-  breadcrumb: string
-  fromdate: NaiveDate
-  todate: NaiveDate
-  venue: string
-  city: string
-  region: string
-  country: string
-  contact: string
-  contactemail: string
-  hide: boolean
-  shortinfo: string
-  info: string
+  organization: string;
+  tname: string;
+  breadcrumb: string;
+  fromdate: NaiveDate;
+  todate: NaiveDate;
+  venue: string;
+  city: string;
+  region: string;
+  country: string;
+  contact: string;
+  contactemail: string;
+  hide: boolean;
+  shortinfo: string;
+  info: string;
 }
 
 interface FileInfo {
-  id: number
-  key: string
-  name: string
-  url: string | undefined
+  id: number;
+  key: string;
+  name: string;
+  url?: string;
 }

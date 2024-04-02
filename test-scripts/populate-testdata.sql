@@ -1,6 +1,5 @@
 DO $$
 DECLARE
-    uniqchars	Varchar(6) := left(md5(random()::text),6);
     tidvar  BIGINT := 33;
     tournament_names text[] = array['Q2023','Kentucky Invitational', 'Mission Invitational', 'Quizfest Invitational',
         'Olathe Invitational', 'Tristate', 'St. Louis', 'California', 'Canada', 'Korea'];
