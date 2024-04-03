@@ -8,9 +8,10 @@ The frontend is designed using the React JavaScript framework.
 The UI is designed using the Material UI framework and components.
 
 The backend database is Postgresql.
-Redis is used as a cache and as a inter Qview server store.  
+Redis/Valkey is used as a cache and as a inter Qview server store if we 
+end up having two application servers.  
 
-Note:  A development environment is up at http://qview.quizstuff.com:3000
+Note:  A beta/UAT development environment is up at http://qview.quizstuff.com:3000
 
 # Requirements & How to set up the Development Environment
 
@@ -55,14 +56,17 @@ Note:  A development environment is up at http://qview.quizstuff.com:3000
    su - postgres
    psql
    CREATE DATABASE qviewdev;
-   CREATE USER qview;
-   ALTER USER qview PASSWORD 'somepassword';
-   ALTER USER qview WITH SUPERUSER;
+   CREATE USER sammy;
+   ALTER USER sammy PASSWORD 'somepassword';
+   ALTER USER sammy WITH SUPERUSER;
    \q
    exit
    exit
    ```
-      
+
+   Note:  There is an example script under setup-db-valkey.sh that does this and other work.
+   This script replaces steps #7, #8, #9.   The script isn't perfect - it has flaws.
+ 
 8) Now populate the database with the tables needed for QView.
    ```
    diesel migration run
@@ -73,7 +77,7 @@ Note:  A development environment is up at http://qview.quizstuff.com:3000
    sudo bash
    su - postgres
    psql
-   ALTER USER qview with NOSUPERUSER;
+   ALTER USER sammy with NOSUPERUSER;
    \q
    exit
    exit
@@ -87,7 +91,7 @@ Note:  A development environment is up at http://qview.quizstuff.com:3000
 11) Create and populate all the appropriate environment variables in the `.env` file.
     ```
     SECRET_KEY=some_secret
-    DATABASE_URL=postgres://qview:somepassword@localhost/qviewdev
+    DATABASE_URL=postgres://sammy:somepassword@localhost/qviewdev
     RUST_BACKTRACE=1
     S3_HOST=http://localhost:9000
     S3_REGION=minio
