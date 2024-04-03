@@ -7,6 +7,7 @@ sudo apt install npm
 
 # Install Rust
 sudo apt install rustc
+sudo apt install rust-src
 sudo apt install cargo
 
 # This is required before running `cargo build` on the create-rust-app project.
