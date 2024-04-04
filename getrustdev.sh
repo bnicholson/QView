@@ -39,6 +39,8 @@ cargo install cargo-watch
 # Node add some node things we need
 sudo npm install -g yarn
 
+# Add all the docker tools
+sudo apt install docker.io docker-compose
 # 
 # Make sure we have a recently updated nodejs
 #
