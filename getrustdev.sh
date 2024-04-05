@@ -48,6 +48,12 @@ sudo npm install -g n
 sudo n lts
 n ls
 
+# 
+# Now install redis - later we'll move this to valkey (probably).
+#
+sudo apt install redis-server
+sudo apt install redis-tools
+
 #
 # Add ~/.cargo/bin to the user's profile
 #
