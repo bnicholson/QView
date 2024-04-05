@@ -42,13 +42,13 @@ struct CSVRecord {
 async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let args: Vec<String> = env::args().collect();
 
-    let limit : i32 = args[1].parse().unwrap();
+    let num_rooms : i32 = args[1].parse().unwrap();
+    let limit : i32 = args[2].parse().unwrap();
 
     // load the environment
     if dotenv::dotenv().is_err() {
         panic!("ERROR: Could not load environment variables from dotenv file");
     }
-
             
     // This is where we will setup our HTTP client requests.
     let client = hyper::client::Client::new();
@@ -85,6 +85,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     for result in rdr.deserialize() {
         count = count + 1;
         if count > limit {
+            eprintln!("");   // terminate stderr line
             break;
         }
         
@@ -149,6 +150,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         if resp.status() != 200 {
             panic!("Blew up on eventlog line {}",count);
         }
+
+        eprint!("\rNumber of Rooms: {:?}, Count: {:?}, Limit: {:?}", num_rooms, count, limit);
     }
 
     // Okay print how many we did.
