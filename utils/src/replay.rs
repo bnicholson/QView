@@ -155,6 +155,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     }
 
     // Okay print how many we did.
+    eprintln!("");   // terminate stderr line    
     println!("Sent {} eventlogs to the server.",count-1);
 
     Ok(())
