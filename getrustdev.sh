@@ -1,62 +1,134 @@
-# Rust and TypeScript Editor
-sudo snap install code --classic
+#!/bin/bash
 
-# Now more development tools
-# sudo apt install git # If you followed the readme, you already installed git.
-sudo apt install npm
+# Function to detect the package manager
+detect_package_manager() {
+    if command -v apt &> /dev/null; then
+        echo "apt"
+    elif command -v pacman &> /dev/null; then
+        echo "pacman"
+    else
+        echo "Unsupported package manager. Please install apt or pacman."
+        exit 1
+    fi
+}
 
-# Install Rust
-sudo apt install rustc
-sudo apt install rust-src
-sudo apt install cargo
+# Function to check if a package is installed
+is_installed() {
+    case $PACKAGE_MANAGER in
+        apt)
+            dpkg -l | grep -qw "$1"
+            ;;
+        pacman)
+            pacman -Q "$1" &> /dev/null
+            ;;
+        *)
+            echo "Unsupported package manager."
+            exit 1
+            ;;
+    esac
+}
 
-# This is required before running `cargo build` on the create-rust-app project.
-sudo apt install pkg-config
+# Function to install packages only if they are not already installed
+install_package() {
+    for package in "$@"; do
+        if is_installed "$package"; then
+            echo "$package is already installed. Skipping."
+        else
+            case $PACKAGE_MANAGER in
+                apt)
+                    sudo apt install -y "$package"
+                    ;;
+                pacman)
+                    sudo pacman -Syu --noconfirm "$package"
+                    ;;
+            esac
+        fi
+    done
+}
 
-# Install the database library.
-sudo apt install postgresql
-sudo apt install postgresql-contrib
+# Function to check for snap and install VS Code
+install_code_editor() {
+    if command -v code &> /dev/null; then
+        echo "VS Code is already installed. Skipping."
+    elif [ "$PACKAGE_MANAGER" = "apt" ]; then
+        echo "Installing VS Code via apt..."
+        # Add Microsoft repository and install VS Code via apt
+        if ! is_installed code; then
+            # Microsoft's instructions to install VS Code. Copied from
+            # https://code.visualstudio.com/docs/setup/linux
+            sudo apt-get install wget gpg
+            wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+            sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+            echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" |sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
+            rm -f packages.microsoft.gpg
+            sudo apt install apt-transport-https
+            sudo apt update
+            sudo apt install code # or code-insiders
+        fi
+    elif [ "$PACKAGE_MANAGER" = "pacman" ]; then
+        echo "Installing VS Code via pacman..."
+        install_package code
+    else
+        echo "No supported method to install VS Code. Please install manually."
+        exit 1
+    fi
+}
 
-# Install the database driver for PostgreSQL.
-sudo apt install libpq-dev
+# Detect the package manager
+PACKAGE_MANAGER=$(detect_package_manager)
+echo "$PACKAGE_MANAGER detected."
 
-#
-# Install a tool for helping manipulate Diesel (Rust CRUD ORM)
-#
-cargo install diesel_cli --no-default-features --features postgres
-#
-# actix-web (Rust Web Server) stuff (mostly creating react web apps)
-#
-cargo install tsync
+# Install VS Code (check for snap, otherwise use apt or pacman)
+echo "Attempting to install VS Code"
+install_code_editor
 
-# More generic cargo tools
-cargo install cargo-edit
-cargo install cargo-watch
+# Install Git and Node.js tools
+echo "Attempting to install Git and Node.js"
+install_package git npm
 
-# # Add one of them to the path TODO: You probably don't need this.
-# echo 'export PATH="$PATH":~/.cargo/bin' >> ~/.bashrc
+echo "Attempting to install Rust and PostgreSQL tools"
+# Install Rust tools and source and PostgreSQL libraries
+# Why are we downloading Rust source? That seems unnecessary...
+if [ "$PACKAGE_MANAGER" = "apt" ]; then
+    install_package rustc cargo rust-src pkg-config postgresql postgresql-contrib libpq-dev redis-server redis-tools docker.io docker-compose
+elif [ "$PACKAGE_MANAGER" = "pacman" ]; then
+    install_package rust cargo rust-src pkgconf postgresql postgresql-libs redis docker docker-compose
+fi
 
-# Node add some node things we need
-sudo npm install -g yarn
+echo "Attempting to install diesel_cli"
+if cargo install --list | grep -q "diesel_cli"; then
+   echo "diesel_cli is already installed via Cargo. Skipping."
+else
+   cargo install diesel_cli --no-default-features --features postgres
+fi
 
-# Add all the docker tools
-sudo apt install docker.io docker-compose
-# 
-# Make sure we have a recently updated nodejs
-#
+# Install Rust development tools via Cargo, skip if already installed
+echo "Attempting to install a bunch of Rust tools"
+for cargo_pkg in tsync cargo-edit cargo-watch; do
+    if cargo install --list | grep -q "$cargo_pkg"; then
+        echo "$cargo_pkg is already installed via Cargo. Skipping."
+    else
+        cargo install "$cargo_pkg"
+    fi
+done
+
+echo "Attempting to install Yarn"
+# Install Yarn globally using npm, skip if already installed
+if npm list -g yarn &> /dev/null; then
+    echo "Yarn is already installed globally. Skipping."
+else
+    sudo npm install -g yarn
+fi
+
+echo "Updating nodejs"
+# Ensure we have a recently updated nodejs
 sudo npm install -g n
 sudo n lts
-n ls
+NODE_VERSION=$(n ls)
+echo "Node version: $NODE_VERSION"
 
-# 
-# Now install redis - later we'll move this to valkey (probably).
-#
-sudo apt install redis-server
-sudo apt install redis-tools
 
-#
-# Add ~/.cargo/bin to the user's profile
-#
+# Add ~/.cargo/bin to the user's profile if it's not already there
 PROFILE=$HOME/.profile
 if ! grep 'cargo bin if' "$PROFILE"; then
    echo "Adding to the .profile the user's cargo bin"
@@ -65,3 +137,5 @@ if ! grep 'cargo bin if' "$PROFILE"; then
    echo '    PATH="$HOME/.cargo/bin:$PATH"' >>~/.profile
    echo 'fi'  >>~/.profile
 fi
+
+echo "Installation complete!"
