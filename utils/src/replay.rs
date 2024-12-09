@@ -5,6 +5,8 @@ extern crate log4rs_syslog;
 extern crate url;
 
 use rand::Rng;
+use std::thread;
+use std::time::Duration;
 use hyper::body::HttpBody as _;
 use tokio::io::{stdout, AsyncWriteExt as _};
 use std::fs::File;
@@ -45,11 +47,25 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let num_rooms : i32 = args[1].parse().unwrap();
     let limit : i32 = args[2].parse().unwrap();
 
+//    for t  in 0..num_rooms {
+//        let mut tid: i32 = t.clone();    
+//        thread::spawn(|| {
+//            for i in 1..1000000 {
+//                println!("hi number {i} from the spawned thread!");
+//                thread::sleep(Duration::from_millis(1));
+//            }
+//        });
+//    }
+    
     // load the environment
     if dotenv::dotenv().is_err() {
         panic!("ERROR: Could not load environment variables from dotenv file");
     }
-            
+    let host : &String = &args[3];
+   // send_events(num_rooms, limit, host);
+
+
+//async fn send_events(num_rooms : i32, limit : i32, host: String ) {
     // This is where we will setup our HTTP client requests.
     let client = hyper::client::Client::new();
 
@@ -95,7 +111,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 //        println!("{:?}", record);
 
         // set up the remaining info
-        let bldgroom = "Ben".to_string();
+        let bldgroom = record.room.clone();//"Ben".to_string();
         let nonce = get_nonce();
         let tk = "nokey".to_string();
         let org = "Nazarene".to_string();
@@ -136,7 +152,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 
 //        println!("Encoding: {:?}", encoded);
         // now send the call to qview server
-        let url = format!("http://localhost:3000/scoreevent?{}",encoded);
+        let url = format!("http://{}/scoreevent?{}",host, encoded);
         println!("\nUrl = {:?}\n",url);
         let uri = url.parse()?;
         let mut resp = client.get(uri).await?;
