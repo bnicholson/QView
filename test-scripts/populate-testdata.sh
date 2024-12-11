@@ -8,4 +8,4 @@ psql -d qviewdev <populate-testdata.sql
 # from a huge eventlog.  This is used to test some of the apis
 # and to create test data
 #
-../.cargo/.build/debug/replay 60 1000000 >/dev/null
+../.cargo/.build/debug/replay 60 1000000 localhost:3000 >/dev/null
