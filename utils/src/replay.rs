@@ -44,8 +44,11 @@ struct CSVRecord {
 async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let args: Vec<String> = env::args().collect();
 
+    // first let's go get all the parameters we need
     let num_rooms : i32 = args[1].parse().unwrap();
     let limit : i32 = args[2].parse().unwrap();
+    let host : &String = &args[3];
+    let filename: &String = &args[4];
 
 //    for t  in 0..num_rooms {
 //        let mut tid: i32 = t.clone();    
@@ -61,7 +64,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     if dotenv::dotenv().is_err() {
         panic!("ERROR: Could not load environment variables from dotenv file");
     }
-    let host : &String = &args[3];
+  
    // send_events(num_rooms, limit, host);
 
 
