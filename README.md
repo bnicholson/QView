@@ -65,14 +65,19 @@ Note:  A beta/UAT development environment is up at http://qview.quizstuff.com:30
    ```
 
    Note:  There is an example script under setup-db-valkey.sh that does this and other work.
-   This script replaces steps #7, #8, #9.   The script isn't perfect - it has flaws.
- 
-8) Now populate the database with the tables needed for QView.
+   This script replaces steps #8, #9, #10.   The script isn't perfect - it has flaws.
+
+8) Create an .env file with the following data (update your user & password)
+   ```
+   DATABASE_URL=postgres://sammy:somepassword@localhost/qviewdev
+   ```
+
+9) Now populate the database with the tables needed for QView.
    ```
    diesel migration run
    ```
 
-9) Remove the superuser permissions from QView.
+10) Remove the superuser permissions from QView.
    ```
    sudo bash
    su - postgres
@@ -83,12 +88,12 @@ Note:  A beta/UAT development environment is up at http://qview.quizstuff.com:30
    exit
    ```
 
-10) Now you are ready to build the executables and the frontend code.
+11) Now you are ready to build the executables and the frontend code.
     ```
     cargo build
     ```
 
-11) Create and populate all the appropriate environment variables in the `.env` file.
+12) Create and populate all the appropriate environment variables in the `.env` file.
     ```
     SECRET_KEY=some_secret
     DATABASE_URL=postgres://sammy:somepassword@localhost/qviewdev
@@ -106,24 +111,24 @@ Note:  A beta/UAT development environment is up at http://qview.quizstuff.com:30
     SEND_MAIL=true
     ```
 
-12) Restart the terminal to refresh the environment variables.
+13) Restart the terminal to refresh the environment variables.
 
-13) Now run the project using Cargo.
+14) Now run the project using Cargo.
     ```  
     cargo fullstack
     ```
 
-14) It's time to use the application. Start your favorite browser.
+15) It's time to use the application. Start your favorite browser.
     ```
     firefox
     ```
 
-15) Go to localhost 
+16) Go to localhost 
     ```
     http://localhost:3000
     ```
 
-16) For more information:
+17) For more information:
   - Read README.md.create-rust-app for more information on how to use create-rust-app. This project was originally started using the create-rust-app tool.
 
 # How It Works
