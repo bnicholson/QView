@@ -2,7 +2,7 @@
 -- rebuild the games table in a clean way.
 -- key4server is now part of the uniqueness of each row
 
-BEGIN;
+--BEGIN;
 
 -- rename the games table to orig_games table
 ALTER TABLE games rename to orig_games;
@@ -29,4 +29,4 @@ INSERT INTO games (tdrri, org, tournament, division, room, round, key4server)
 DROP TABLE orig_games;
 
 -- Now commit all these changes
-COMMIT;
+--COMMIT;

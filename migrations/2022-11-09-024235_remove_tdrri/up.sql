@@ -1,7 +1,7 @@
 -- Your SQL goes here
 
 -- start the atomic portion
-BEGIN;
+--BEGIN;
 
 -- Save the tables away
 ALTER TABLE games rename to orig_games;
@@ -54,6 +54,6 @@ INSERT INTO quizevents (gid, question, eventnum, name, team, quizzer, event, par
 DROP TABLE orig_quizevents;
 
 -- Commit
-COMMIT;
+--COMMIT;
 
 -- All Done

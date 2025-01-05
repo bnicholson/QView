@@ -1,6 +1,6 @@
 -- Your SQL goes here
 
-BEGIN;
+--BEGIN;
 
 -- rename the tournaments table to orig_tournaments table
 ALTER TABLE tournaments rename to orig_tournaments;
@@ -49,6 +49,6 @@ DROP TABLE orig_tournaments;
 
 
 -- Now commit all these changes
-COMMIT;
+--COMMIT;
 
 -- all done

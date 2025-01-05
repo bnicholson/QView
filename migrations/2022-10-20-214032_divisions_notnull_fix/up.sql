@@ -1,6 +1,6 @@
 -- Your SQL goes here
 
-BEGIN;
+--BEGIN;
 
 -- Rename the division table to orig_division
 ALTER TABLE divisions RENAME to orig_divisions;
@@ -42,6 +42,6 @@ DROP TABLE orig_divisions;
 DROP TABLE orig_division_games;
 
 -- Now commit all these changes
-COMMIT;
+--COMMIT;
 
 -- all done

@@ -1,6 +1,6 @@
 -- Your SQL goes here
 
-BEGIN;
+--BEGIN;
 
 -- create the new eventlog table 
 create table apicalllog (
@@ -13,6 +13,6 @@ create table apicalllog (
 );
 
 -- Now commit all these changes
-COMMIT;
+--COMMIT;
 
 -- all done

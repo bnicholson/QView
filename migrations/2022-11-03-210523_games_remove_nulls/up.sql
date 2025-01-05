@@ -1,7 +1,7 @@
 -- Your SQL goes here
 
 -- start the atomic portion
-BEGIN;
+--BEGIN;
 
 -- Save the tables away
 ALTER TABLE games rename to orig_games;
@@ -28,6 +28,6 @@ CREATE TABLE games (
 DROP TABLE orig_games;
 
 -- Commit
-COMMIT;
+--COMMIT;
 
 -- All Done

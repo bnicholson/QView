@@ -1,6 +1,6 @@
 -- Your SQL goes here
 
-BEGIN;
+--BEGIN;
 
 -- rename the tournaments table to orig_tournaments table
 ALTER TABLE eventlogs rename to orig_eventlogs;
@@ -46,6 +46,6 @@ select pg_catalog.setval('eventlogs_evid_seq'::regclass, MAX("evid"),true) FROM 
 DROP TABLE orig_eventlogs;
 
 -- Now commit all these changes
-COMMIT;
+--COMMIT;
 
 -- all done

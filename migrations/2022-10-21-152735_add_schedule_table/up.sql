@@ -1,7 +1,7 @@
 -- Your SQL goes here
 
 -- Let's start with a transaction
-BEGIN;
+--BEGIN;
 
 -- create the table that defines the rooms
 CREATE TABLE rooms (
@@ -34,4 +34,4 @@ CREATE TABLE schedules (
 -- 
 
 -- Commit this
-COMMIT;
+--COMMIT;

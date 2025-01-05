@@ -1,6 +1,6 @@
 -- Your SQL goes here
 
-BEGIN;
+--BEGIN;
 
 -- Save the tables away
 ALTER TABLE games RENAME to orig_games;
@@ -35,4 +35,4 @@ DROP TABLE orig_games;
 --DROP INDEX orig_games_org_tournament_division_room_round_clientkey_key1;
 
 -- commit this
-COMMIT;
+--COMMIT;

@@ -1,6 +1,6 @@
 -- Your SQL goes here
 
-BEGIN;
+--BEGIN;
 
 -- create the new divisions table 
 create table divisions (
@@ -22,6 +22,6 @@ create table division_games (
 );
 
 -- Now commit all these changes
-COMMIT;
+--COMMIT;
 
 -- all done

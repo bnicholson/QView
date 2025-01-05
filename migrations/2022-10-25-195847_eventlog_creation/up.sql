@@ -1,6 +1,6 @@
 -- Your SQL goes here
 
-BEGIN;
+--BEGIN;
 
 -- create the new eventlog table 
 create table eventlogs (
@@ -30,6 +30,6 @@ create table eventlogs (
 );
 
 -- Now commit all these changes
-COMMIT;
+--COMMIT;
 
 -- all done

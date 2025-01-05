@@ -1,6 +1,6 @@
 -- rebuild the tournament table in a clean way.
 
-BEGIN;
+--BEGIN;
 
 -- rename the tournaments table to orig_tournaments table
 ALTER TABLE tournaments RENAME to orig_tournaments;
@@ -41,7 +41,7 @@ INSERT INTO tournaments (organization,tournament, fromdate, todate, venue, city,
 DROP TABLE orig_tournaments;
 
 -- Now commit all these changes
-COMMIT;
+--COMMIT;
 
 -- all done
 

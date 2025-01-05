@@ -1,7 +1,7 @@
 -- Your SQL goes here
 
 -- Let's start with a transaction
-BEGIN;
+--BEGIN;
 
 -- Save the tables away
 ALTER TABLE rooms RENAME to orig_rooms;
@@ -35,4 +35,4 @@ DROP TABLE orig_rooms;
 --DROP INDEX orig_rooms_roomid_tid_name_key;
 
 -- commit this
-COMMIT;
+--COMMIT;

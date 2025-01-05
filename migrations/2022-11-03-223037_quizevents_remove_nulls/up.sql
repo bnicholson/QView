@@ -1,7 +1,7 @@
 -- Your SQL goes here
 
 -- start the atomic portion
-BEGIN;
+--BEGIN;
 
 -- Save the tables away
 ALTER TABLE quizzes rename to orig_quizzes;
@@ -30,6 +30,6 @@ CREATE TABLE quizevents (
 DROP TABLE orig_quizzes;
 
 -- Commit
-COMMIT;
+--COMMIT;
 
 -- All Done
