@@ -39,19 +39,19 @@ async fn main() -> std::io::Result<()> {
     }
     
     #[cfg(not(debug_assertions))] {
-         // Handle setting up log4rs (logging)
+        // Handle setting up log4rs (logging)
         // add syslog support
-//        let mut deserializers = log4rs::file::Deserializers::new();
-//        log4rs_syslog::register(&mut deserializers);
+        let mut deserializers = log4rs::file::Deserializers::new();
+        log4rs_syslog::register(&mut deserializers);
         // 
-//        log4rs::init_file("config/logging_prod.yaml",deserializers).unwrap();  
+        log4rs::init_file("config/logging_prod.yaml",deserializers).unwrap();  
     }
 
     #[cfg(debug_assertions)]
-//    log4rs::init_file("config/logging_debug.yaml",Default::default()).unwrap();
+    log4rs::init_file("config/logging_debug.yaml",Default::default()).unwrap();
 
     // tell everyone we have logging running
-//    log::info!("Initialized log4rs");
+    log::info!("Initialized log4rs");
 
     // Now setup some of the crates that we'll use later
     let app_data = create_rust_app::setup();

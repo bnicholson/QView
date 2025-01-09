@@ -26,6 +26,10 @@ import AddIcon from "@mui/icons-material/Add"
 import { selectDisplayDate, selectTournament, setDisplayDate, setTournament, toggleIsOn, setTid } from '../breadcrumb'
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import Tooltip from '@mui/material/Tooltip';
+import {createRoot} from 'react-dom/client'
+import Markdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import MDEditor from '@uiw/react-md-editor';
 
 export const DivisionAPI = {
   get: async (page: number, size: number) =>
@@ -91,10 +95,19 @@ export const Divisions = () => {
     }
   }, [tid])
 
+  const [valuemd, setValue] = React.useState("**Hello world!!!**")
 
-
-  return (
+    return (
     <div>
+      <div>
+      <Markdown remarkPlugins={[remarkGfm]}>{valuemd}</Markdown>
+      <MDEditor
+        value={valuemd}
+        onChange={setValue}
+      />
+      <MDEditor.Markdown source={valuemd} style={{ whiteSpace: 'pre-wrap' }} />
+      </div>
+      <div>
       <Fab color="primary" onClick={() => handleEditorClickOpen()} aria-label="Add Tournament">
         <AddIcon />
       </Fab>
@@ -207,6 +220,7 @@ export const Divisions = () => {
         {DivisionEditor(openDivisionEditor, setDivisionEditorOpen)}
       </div>
     </div >
+    </div>
   )
 }
 
@@ -219,7 +233,6 @@ const test = () => {
       />
     </ListItem>
   )
-
 }
 
 const DivisionEditor = (openDivisionEditor: boolean, setDivisionEditorOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
